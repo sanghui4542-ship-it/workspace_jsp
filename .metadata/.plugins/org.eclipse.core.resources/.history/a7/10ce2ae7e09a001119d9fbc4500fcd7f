@@ -1,0 +1,59 @@
+package pro01.ex01;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+//1. 실제 웹 프로그래밍에서 사용되는 사용자정의 서블릿 FirstServlet 는
+//   ServletApi.jar 라이브러리에서 제공되는 HttpServlet 클래스를 상속받아 만듭니다.
+
+//2. HttpServlet 클래스에서 제공하는 서블릿 생명주기 관련 메소드들 ( init(), service(), doGet(), destory())
+
+public class FirstServlet extends HttpServlet{
+
+	//HttpServlet 부모 클래스에 만들어져 있는 서블릿의 생명주기 관련 메소드 오버라이딩 해서 작성!
+	//alt + shift + s    v
+
+/*
+ 	init() 메소드는 FirstServlet클래스의 객체(인스턴스)가 처음 생성되면서 톰캣 서버 메모리에 올라가는 시점에
+ 	단 한번만 톰캣에 의해 호출되는 메소드로, 변수의 초기화 작업을 수행하는 코드를 작성해 놓습니다.
+ 	예를 들어, 데이터베이스 서버의 DBMS프로그램과 연결하는 코드를 설정하거나, 설정 파일을 톰캣 서버메모리에 로드하는 동작 등 작업을 수행할 수 있음
+ */	
+	@Override
+	public void init() throws ServletException {
+		System.out.println("init() 메소드 호출 - FirstServlet 클래스의 객체 메모리 톰캣서버 메모리 영역에 올림");
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		System.out.println("doGet() 메소드 호출 당함 - GET 요청처리");
+		
+		System.out.println("요청처리 후 destory() 메소드가 호출되어 서블릿은 종료될 것임");
+		
+		//클라이언트의 웹브라우저로 응답할 데이터 종류(MINE-TYPE)을 text기반의 HTML문서의 태그형태로 내보내고
+		//한글 깨짐을 방지하기 위한 응답할 문자 처리 방식을 UTF-8 로 HttpServletResponse객체에 설정
+		resp.setContentType("text/html; charset=UTF-8");
+		
+		//웹브라우저와 창과 연결된 출력스트림 통로(PrintWriter객체)를 통해
+		//HTML태그 형태의 응답할 데이터를 만든 후 브라우저로 내보낸다.(출력한다.)
+		PrintWriter out = resp.getWriter();
+					out.println("<html>");
+						out.println("<body>");
+							out.println("<h1>FirstServlet.class 서블릿이 응답하는 데이터</h1>");
+						out.println("</body>");
+					out.println("</html>");		
+	}
+	
+	@Override
+	public void destroy() {
+		System.out.println("destory() 메소드 호출 - 서블릿 종료");
+	}
+	
+	
+}//------------------------------ FirstServlet
+
