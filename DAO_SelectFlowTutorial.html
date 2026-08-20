@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<!-- DAO_SelectFlowTutorial.html · 2026-08-20 · MemberDAO가 오라클에서 회원을 가져오는 17장면 상세 애니메이션 -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오라클 → MemberDAO 조회 흐름 애니메이션 자습서</title>
+<style>
+:root{
+  --bg:#0d1220; --panel:#151c30; --panel2:#1b2440; --line:#2a3558;
+  --txt:#dce3f5; --dim:#8b96b8; --amber:#ffb454; --cyan:#5cd6ff;
+  --green:#5dde8f; --red:#ff6b7a; --pink:#ff8fc7; --code:#0a0e1a;
+  --mono:'D2Coding','Consolas','Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.65}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 16px 120px}
+
+header{border:1px solid var(--line);border-radius:14px;background:linear-gradient(160deg,#151c30,#0f1526);padding:26px 24px;margin-bottom:26px}
+.eyebrow{font-family:var(--mono);color:var(--cyan);font-size:13px;letter-spacing:2px}
+h1{font-size:clamp(21px,4.2vw,29px);margin:8px 0 10px}
+h1 b{color:var(--amber)}
+.sub{color:var(--dim);font-size:15px}
+.dl{display:inline-block;margin-top:14px;background:var(--amber);color:#1a1206;font-weight:bold;border:none;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer}
+
+section{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:22px 18px;margin-bottom:24px}
+.step-tag{display:inline-block;font-family:var(--mono);font-size:12px;color:#0d1220;background:var(--cyan);border-radius:6px;padding:3px 10px;font-weight:bold;letter-spacing:1px}
+h2{font-size:19px;margin:10px 0 6px}
+h3{font-size:15.5px;margin:18px 0 8px;color:var(--cyan)}
+p{margin:8px 0;font-size:14.5px}
+.why{border-left:4px solid var(--amber);background:var(--panel2);border-radius:0 10px 10px 0;padding:11px 13px;margin:12px 0;font-size:14px}
+.why b{color:var(--amber)}
+.note{color:var(--dim);font-size:12.5px}
+
+/* 캡션 */
+.caption{display:flex;gap:10px;align-items:flex-start;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin-bottom:12px;min-height:62px}
+.scnum{font-family:var(--mono);font-size:11px;color:#0d1220;background:var(--amber);border-radius:6px;padding:2px 8px;font-weight:bold;white-space:nowrap;margin-top:3px}
+.sctext{font-size:13.5px}
+.sctext b{color:var(--amber)} .sctext .cyw{color:var(--cyan)}
+
+/* ═══ 메인 무대 : 좌(코드) 우(메모리+오라클) ═══ */
+.duo{display:grid;grid-template-columns:minmax(300px,44%) 1fr;gap:12px}
+@media(max-width:840px){.duo{grid-template-columns:1fr}}
+
+/* 코드 패널 */
+.codepane{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:10px 0;font-family:var(--mono);font-size:12px;line-height:1.9;overflow-x:auto}
+.cl{padding:0 12px;white-space:pre;color:#aab4d4;border-left:3px solid transparent;transition:all .3s}
+.cl .cm{color:#5f6a8c} .cl .st{color:#ffcf87} .cl .kw{color:#7aa2ff}
+.cl.on{background:#22304f;border-left-color:var(--amber);color:#fff}
+.cl.dim{opacity:.35}
+.ordtag{display:inline-block;font-size:10px;background:#241c0e;color:var(--amber);border-radius:4px;padding:0 5px;margin-left:6px}
+
+/* 오른쪽 무대 */
+.world{display:flex;flex-direction:column;gap:8px}
+.box{border:1px solid var(--line);border-radius:10px;background:#0f1526;padding:9px}
+.box>h4{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--dim);margin-bottom:7px}
+.box>h4 b{color:var(--cyan)}
+
+/* 서블릿 바 */
+.svbar{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11.5px;background:#101a30;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.svbar .st8{color:var(--dim);transition:color .3s}
+.svbar.on{border-color:var(--green)} .svbar.on .st8{color:var(--green)}
+
+/* JVM : Stack / Heap */
+.jvm{display:grid;grid-template-columns:44% 1fr;gap:8px}
+.memcol{border:1px dashed var(--line);border-radius:8px;padding:7px;min-height:150px}
+.memcol h5{font-family:var(--mono);font-size:10.5px;color:var(--amber);letter-spacing:1px;margin-bottom:6px}
+.vchip{display:block;font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);border-radius:6px;padding:3px 7px;margin:3px 0;background:#101a30;opacity:0;transform:translateX(-10px);transition:all .5s}
+.vchip.show{opacity:1;transform:none}
+.vchip.flash{border-color:var(--amber);background:#241c0e}
+.vchip .vn{color:var(--cyan)} .vchip .vv{color:var(--amber)} .vchip .ar{color:var(--dim)}
+.hcard{font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);border-radius:8px;padding:5px 8px;margin:4px 0;background:#101a30;opacity:0;transform:scale(.85);transition:all .5s}
+.hcard.show{opacity:1;transform:none}
+.hcard.flash{border-color:var(--amber);box-shadow:0 0 10px rgba(255,180,84,.35)}
+.hcard.dead{opacity:.35;border-style:dashed}
+.hcard h6{color:var(--pink);font-size:10.5px;margin-bottom:2px}
+.hcard .fl{color:var(--dim)} .hcard .fv{color:var(--green)}
+.slots{display:flex;gap:4px;margin-top:3px}
+.slot{flex:1;text-align:center;border:1px dashed var(--line);border-radius:5px;padding:3px 2px;color:var(--dim);font-size:9.5px;transition:all .4s}
+.slot.fill{border-style:solid;border-color:var(--green);color:var(--green);background:#0f2418}
+.badge{display:inline-block;font-size:9.5px;border-radius:4px;padding:0 5px;margin-left:4px}
+.badge.reg{background:#0e1e2b;color:var(--cyan)}
+.badge.tr{background:#0f2418;color:var(--green)} .badge.fa{background:#33161d;color:var(--red)}
+
+/* 통신 회선 (세로) */
+.pipe{position:relative;height:56px;border-left:2px dashed var(--line);margin-left:26px}
+.pipe .plbl{position:absolute;left:12px;top:16px;font-family:var(--mono);font-size:10px;color:var(--dim)}
+.pk{position:absolute;left:-11px;top:-4px;width:230px;background:#10203a;border:1.5px solid var(--cyan);border-radius:8px;font-family:var(--mono);font-size:10px;padding:4px 8px;opacity:0;z-index:4;transition:top .9s ease-in-out,opacity .3s;box-shadow:0 6px 16px rgba(0,0,0,.55)}
+.pk.up{border-color:var(--amber)}
+.pk.on{opacity:1}
+.pk .pt{font-weight:bold;color:var(--cyan)} .pk.up .pt{color:var(--amber)}
+@media(max-width:840px){.pk{width:180px}}
+
+/* 오라클 서버 */
+.ora{border-color:#7a3945}
+.ora>h4 b{color:var(--red)}
+.otbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10.5px;margin-top:4px}
+.otbl th{background:#241722;color:var(--pink);border:1px solid #3a2530;padding:3px 5px;font-weight:normal}
+.otbl td{border:1px solid #3a2530;padding:3px 5px;color:var(--dim);transition:all .3s}
+.otbl tr.scan td{background:#241c0e;color:var(--amber)}
+.otbl tr.copy td{background:#0f2418;color:var(--green)}
+.rswrap{margin-top:8px;opacity:0;transition:opacity .5s}
+.rswrap.show{opacity:1}
+.rsl{font-family:var(--mono);font-size:10.5px;color:var(--cyan);margin-bottom:3px}
+.currow{font-family:var(--mono);font-size:10px;color:var(--amber);margin:2px 0}
+.rstbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10.5px}
+.rstbl th{background:#0e1e2b;color:var(--cyan);border:1px solid var(--line);padding:3px 5px;font-weight:normal}
+.rstbl td{border:1px solid var(--line);padding:3px 5px;color:var(--dim);transition:all .3s}
+.rstbl td:first-child{width:26px;text-align:center;color:var(--amber)}
+.rstbl tr.cur td{background:#22304f;color:#fff}
+.rstbl tr.cur td:first-child::before{content:"▶"}
+.rstbl tr.done td{opacity:.45}
+.rstbl td.pick{background:#241c0e;color:var(--amber)}
+
+.ctrl{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 16px;font-size:14px;cursor:pointer}
+.btn.primary{background:var(--cyan);color:#0d1220;font-weight:bold;border:none}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* 등장인물 카드 */
+.cast{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:12px 0}
+.actorcard{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px}
+.actorcard h4{font-size:13px;color:var(--amber);font-family:var(--mono);margin-bottom:5px}
+.actorcard p{font-size:12.5px;color:var(--dim);margin:0}
+
+/* 퀴즈/마무리/대시보드 */
+.quiz{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0}
+.quiz h4{font-size:14.5px;margin-bottom:10px}
+.opt{display:block;width:100%;text-align:left;background:var(--code);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin:6px 0;font-size:13.5px;cursor:pointer}
+.opt.ok{border-color:var(--green);background:#123524}
+.opt.no{border-color:var(--red);background:#33161d}
+.expl{display:none;font-size:13px;color:var(--dim);border-top:1px dashed var(--line);margin-top:8px;padding-top:8px}
+.expl.show{display:block}
+.finale{border:1px solid var(--amber);background:linear-gradient(160deg,#1d1a12,#151c30)}
+.finale ol{margin:10px 0 0 22px;font-size:14.5px}
+.finale li{margin:8px 0}
+.finale b{color:var(--amber)}
+#dash{position:fixed;right:14px;bottom:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-family:var(--mono);font-size:12px;color:var(--dim);box-shadow:0 6px 20px rgba(0,0,0,.5);z-index:9}
+#dash b{color:var(--green)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">SERVLET · JDBC · MemberDAO.listMembers()</div>
+  <h1>오라클 → MemberDAO<br><b>회원 3명이 자바 배열에 담기기까지의 17장면</b></h1>
+  <p class="sub">왼쪽에는 실제 MemberDAO.java 코드가, 오른쪽에는 JVM 메모리(Stack/Heap)와
+  오라클 서버가 그려집니다. <b>[다음 장면 ▶]</b>을 누르면
+  <b>지금 실행되는 코드 줄이 노랗게 켜지고</b>, 그 줄이 메모리와 오라클에서
+  일으키는 변화가 동시에 움직입니다.</p>
+  <button class="dl" onclick="downloadDoc()">⬇️ 이 문서 다운로드 (.html)</button>
+</header>
+
+<!-- ══════════ 등장인물 소개 ══════════ -->
+<section>
+  <span class="step-tag">준비</span>
+  <h2>등장인물 5명 먼저 인사하기</h2>
+  <div class="cast">
+    <div class="actorcard"><h4>Connection (T4CConnection)</h4><p>오라클 서버와의 <b>연결 통로</b>. 접속 상태를 관리한다. 테이블이 아니라 서버 자체와 연결된다.</p></div>
+    <div class="actorcard"><h4>Statement</h4><p>SQL 문장을 오라클로 <b>전송해 실행을 요청</b>하는 객체. 실행 자체는 오라클이 한다.</p></div>
+    <div class="actorcard"><h4>ResultSet</h4><p>조회 결과를 <b>한 행씩 읽어오는 커서</b>. 결과 전체를 담는 게 아니라 읽는 통로다.</p></div>
+    <div class="actorcard"><h4>MemberVO</h4><p>회원 <b>1명(=1행)</b>의 값 5개를 담는 상자. 행이 3개면 3개 만들어진다.</p></div>
+    <div class="actorcard"><h4>ArrayList</h4><p>완성된 MemberVO들을 순서대로 담는 <b>가변길이 배열</b>. 최종적으로 서블릿에 반환된다.</p></div>
+  </div>
+  <div class="why">💡 오늘의 목표 — 오라클 t_member의 3행(hong·lee·kim)이
+  <b>ResultSet 커서 → 변수 → MemberVO → ArrayList</b> 순서로 이사하는 전 과정을 눈으로 확인한다.</div>
+</section>
+
+<!-- ══════════ 메인 무대 ══════════ -->
+<section>
+  <span class="step-tag">무대</span>
+  <h2>listMembers() 실행 — 17장면</h2>
+  <div class="caption"><span class="scnum" id="capn">장면 0/17</span><span class="sctext" id="capt">[다음 장면 ▶]을 눌러 시작하세요. MemberServlet이 dao.listMembers()를 호출하는 순간부터 시작합니다.</span></div>
+
+  <div class="duo">
+    <!-- ─── 왼쪽 : 코드 ─── -->
+    <div class="codepane" id="codepane">
+      <div class="cl" id="cl0">public ArrayList&lt;MemberVO&gt; listMembers() {</div>
+      <div class="cl" id="cl1">  ArrayList&lt;MemberVO&gt; list = new ArrayList&lt;&gt;();</div>
+      <div class="cl" id="cl2">  connDB(); <span class="cm">// 아래 3줄 실행</span><span class="ordtag">순서2~4</span></div>
+      <div class="cl" id="cl3">    Class.forName(DRIVER);<span class="ordtag">순서2</span></div>
+      <div class="cl" id="cl4">    con = DriverManager.getConnection(URL,USER,PWD);<span class="ordtag">순서3</span></div>
+      <div class="cl" id="cl5">    stmt = con.createStatement();<span class="ordtag">순서4</span></div>
+      <div class="cl" id="cl6">  String query = <span class="st">"select * from t_member"</span>;<span class="ordtag">순서5</span></div>
+      <div class="cl" id="cl7">  rs = stmt.executeQuery(query);<span class="ordtag">순서6</span></div>
+      <div class="cl" id="cl8">  while (rs.next()) {<span class="ordtag">순서7</span></div>
+      <div class="cl" id="cl9">    String id = rs.getString(<span class="st">"ID"</span>); <span class="cm">// pwd·name·email·joinDate도 동일</span></div>
+      <div class="cl" id="cl10">    MemberVO vo = new MemberVO();  vo.setId(id); <span class="cm">// set 5개</span></div>
+      <div class="cl" id="cl11">    list.add(vo);</div>
+      <div class="cl" id="cl12">  } <span class="cm">// next()가 false면 종료</span></div>
+      <div class="cl" id="cl13">  ResourceClose(); <span class="cm">// finally</span><span class="ordtag">순서8</span></div>
+      <div class="cl" id="cl14">  return list; <span class="cm">// 서블릿으로 반환</span></div>
+    </div>
+
+    <!-- ─── 오른쪽 : 세계 ─── -->
+    <div class="world">
+      <div class="svbar" id="svbar"><span>🌐 MemberServlet</span><span class="st8" id="svmsg">dao.listMembers() 호출 대기</span></div>
+
+      <div class="box">
+        <h4>☕ <b>JVM 메모리</b> (자바 프로그램 쪽)</h4>
+        <div class="jvm">
+          <div class="memcol"><h5>[Stack] listMembers 변수들</h5>
+            <span class="vchip" id="v_list"><span class="vn">list</span> <span class="ar">→</span> <span class="vv">ArrayList#1</span></span>
+            <span class="vchip" id="v_con"><span class="vn">con</span> <span class="ar">→</span> <span class="vv">T4CConnection#2</span></span>
+            <span class="vchip" id="v_stmt"><span class="vn">stmt</span> <span class="ar">→</span> <span class="vv">Statement#3</span></span>
+            <span class="vchip" id="v_query"><span class="vn">query</span> <span class="ar">=</span> <span class="vv">"select * from t_member"</span></span>
+            <span class="vchip" id="v_rs"><span class="vn">rs</span> <span class="ar">→</span> <span class="vv">ResultSet#4</span></span>
+            <span class="vchip" id="v_vals"><span class="vn">id</span>=<span class="vv" id="vv_id">?</span> <span class="vn">name</span>=<span class="vv" id="vv_nm">?</span> ...</span>
+            <span class="vchip" id="v_vo"><span class="vn">vo</span> <span class="ar">→</span> <span class="vv" id="vv_vo">MemberVO#5</span></span>
+          </div>
+          <div class="memcol"><h5>[Heap] 객체들</h5>
+            <div class="hcard" id="h_drv"><h6>OracleDriver 클래스</h6><span class="fl">JVM에 로딩됨</span> <span class="badge reg" id="drvreg">DriverManager 등록 완료</span></div>
+            <div class="hcard" id="h_arr"><h6>ArrayList#1</h6><div class="slots"><span class="slot" id="a0">0: 비어있음</span><span class="slot" id="a1">1: 비어있음</span><span class="slot" id="a2">2: 비어있음</span></div></div>
+            <div class="hcard" id="h_conn"><h6>T4CConnection#2</h6><span class="fl">오라클과의 연결 통로</span> <span class="badge tr" id="connst">접속 유지 중</span></div>
+            <div class="hcard" id="h_stmt"><h6>Statement#3</h6><span class="fl">SQL 전송·실행 요청 담당</span></div>
+            <div class="hcard" id="h_rs"><h6>ResultSet#4 (커서)</h6><span class="fl">현재 위치 : </span><span class="fv" id="rspos">-</span></div>
+            <div class="hcard" id="h_vo0"><h6>MemberVO#5</h6><span class="fl" id="vo0f">비어 있음</span></div>
+            <div class="hcard" id="h_vo1"><h6>MemberVO#6</h6><span class="fl" id="vo1f">비어 있음</span></div>
+            <div class="hcard" id="h_vo2"><h6>MemberVO#7</h6><span class="fl" id="vo2f">비어 있음</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipe"><span class="plbl">JDBC 통신 (localhost:1521)</span>
+        <div class="pk" id="pk"><span class="pt" id="pkt">📨</span><div id="pkb"></div></div>
+      </div>
+
+      <div class="box ora">
+        <h4>🗄️ <b>오라클 DBMS 서버</b> (XE · scott 계정)</h4>
+        <table class="otbl">
+          <tr><th colspan="5">t_member 테이블 (원본 · 항상 서버에 있음)</th></tr>
+          <tr><th>ID</th><th>PWD</th><th>NAME</th><th>EMAIL</th><th>JOINDATE</th></tr>
+          <tr id="ot0"><td>hong</td><td>1212</td><td>홍길동</td><td>hong@gmail.com</td><td>2026-08-19</td></tr>
+          <tr id="ot1"><td>lee</td><td>1212</td><td>이순신</td><td>lee@test.com</td><td>2026-08-19</td></tr>
+          <tr id="ot2"><td>kim</td><td>1212</td><td>김유신</td><td>kim@web.com</td><td>2026-08-19</td></tr>
+        </table>
+        <div class="rswrap" id="rswrap">
+          <div class="rsl">조회 결과 (SELECT 실행 결과 · rs 커서가 읽는 대상)</div>
+          <div class="currow">커서 위치 : <span id="curpos">첫 번째 행 "직전" (아직 아무 행도 안 가리킴!)</span></div>
+          <table class="rstbl">
+            <tr><th></th><th>ID</th><th>PWD</th><th>NAME</th><th>EMAIL</th><th>JOINDATE</th></tr>
+            <tr id="rr0"><td></td><td>hong</td><td>1212</td><td>홍길동</td><td>hong@gmail.com</td><td>2026-08-19</td></tr>
+            <tr id="rr1"><td></td><td>lee</td><td>1212</td><td>이순신</td><td>lee@test.com</td><td>2026-08-19</td></tr>
+            <tr id="rr2"><td></td><td>kim</td><td>1212</td><td>김유신</td><td>kim@web.com</td><td>2026-08-19</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <button class="btn primary" id="nextBtn" onclick="play()">다음 장면 ▶ (1/17)</button>
+    <button class="btn" onclick="resetAll()">⟲ 처음부터</button>
+  </div>
+</section>
+
+<!-- ══════════ 퀴즈 ══════════ -->
+<section>
+  <span class="step-tag">CHECK</span>
+  <h2>🧠 이해도 점검 퀴즈</h2>
+  <div class="quiz" data-q="q1">
+    <h4>Q1. 장면 8에서 확인했듯, executeQuery() 직후 커서의 위치는?</h4>
+    <button class="opt" onclick="grade(this,false)">첫 번째 행(hong)을 가리키고 있다</button>
+    <button class="opt" onclick="grade(this,true)">첫 번째 행의 "직전"이라 아직 아무 행도 가리키지 않는다</button>
+    <button class="opt" onclick="grade(this,false)">마지막 행(kim)을 가리키고 있다</button>
+    <div class="expl">✅ 커서는 첫 행 직전에서 시작합니다. 그래서 첫 행을 읽으려면 반드시 next()를 먼저 1번 호출해야 합니다.</div>
+  </div>
+  <div class="quiz" data-q="q2">
+    <h4>Q2. 회원이 3명일 때 rs.next()가 호출되는 총 횟수와 마지막 반환값은?</h4>
+    <button class="opt" onclick="grade(this,false)">3번 호출, 마지막은 true</button>
+    <button class="opt" onclick="grade(this,true)">4번 호출, 마지막은 false</button>
+    <button class="opt" onclick="grade(this,false)">1번 호출, 마지막은 true</button>
+    <div class="expl">✅ 1·2·3행에서 true 3번 + 행이 끝난 뒤 false 1번 = 총 4번. 장면 15에서 4번째 next()가 false를 돌려주며 while이 끝났습니다.</div>
+  </div>
+  <div class="quiz" data-q="q3">
+    <h4>Q3. 장면 16의 ResourceClose()에서 닫는 올바른 순서는?</h4>
+    <button class="opt" onclick="grade(this,true)">rs → stmt → con (연 순서의 반대)</button>
+    <button class="opt" onclick="grade(this,false)">con → stmt → rs (연 순서 그대로)</button>
+    <button class="opt" onclick="grade(this,false)">아무 순서나 상관없다</button>
+    <div class="expl">✅ rs는 stmt로, stmt는 con으로 만들어진 의존 관계이므로 안쪽 자원(rs)부터 닫습니다. close()는 메모리 삭제가 아니라 DB 자원 반납입니다.</div>
+  </div>
+</section>
+
+<!-- ══════════ 핵심 정리 ══════════ -->
+<section class="finale">
+  <span class="step-tag" style="background:var(--amber)">핵심 정리 3줄</span>
+  <ol>
+    <li>흐름은 <b>드라이버 로딩 → Connection → Statement → executeQuery → ResultSet</b> — SQL 실행은 자바가 아니라 <b>오라클 서버</b>가 한다.</li>
+    <li>커서는 <b>첫 행 직전</b>에서 시작하고, next()는 <b>이동+true/false 반환</b>을 동시에 한다 (3행이면 4번째 호출이 false).</li>
+    <li>행 1개 = <b>MemberVO 1개</b>로 포장되어 ArrayList에 담기고, finally에서 <b>rs→stmt→con</b> 순서로 자원을 반납한 뒤 배열이 서블릿으로 반환된다.</li>
+  </ol>
+</section>
+
+</div><!-- /wrap -->
+
+<div id="dash">진행률 <b id="dashPct">0%</b> · 퀴즈 <b id="dashQuiz">0/3</b></div>
+
+<script>
+function $(id){return document.getElementById(id);}
+function cp(btn){try{navigator.clipboard.writeText(btn.nextElementSibling.innerText);}catch(e){}}
+function downloadDoc(){
+  try{
+    var blob=new Blob(['<!DOCTYPE html>\n'+document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download='DAO_SelectFlowTutorial.html';a.click();URL.revokeObjectURL(a.href);
+  }catch(e){alert('브라우저에서 Ctrl+S로 저장해 주세요.');}
+}
+/* 코드 라인 하이라이트 */
+function line(){ // line(3) 또는 line(8,11) 구간
+  var ids=[].slice.call(arguments);
+  for(var i=0;i<=14;i++){var e=$('cl'+i);e.classList.remove('on');}
+  ids.forEach(function(i){$('cl'+i).classList.add('on');});
+}
+function cap(i,html){$('capn').textContent='장면 '+i+'/17';$('capt').innerHTML=html;}
+function flash(id){var e=$(id);e.classList.add('flash');setTimeout(function(){e.classList.remove('flash');},1300);}
+function show(id){$(id).classList.add('show');}
+/* 통신 패킷 : dir 'down'(자바→오라클) / 'up'(오라클→자바) */
+function packet(dir,title,body,cb){
+  var p=$('pk');
+  $('pkt').textContent=title;$('pkb').innerHTML=body;
+  p.classList.toggle('up',dir==='up');
+  p.style.transition='none';p.style.top=(dir==='down')?'-6px':'34px';
+  p.offsetHeight;p.style.transition='';
+  p.classList.add('on');
+  setTimeout(function(){p.style.top=(dir==='down')?'34px':'-6px';},60);
+  setTimeout(function(){p.classList.remove('on');if(cb)cb();},1150);
+}
+/* 커서 표시 */
+function cursor(pos,text){
+  ['rr0','rr1','rr2'].forEach(function(id,i){
+    var e=$(id);e.classList.remove('cur');
+    if(pos>i)e.classList.add('done');
+    if(pos===i)e.classList.add('cur');
+  });
+  $('curpos').textContent=text;
+  $('rspos').textContent=text;flash('h_rs');
+}
+function fillVO(n,who){
+  var data={hong:'id="hong" pwd="1212"<br>name="홍길동" email=...<br>joinDate=2026-08-19',
+            lee:'id="lee" pwd="1212"<br>name="이순신" email=...<br>joinDate=2026-08-19',
+            kim:'id="kim" pwd="1212"<br>name="김유신" email=...<br>joinDate=2026-08-19'};
+  show('h_vo'+n);flash('h_vo'+n);
+  $('vo'+n+'f').innerHTML='<span class="fv">'+data[who]+'</span>';
+}
+function fillSlot(n,who){var s=$('a'+n);s.classList.add('fill');s.textContent=n+': VO('+who+')';flash('h_arr');}
+
+/* ───────── 17장면 대본 ───────── */
+var scenes=[
+ function(){ // 1
+  cap(1,'<b>호출!</b> — 브라우저 요청을 받은 MemberServlet이 <span class="cyw">dao.listMembers()</span>를 호출합니다. listMembers 메소드가 실행을 시작합니다.');
+  line(0);$('svbar').classList.add('on');$('svmsg').textContent='listMembers() 호출!';},
+ function(){ // 2
+  cap(2,'<b>빈 배열 준비</b> — [Heap]에 <b>ArrayList#1</b>이 생기고, [Stack]의 list 변수가 그 주소를 가리킵니다. 아직 3칸 모두 비어 있습니다.');
+  line(1);show('v_list');show('h_arr');flash('h_arr');},
+ function(){ // 3
+  cap(3,'<b>순서2 · 드라이버 로딩</b> — Class.forName이 OracleDriver <b>클래스 자체</b>를 JVM에 읽어들입니다(객체 생성 아님). 로딩 순간 static 블록이 실행되어 <span class="cyw">DriverManager에 자동 등록</span>됩니다.');
+  line(2,3);show('h_drv');flash('h_drv');},
+ function(){ // 4
+  cap(4,'<b>순서3 · 접속 요청</b> — 등록된 드라이버가 URL의 주소(localhost:1521, XE)로 접속을 시도합니다. 봉투에 계정 정보가 실려 내려갑니다.');
+  line(4);
+  packet('down','📨 접속 요청','URL=...:1521:XE<br>user=scott / pw=tiger',function(){
+    cap(4,'오라클 : scott/tiger 인증... <b>성공!</b> 연결 승인이 올라옵니다.');
+    packet('up','📩 접속 승인','인증 OK · 연결 수립',null);});},
+ function(){ // 5
+  cap(5,'<b>연결 통로 완성</b> — [Heap]에 <b>T4CConnection#2</b> 객체가 생기고 con 변수가 가리킵니다. 이제 자바와 오라클 사이에 전용 통로가 뚫렸습니다.');
+  line(4);show('v_con');show('h_conn');flash('h_conn');},
+ function(){ // 6
+  cap(6,'<b>순서4 · 실행 담당 고용</b> — con.createStatement()로 <b>Statement#3</b>을 얻습니다. 이 객체가 앞으로 SQL을 통로에 실어 보내는 일을 맡습니다.');
+  line(5);show('v_stmt');show('h_stmt');flash('h_stmt');},
+ function(){ // 7
+  cap(7,'<b>순서5 · SQL 작성</b> — 아직 전송 전! <span class="cyw">"select * from t_member"</span> 문장이 query 변수(문자열)에 준비만 된 상태입니다.');
+  line(6);show('v_query');flash('v_query');},
+ function(){ // 8
+  cap(8,'<b>순서6 · SQL 전송!</b> — executeQuery가 SQL을 오라클로 내려보냅니다. 오라클이 t_member를 스캔하는 것을 보세요. (실행은 오라클이 합니다!)');
+  line(7);
+  packet('down','📨 SQL 전송','select * from t_member',function(){
+    ['ot0','ot1','ot2'].forEach(function(id,i){setTimeout(function(){$(id).classList.add('scan');},i*260);});
+    setTimeout(function(){
+      ['ot0','ot1','ot2'].forEach(function(id){$(id).classList.remove('scan');$(id).classList.add('copy');});
+      show('rswrap');
+      cap(8,'오라클이 3행을 찾아 <b>조회 결과</b>를 만들었습니다. 원본 테이블은 그대로 있고, 결과는 별도로 준비됩니다.');
+      setTimeout(function(){['ot0','ot1','ot2'].forEach(function(id){$(id).classList.remove('copy');});},900);
+    },900);});},
+ function(){ // 9
+  cap(9,'<b>커서(ResultSet) 도착</b> — [Heap]에 <b>ResultSet#4</b>가 생기고 rs가 가리킵니다. ⚠️ 지금 커서 위치를 보세요 — <b>첫 행 "직전"</b>입니다. 아직 hong도 안 가리킵니다!');
+  line(7);
+  packet('up','📩 커서 반환','ResultSet (읽기 통로)',function(){
+    show('v_rs');show('h_rs');cursor(-1,'첫 번째 행 "직전" (아직 아무 행도 안 가리킴!)');});},
+ function(){ // 10
+  cap(10,'<b>순서7 · next() 1번째</b> — 커서가 한 칸 내려가 <b>1행(hong)</b>에 도착, 행이 있으니 <span class="cyw">true</span> 반환 → while 안으로 진입합니다.');
+  line(8);cursor(0,'1행 (hong) ← next() 1회 : true');},
+ function(){ // 11
+  cap(11,'<b>열 값 꺼내기</b> — getString("ID")… 커서가 선 hong 행에서 셀 5개가 하나씩 [Stack] 변수로 복사됩니다.');
+  line(9);
+  var tds=$('rr0').querySelectorAll('td');
+  for(var i=1;i<tds.length;i++)(function(td,i){setTimeout(function(){td.classList.add('pick');},i*230);})(tds[i],i);
+  setTimeout(function(){show('v_vals');flash('v_vals');$('vv_id').textContent='"hong"';$('vv_nm').textContent='"홍길동"';},1250);},
+ function(){ // 12
+  cap(12,'<b>상자 포장</b> — new MemberVO()로 [Heap]에 <b>MemberVO#5</b>가 생기고, set 메소드 5번으로 hong의 값이 전부 담깁니다.');
+  line(10);show('v_vo');fillVO(0,'hong');
+  var tds=$('rr0').querySelectorAll('td');for(var i=0;i<tds.length;i++)tds[i].classList.remove('pick');},
+ function(){ // 13
+  cap(13,'<b>배열에 추가</b> — list.add(vo)! ArrayList#1의 <b>0번 칸</b>에 VO(hong)의 주소가 들어갑니다. 1명 이사 완료.');
+  line(11);fillSlot(0,'hong');},
+ function(){ // 14
+  cap(14,'⏩ <b>2번째 반복 자동 진행</b> — next() 2회(true) → lee 행 읽기 → MemberVO#6 포장 → 1번 칸 추가. 같은 과정이 반복됩니다.');
+  line(8,9,10,11);cursor(1,'2행 (lee) ← next() 2회 : true');
+  setTimeout(function(){$('vv_id').textContent='"lee"';$('vv_nm').textContent='"이순신"';flash('v_vals');},500);
+  setTimeout(function(){$('vv_vo').textContent='MemberVO#6';fillVO(1,'lee');},1000);
+  setTimeout(function(){fillSlot(1,'lee');},1600);},
+ function(){ // 15
+  cap(15,'⏩ <b>3번째 반복 자동 진행</b> — next() 3회(true) → kim 행 읽기 → MemberVO#7 포장 → 2번 칸 추가. 배열이 가득 찼습니다.');
+  line(8,9,10,11);cursor(2,'3행 (kim) ← next() 3회 : true');
+  setTimeout(function(){$('vv_id').textContent='"kim"';$('vv_nm').textContent='"김유신"';flash('v_vals');},500);
+  setTimeout(function(){$('vv_vo').textContent='MemberVO#7';fillVO(2,'kim');},1000);
+  setTimeout(function(){fillSlot(2,'kim');},1600);},
+ function(){ // 16
+  cap(16,'<b>next() 4번째 = <span style="color:var(--red)">false</span></b> — 커서가 내려갔지만 더 이상 행이 없습니다 → while 종료. (3행인데 next()는 총 4번 호출된 것에 주목!)');
+  line(8,12);cursor(3,'행 끝 아래 ← next() 4회 : false (반복 종료)');
+  ['rr0','rr1','rr2'].forEach(function(id){$(id).classList.add('done');$(id).classList.remove('cur');});},
+ function(){ // 17
+  cap(17,'<b>순서8 · 자원 반납 → 반환!</b> — finally에서 <b>rs → stmt → con</b> 순서(연 순서의 반대)로 반납하고, 회원 3명이 담긴 ArrayList가 서블릿으로 돌아갑니다. 🎉 임무 완료!');
+  line(13,14);
+  setTimeout(function(){$('h_rs').classList.add('dead');$('rspos').textContent='반납됨(close)';},200);
+  setTimeout(function(){$('h_stmt').classList.add('dead');},650);
+  setTimeout(function(){$('h_conn').classList.add('dead');$('connst').textContent='반납됨(close)';$('connst').className='badge fa';},1100);
+  setTimeout(function(){
+    packet('up','📦 return list','[VO(hong), VO(lee), VO(kim)]',function(){
+      $('svmsg').textContent='ArrayList(3명) 수신 → HTML 표 출력';mark('flow');});
+  },1500);}
+];
+var idx=0,lock=false;
+function play(){
+  if(lock||idx>=scenes.length)return;
+  lock=true;scenes[idx]();idx++;
+  var b=$('nextBtn');
+  if(idx>=scenes.length){b.textContent='🎉 전체 장면 종료 (⟲로 다시보기)';b.disabled=true;}
+  else b.textContent='다음 장면 ▶ ('+(idx+1)+'/17)';
+  setTimeout(function(){lock=false;},1900);
+}
+function resetAll(){
+  if(lock)return;idx=0;
+  var b=$('nextBtn');b.disabled=false;b.textContent='다음 장면 ▶ (1/17)';
+  cap(0,'[다음 장면 ▶]을 눌러 시작하세요.');line();
+  $('svbar').classList.remove('on');$('svmsg').textContent='dao.listMembers() 호출 대기';
+  ['v_list','v_con','v_stmt','v_query','v_rs','v_vals','v_vo'].forEach(function(i){$(i).classList.remove('show','flash');});
+  ['h_drv','h_arr','h_conn','h_stmt','h_rs','h_vo0','h_vo1','h_vo2'].forEach(function(i){var e=$(i);e.classList.remove('show','flash','dead');});
+  $('connst').textContent='접속 유지 중';$('connst').className='badge tr';
+  $('rspos').textContent='-';
+  ['vo0f','vo1f','vo2f'].forEach(function(i){$(i).textContent='비어 있음';$(i).className='fl';});
+  [0,1,2].forEach(function(n){var s=$('a'+n);s.classList.remove('fill');s.textContent=n+': 비어있음';});
+  ['rr0','rr1','rr2'].forEach(function(id){var e=$(id);e.classList.remove('cur','done');
+    e.querySelectorAll('td').forEach(function(td){td.classList.remove('pick');});});
+  ['ot0','ot1','ot2'].forEach(function(id){$(id).classList.remove('scan','copy');});
+  $('rswrap').classList.remove('show');
+  $('curpos').textContent='첫 번째 행 "직전" (아직 아무 행도 안 가리킴!)';
+  $('vv_id').textContent='?';$('vv_nm').textContent='?';$('vv_vo').textContent='MemberVO#5';
+  var p=$('pk');p.classList.remove('on');
+  $('capn').textContent='장면 0/17';
+}
+
+/* ───────── 퀴즈 + 대시보드 ───────── */
+var state={flow:0,q1:0,q2:0,q3:0};
+try{var sv=localStorage.getItem('daoFlowTut');if(sv)state=JSON.parse(sv);}catch(e){}
+function mark(k){state[k]=1;save();}
+function grade(btn,ok){
+  var q=btn.closest('.quiz');
+  q.querySelectorAll('.opt').forEach(function(o){o.disabled=true;});
+  btn.classList.add(ok?'ok':'no');
+  if(!ok)q.querySelectorAll('.opt').forEach(function(o){if(o.getAttribute('onclick').indexOf('true')>-1)o.classList.add('ok');});
+  q.querySelector('.expl').classList.add('show');
+  if(ok)state[q.dataset.q]=1;save();
+}
+function save(){
+  try{localStorage.setItem('daoFlowTut',JSON.stringify(state));}catch(e){}
+  var quiz=['q1','q2','q3'].reduce(function(a,k){return a+state[k];},0);
+  $('dashPct').textContent=Math.round((state.flow+quiz)/4*100)+'%';
+  $('dashQuiz').textContent=quiz+'/3';
+}
+save();
+</script>
+</body>
+</html>

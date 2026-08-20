@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<!-- ConnectionPoolTutorial.html · v1 · 2026-08-19 · 비전공자용 커넥션풀 단계별 애니메이션 자습서 -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커넥션풀(Connection Pool) 단계별 애니메이션 자습서</title>
+<style>
+:root{
+  --bg:#0d1220; --panel:#151c30; --panel2:#1b2440; --line:#2a3558;
+  --txt:#dce3f5; --dim:#8b96b8; --amber:#ffb454; --cyan:#5cd6ff;
+  --green:#5dde8f; --red:#ff6b7a; --code:#0a0e1a;
+  --mono:'D2Coding','Consolas','Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;line-height:1.7}
+.wrap{max-width:880px;margin:0 auto;padding:24px 16px 120px}
+
+/* ── 헤더 ── */
+header{border:1px solid var(--line);border-radius:14px;background:linear-gradient(160deg,#151c30,#0f1526);padding:28px 24px;margin-bottom:28px}
+.eyebrow{font-family:var(--mono);color:var(--cyan);font-size:13px;letter-spacing:2px}
+h1{font-size:clamp(22px,4.5vw,30px);margin:8px 0 10px}
+h1 b{color:var(--amber)}
+.sub{color:var(--dim);font-size:15px}
+.dl{display:inline-block;margin-top:16px;background:var(--amber);color:#1a1206;font-weight:bold;border:none;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer}
+.dl:active{transform:scale(.97)}
+
+/* ── 섹션 공통 ── */
+section{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:24px 20px;margin-bottom:26px}
+.step-tag{display:inline-block;font-family:var(--mono);font-size:12px;color:#0d1220;background:var(--cyan);border-radius:6px;padding:3px 10px;font-weight:bold;letter-spacing:1px}
+h2{font-size:20px;margin:10px 0 6px}
+h3{font-size:16px;margin:20px 0 8px;color:var(--cyan)}
+p{margin:8px 0;font-size:15px}
+.why{border-left:4px solid var(--amber);background:var(--panel2);border-radius:0 10px 10px 0;padding:12px 14px;margin:14px 0;font-size:14.5px}
+.why b{color:var(--amber)}
+.warn{border-left:4px solid var(--red);background:#241722;border-radius:0 10px 10px 0;padding:12px 14px;margin:14px 0;font-size:14px}
+.warn b{color:var(--red)}
+.note{color:var(--dim);font-size:13px}
+
+/* ── 코드 블록 ── */
+.codebox{position:relative;margin:12px 0}
+pre{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.65;color:#cdd7f0}
+.copy{position:absolute;top:8px;right:8px;background:var(--panel2);color:var(--cyan);border:1px solid var(--line);border-radius:6px;font-size:12px;padding:4px 10px;cursor:pointer}
+.cm{color:#6b7694}.kw{color:#7aa2ff}.st{color:#ffcf87}.hl-add{background:#123524;display:block;border-left:3px solid var(--green);padding-left:6px}
+.hl-del{background:#33161d;display:block;border-left:3px solid var(--red);padding-left:6px;color:#94a0c0;text-decoration:line-through}
+.hl-on{background:#2a2410;display:block;border-left:3px solid var(--amber);padding-left:6px}
+
+/* ── 애니메이션 무대 공통 ── */
+.stage{background:var(--code);border:1px solid var(--line);border-radius:12px;padding:18px;margin:14px 0;overflow:hidden}
+.stage-title{font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:12px;letter-spacing:1px}
+.ctrl{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 16px;font-size:14px;cursor:pointer}
+.btn.primary{background:var(--cyan);color:#0d1220;font-weight:bold;border:none}
+.btn.amber{background:var(--amber);color:#1a1206;font-weight:bold;border:none}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.log{font-family:var(--mono);font-size:12.5px;color:var(--green);min-height:22px;margin-top:10px;white-space:pre-wrap}
+
+/* STEP1 : 기존 방식 vs 풀 방식 */
+.race{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.race{grid-template-columns:1fr}}
+.lane{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px}
+.lane h4{font-size:13.5px;margin-bottom:8px}
+.lane.old h4{color:var(--red)} .lane.new h4{color:var(--green)}
+.reqrow{display:flex;align-items:center;gap:8px;margin:8px 0;font-family:var(--mono);font-size:12px}
+.bar{flex:1;height:14px;background:#0a0e1a;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.bar i{display:block;height:100%;width:0%}
+.old .bar i{background:linear-gradient(90deg,#7a3945,#ff6b7a)}
+.new .bar i{background:linear-gradient(90deg,#1f7a4d,#5dde8f)}
+.ms{width:64px;text-align:right;color:var(--dim)}
+
+/* STEP2 : 커넥션풀 시뮬레이터 */
+.pool{border:1px dashed var(--cyan);border-radius:10px;padding:12px;margin-bottom:14px}
+.pool-label{font-family:var(--mono);font-size:12px;color:var(--cyan);margin-bottom:10px}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{width:96px;text-align:center;font-family:var(--mono);font-size:12px;border-radius:8px;padding:10px 4px;border:1px solid var(--line);background:#10203a;color:var(--green);transition:all .4s}
+.chip.busy{background:#3a2410;color:var(--amber);border-color:var(--amber);transform:translateY(6px)}
+.chip .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:5px;transition:background .3s}
+.chip.busy .dot{background:var(--amber);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.3}}
+.waitq{font-family:var(--mono);font-size:12px;color:var(--red);min-height:20px;margin-top:8px}
+.simstat{display:flex;gap:16px;font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:8px;flex-wrap:wrap}
+.simstat b{color:var(--txt)}
+
+/* STEP3 : JNDI */
+.jndi{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:6px}
+@media(max-width:700px){.jndi{grid-template-columns:1fr;gap:12px}.arrowcol{transform:rotate(90deg)}}
+.kvbox{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px}
+.kvbox h4{font-size:13px;color:var(--cyan);font-family:var(--mono);margin-bottom:8px}
+.kv{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12.5px;border:1px solid var(--line);border-radius:7px;padding:7px 10px;margin:6px 0;transition:all .4s}
+.kv .k{color:var(--amber)} .kv .v{color:var(--dim)}
+.kv.found{background:#123524;border-color:var(--green);box-shadow:0 0 12px rgba(93,222,143,.35)}
+.kv.found .v{color:var(--green)}
+.arrowcol{text-align:center;color:var(--cyan);font-size:22px}
+.lookup-line{font-family:var(--mono);font-size:13px;color:var(--txt);background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:10px}
+.lookup-line .st{color:var(--st)}
+
+/* STEP4 : 설정 4단계 */
+.flow{display:flex;flex-direction:column;gap:0}
+.fstep{display:flex;gap:12px;opacity:.35;transition:opacity .5s}
+.fstep.on{opacity:1}
+.fnum{width:34px;min-width:34px;height:34px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:bold;color:var(--dim);transition:all .4s}
+.fstep.on .fnum{border-color:var(--amber);color:var(--amber);box-shadow:0 0 10px rgba(255,180,84,.4)}
+.fbody{padding-bottom:18px;border-left:2px dashed var(--line);margin-left:-24px;padding-left:30px;transform:translateX(24px)}
+.fstep:last-child .fbody{border-left:none}
+.fbody b{color:var(--amber)}
+.fbody .file{font-family:var(--mono);font-size:12.5px;color:var(--cyan)}
+
+/* 속성 표 */
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+th{background:var(--panel2);color:var(--cyan);font-family:var(--mono);font-size:12.5px}
+td:first-child{font-family:var(--mono);color:var(--amber);white-space:nowrap}
+
+/* STEP5 : 코드 diff 단계 공개 */
+.diffbtns{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.diffbtns .btn.act{background:var(--amber);color:#1a1206;border:none;font-weight:bold}
+.diffnote{font-size:13.5px;color:var(--dim);min-height:44px;border-left:3px solid var(--cyan);padding-left:10px;margin:8px 0}
+.diffnote b{color:var(--cyan)}
+
+/* 퀴즈 */
+.quiz{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0}
+.quiz h4{font-size:14.5px;margin-bottom:10px}
+.opt{display:block;width:100%;text-align:left;background:var(--code);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin:6px 0;font-size:13.5px;cursor:pointer}
+.opt.ok{border-color:var(--green);background:#123524}
+.opt.no{border-color:var(--red);background:#33161d}
+.expl{display:none;font-size:13px;color:var(--dim);border-top:1px dashed var(--line);margin-top:8px;padding-top:8px}
+.expl.show{display:block}
+
+/* 핵심 정리 */
+.finale{border:1px solid var(--amber);background:linear-gradient(160deg,#1d1a12,#151c30)}
+.finale ol{margin:10px 0 0 22px;font-size:15px}
+.finale li{margin:8px 0}
+.finale b{color:var(--amber)}
+
+/* 대시보드 */
+#dash{position:fixed;right:14px;bottom:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-family:var(--mono);font-size:12px;color:var(--dim);box-shadow:0 6px 20px rgba(0,0,0,.5);z-index:9}
+#dash b{color:var(--green)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ══════════ 헤더 ══════════ -->
+<header>
+  <div class="eyebrow">SERVLET · CHAPTER 7 · DATASOURCE</div>
+  <h1>커넥션풀(Connection Pool)<br><b>미리 만들고, 빌려 쓰고, 반납한다</b></h1>
+  <p class="sub">매 요청마다 DB에 새로 접속하던 방식을 버리고, 톰캣이 미리 만들어 둔 연결을
+  꺼내 쓰는 과정을 5단계 애니메이션으로 직접 눌러 보며 배웁니다.</p>
+  <button class="dl" onclick="downloadDoc()">⬇️ 이 문서 다운로드 (.html)</button>
+</header>
+
+<!-- ══════════ STEP 1 ══════════ -->
+<section id="s1">
+  <span class="step-tag">STEP 1</span>
+  <h2>왜 커넥션풀이 필요한가?</h2>
+  <div class="why">💡 <b>문제 상황</b> — 지금까지의 DAO는 요청이 올 때마다
+  <span style="font-family:var(--mono)">DriverManager.getConnection()</span>으로
+  DB 접속을 <b>새로 생성</b>하고, 끝나면 <b>완전히 끊었습니다</b>.
+  접속 생성은 시간이 오래 걸리는 작업이라, 사용자가 많아질수록 서버가 느려집니다.</div>
+
+  <p>아래 버튼을 눌러 <b style="color:var(--red)">기존 방식</b>과
+  <b style="color:var(--green)">커넥션풀 방식</b>이 요청 3건을 처리하는 속도를 비교해 보세요.</p>
+
+  <div class="stage">
+    <div class="stage-title">[ 요청 3건 처리 속도 비교 · 막대가 끝까지 차면 응답 완료 ]</div>
+    <div class="race">
+      <div class="lane old">
+        <h4>❌ 기존 방식 : 매번 새로 접속</h4>
+        <div class="reqrow">요청1 <div class="bar"><i id="o1"></i></div><span class="ms" id="om1"></span></div>
+        <div class="reqrow">요청2 <div class="bar"><i id="o2"></i></div><span class="ms" id="om2"></span></div>
+        <div class="reqrow">요청3 <div class="bar"><i id="o3"></i></div><span class="ms" id="om3"></span></div>
+        <p class="note">접속 생성(느림) + SQL 실행 + 접속 종료를 매번 반복</p>
+      </div>
+      <div class="lane new">
+        <h4>✅ 커넥션풀 : 미리 만든 연결을 빌려 씀</h4>
+        <div class="reqrow">요청1 <div class="bar"><i id="n1"></i></div><span class="ms" id="nm1"></span></div>
+        <div class="reqrow">요청2 <div class="bar"><i id="n2"></i></div><span class="ms" id="nm2"></span></div>
+        <div class="reqrow">요청3 <div class="bar"><i id="n3"></i></div><span class="ms" id="nm3"></span></div>
+        <p class="note">접속은 이미 만들어져 있음 → SQL 실행만 하면 끝</p>
+      </div>
+    </div>
+    <div class="ctrl">
+      <button class="btn primary" id="raceBtn" onclick="runRace()">▶ 속도 비교 시작</button>
+      <button class="btn" onclick="resetRace()">↺ 초기화</button>
+    </div>
+    <div class="log" id="raceLog"></div>
+  </div>
+
+  <div class="why">📌 <b>결론 한 줄</b> — <b>"생성은 한 번, 사용은 여러 번!"</b>
+  DB 연결을 미리 여러 개 만들어 보관해 두고, 필요할 때 빌려 쓰고 돌려주는 방식이
+  <b>커넥션풀(Connection Pool)</b>입니다.</div>
+</section>
+
+<!-- ══════════ STEP 2 ══════════ -->
+<section id="s2">
+  <span class="step-tag">STEP 2</span>
+  <h2>커넥션풀 동작 시뮬레이터</h2>
+  <p>톰캣 서버가 시작될 때 커넥션 3개를 <b>미리</b> 만들어 풀에 보관해 둔 상태입니다.
+  <b>[요청 보내기]</b>를 연달아 눌러 보세요. 4번째 요청부터는 어떻게 되는지도 확인해 보세요.</p>
+
+  <div class="stage">
+    <div class="stage-title">[ 톰캣 서버 내부 · maxActive=3 (동시에 빌려줄 수 있는 최대 개수) ]</div>
+    <div class="pool">
+      <div class="pool-label">DB 커넥션 풀 (Connection Pool) — 서버 시작 시 미리 생성됨</div>
+      <div class="chips">
+        <div class="chip" id="c0"><span class="dot"></span>커넥션1<br><span class="st8" id="t0">대기중</span></div>
+        <div class="chip" id="c1"><span class="dot"></span>커넥션2<br><span class="st8" id="t1">대기중</span></div>
+        <div class="chip" id="c2"><span class="dot"></span>커넥션3<br><span class="st8" id="t2">대기중</span></div>
+      </div>
+      <div class="waitq" id="waitq"></div>
+    </div>
+    <div class="simstat">
+      <span>처리 완료 : <b id="doneCnt">0</b>건</span>
+      <span>현재 사용중 : <b id="busyCnt">0</b>/3</span>
+      <span>대기 요청 : <b id="waitCnt">0</b>건</span>
+    </div>
+    <div class="ctrl">
+      <button class="btn primary" onclick="sendReq()">📨 요청 보내기 (getConnection)</button>
+      <button class="btn" onclick="resetSim()">↺ 초기화</button>
+    </div>
+    <div class="log" id="simLog">풀이 준비되었습니다. 요청을 보내 보세요.</div>
+  </div>
+
+  <h3>흐름 정리</h3>
+  <div class="codebox"><button class="copy" onclick="cp(this)">복사</button><pre>[ 커넥션 풀 : 커넥션1 | 커넥션2 | 커넥션3 ]   &lt;- 서버 시작 시 미리 생성
+        |
+        | 1) 웹 요청이 오면 풀에서 연결을 빌려감  (getConnection)
+        v
+[ 웹 요청 처리 코드 ]  &lt;- 빌린 연결로 SQL 실행
+        |
+        | 2) 사용이 끝나면 연결을 반납함  (close)
+        v
+[ 다시 커넥션 풀로 연결이 돌아감 ]  &lt;- 끊는 게 아니라 "반납"</pre></div>
+
+  <div class="warn">⚠️ <b>주의</b> — 커넥션풀에서는 <span style="font-family:var(--mono)">close()</span>가
+  연결을 끊는 것이 아니라 <b>풀에 반납</b>하는 동작으로 바뀝니다.
+  반납을 안 하면 풀의 연결이 바닥나서 뒤 요청들이 전부 대기하게 됩니다.
+  (그래서 finally에서 반드시 close를 호출해야 합니다.)</div>
+</section>
+
+<!-- ══════════ STEP 3 ══════════ -->
+<section id="s3">
+  <span class="step-tag">STEP 3</span>
+  <h2>JNDI — 이름(key)으로 풀을 꺼내 쓰는 기술</h2>
+  <p><b>JNDI</b>(Java Naming and Directory Interface)는 자원을
+  <b>키(Key)와 값(Value)</b>으로 저장해 두고, 나중에 <b>키로 꺼내 쓰는</b> 기술입니다.
+  열쇠(key)로 사물함(value)을 여는 방식과 같습니다.</p>
+
+  <p>이미 배운 것들 중에도 "키로 값을 꺼내는" 구조가 있었습니다.</p>
+  <table>
+    <tr><th>이미 배운 예</th><th>키(key)</th><th>값(value)</th></tr>
+    <tr><td>getParameter("name")</td><td>input의 name 속성</td><td>사용자가 입력한 값</td></tr>
+    <tr><td>HashMap.get("key")</td><td>put으로 저장한 키</td><td>put으로 저장한 값</td></tr>
+    <tr><td>DNS (도메인 → IP)</td><td>naver.com</td><td>IP 주소</td></tr>
+  </table>
+
+  <p>아래 버튼을 눌러 DAO가 JNDI 저장소에서 커넥션풀을 꺼내는 순간을 확인해 보세요.</p>
+
+  <div class="stage">
+    <div class="stage-title">[ DAO 코드 1줄이 실행되는 순간 ]</div>
+    <div class="lookup-line" id="lookupLine">dataFactory = (DataSource) envContext.lookup(<span class="st">"jdbc/oracle"</span>);</div>
+    <div class="jndi">
+      <div class="kvbox">
+        <h4>MemberDAO (웹 애플리케이션)</h4>
+        <p style="font-size:13px">키 <b style="color:var(--amber);font-family:var(--mono)">"jdbc/oracle"</b> 로<br>lookup(조회)을 요청합니다.</p>
+      </div>
+      <div class="arrowcol" id="jarrow">→</div>
+      <div class="kvbox">
+        <h4>톰캣의 JNDI 저장소 (key / value 모음)</h4>
+        <div class="kv" id="kv1"><span class="k">"jdbc/oracle"</span><span class="v">커넥션풀 객체(DataSource)</span></div>
+        <div class="kv"><span class="k">"mail/smtp"</span><span class="v">메일서버 객체 (예시)</span></div>
+      </div>
+    </div>
+    <div class="ctrl">
+      <button class="btn primary" onclick="runLookup()">▶ lookup 실행해 보기</button>
+    </div>
+    <div class="log" id="jndiLog"></div>
+  </div>
+
+  <div class="why">💡 <b>왜 이렇게 할까?</b> — 톰캣이 커넥션풀을 미리 만들어
+  <b>"jdbc/oracle"</b>이라는 이름(key)으로 등록해 둡니다.
+  그러면 DAO는 <b>URL·아이디·비밀번호를 코드에 직접 쓰지 않고</b>
+  이름만 알면 DB에 연결할 수 있습니다. → <b>보안 + 유지보수</b>가 좋아집니다.
+  (DB 비밀번호가 바뀌어도 자바 코드는 수정할 필요가 없습니다.)</div>
+</section>
+
+<!-- ══════════ STEP 4 ══════════ -->
+<section id="s4">
+  <span class="step-tag">STEP 4</span>
+  <h2>톰캣에 커넥션풀 설정하기 (4단계)</h2>
+  <p><b>[다음 단계]</b>를 눌러 설정 순서를 하나씩 밝혀 보세요.</p>
+
+  <div class="stage">
+    <div class="stage-title">[ 톰캣의 ConnectionPool 설정 과정 ]</div>
+    <div class="flow">
+      <div class="fstep on" id="f1"><div class="fnum">1</div><div class="fbody">
+        <b>JDBC 드라이버 설치</b><br>
+        <span class="file">ojdbc6.jar</span> 파일을 프로젝트의
+        <span class="file">WebContent/WEB-INF/lib</span> 폴더에 넣습니다.
+        <br><span class="note">DB와 대화할 통역 프로그램을 먼저 준비하는 단계입니다.</span>
+      </div></div>
+      <div class="fstep" id="f2"><div class="fnum">2</div><div class="fbody">
+        <b>커넥션풀 라이브러리 설치</b><br>
+        <span class="file">tomcat-dbcp-7.0.30.jar</span> 파일을 같은
+        <span class="file">WEB-INF/lib</span> 폴더에 넣습니다.
+        <br><span class="note">풀을 만들고 관리하는 기능이 이 jar 안에 들어 있습니다. (DBCP = DataBase Connection Pool)</span>
+      </div></div>
+      <div class="fstep" id="f3"><div class="fnum">3</div><div class="fbody">
+        <b>context.xml에 &lt;Resource&gt; 설정</b><br>
+        이클립스의 <span class="file">Servers &gt; context.xml</span> 파일에
+        연결할 DB 정보를 JNDI 이름으로 등록합니다. (아래 코드 참고)
+      </div></div>
+      <div class="fstep" id="f4"><div class="fnum">4</div><div class="fbody">
+        <b>DAO에서 JNDI 이름으로 연결</b><br>
+        MemberDAO에서 <span class="file">lookup("jdbc/oracle")</span>로 풀을 받아
+        <span class="file">dataFactory.getConnection()</span>으로 연결을 빌립니다. (STEP 5에서 코드 확인)
+      </div></div>
+    </div>
+    <div class="ctrl">
+      <button class="btn primary" id="flowBtn" onclick="nextFlow()">▶ 다음 단계 (1/4)</button>
+      <button class="btn" onclick="resetFlow()">↺ 처음부터</button>
+    </div>
+  </div>
+
+  <h3>3단계에서 작성하는 context.xml</h3>
+  <div class="codebox"><button class="copy" onclick="cp(this)">복사</button><pre>&lt;Resource
+    name=<span class="st">"jdbc/oracle"</span>                              <span class="cm">← JNDI 이름(key). DAO가 이 이름으로 꺼냄</span>
+    auth=<span class="st">"Container"</span>                               <span class="cm">← 인증 주체 = 톰캣(컨테이너)</span>
+    type=<span class="st">"javax.sql.DataSource"</span>                    <span class="cm">← 저장되는 값의 종류 = 커넥션풀 객체</span>
+    driverClassName=<span class="st">"oracle.jdbc.driver.OracleDriver"</span> <span class="cm">← DB 종류별 드라이버 클래스</span>
+    url=<span class="st">"jdbc:oracle:thin:@localhost:1521:XE"</span>       <span class="cm">← 접속 주소·포트·SID</span>
+    username=<span class="st">"scott"</span>                              <span class="cm">← DB 접속 아이디</span>
+    password=<span class="st">"tiger"</span>                              <span class="cm">← DB 접속 비밀번호</span>
+    maxActive=<span class="st">"50"</span>                                <span class="cm">← 동시에 빌려줄 수 있는 최대 연결 수</span>
+    maxWait=<span class="st">"-1"</span>                                  <span class="cm">← 빈 연결이 생길 때까지 기다리는 최대 시간(-1=무한)</span>
+/&gt;</pre></div>
+
+  <h3>&lt;Resource&gt; 주요 속성 표</h3>
+  <table>
+    <tr><th>속성</th><th>설명</th></tr>
+    <tr><td>name</td><td>DataSource에 대한 JNDI 이름 (DAO가 lookup할 때 쓰는 키)</td></tr>
+    <tr><td>auth</td><td>인증 주체 (Container = 톰캣이 관리)</td></tr>
+    <tr><td>type</td><td>DB 종류별 DataSource 클래스</td></tr>
+    <tr><td>driverClassName</td><td>연결할 DB 종류에 따른 드라이버 클래스 이름</td></tr>
+    <tr><td>url</td><td>접속할 DB 주소와 포트 번호 및 SID</td></tr>
+    <tr><td>username / password</td><td>DB 접속 ID / 비밀번호</td></tr>
+    <tr><td>maxActive</td><td>동시에 최대로 DB에 연결할 수 있는 Connection 수</td></tr>
+    <tr><td>maxIdle</td><td>동시에 idle(대기) 상태로 있을 수 있는 최대 수</td></tr>
+    <tr><td>maxWait</td><td>새로운 연결이 생길 때까지 기다릴 수 있는 최대 시간</td></tr>
+  </table>
+  <p class="note">다른 속성들은 고정적으로 사용되며, 주로 driverClassName, username, password, url만 변경해서 사용합니다.</p>
+</section>
+
+<!-- ══════════ STEP 5 ══════════ -->
+<section id="s5">
+  <span class="step-tag">STEP 5</span>
+  <h2>MemberDAO 코드는 어떻게 바뀌는가?</h2>
+  <p>수정 버튼을 순서대로 눌러 보세요. 바뀌는 줄이 색으로 표시됩니다.
+  <span style="color:var(--red)">■ 빨강=삭제(주석처리)</span> ·
+  <span style="color:var(--green)">■ 초록=추가</span> ·
+  <span style="color:var(--amber)">■ 노랑=현재 단계</span></p>
+
+  <div class="diffbtns">
+    <button class="btn act" id="d0" onclick="showDiff(0)">원본</button>
+    <button class="btn" id="d1" onclick="showDiff(1)">수정1 · 상수 제거</button>
+    <button class="btn" id="d2" onclick="showDiff(2)">수정2 · DataSource 변수</button>
+    <button class="btn" id="d3" onclick="showDiff(3)">수정3 · 생성자에서 lookup</button>
+    <button class="btn" id="d4" onclick="showDiff(4)">수정4 · 풀에서 연결 빌리기</button>
+  </div>
+  <div class="diffnote" id="diffnote"><b>원본</b> — 지금까지의 방식입니다. 4가지 접속 정보를 코드에 직접 적고, 요청마다 connDB()로 새 접속을 만들었습니다.</div>
+
+  <div class="codebox"><button class="copy" onclick="cp(this)">복사</button><pre id="diffcode"></pre></div>
+
+  <div class="why">💡 <b>결과 확인</b> — <span style="font-family:var(--mono)">http://localhost:8090/pro07/member2</span>
+  로 요청하면 화면은 이전과 똑같은 회원 표가 나옵니다.
+  차이는 눈에 보이지 않는 곳에 있습니다. <b>이번에는 커넥션풀에서 연결을 빌려 썼다</b>는 점입니다.</div>
+</section>
+
+<!-- ══════════ 퀴즈 ══════════ -->
+<section id="s6">
+  <span class="step-tag">CHECK</span>
+  <h2>🧠 이해도 점검 퀴즈</h2>
+
+  <div class="quiz" data-q="q1">
+    <h4>Q1. 커넥션풀을 사용하는 가장 큰 이유는?</h4>
+    <button class="opt" onclick="grade(this,false)">SQL 문법 오류를 자동으로 고쳐 주기 때문</button>
+    <button class="opt" onclick="grade(this,true)">시간이 오래 걸리는 DB 접속 생성을 미리 해 두고 재사용하기 때문</button>
+    <button class="opt" onclick="grade(this,false)">비밀번호를 암호화해 주기 때문</button>
+    <div class="expl">✅ 접속 "생성"이 느린 작업입니다. 미리 만들어 두고 빌려 쓰면 요청마다 생성 시간이 사라집니다. (생성은 한 번, 사용은 여러 번)</div>
+  </div>
+
+  <div class="quiz" data-q="q2">
+    <h4>Q2. DAO 코드의 lookup("jdbc/oracle") 에서 "jdbc/oracle"은 무엇과 짝을 이루는가?</h4>
+    <button class="opt" onclick="grade(this,false)">web.xml의 &lt;servlet-mapping&gt; 이름</button>
+    <button class="opt" onclick="grade(this,false)">오라클 계정 아이디</button>
+    <button class="opt" onclick="grade(this,true)">context.xml의 &lt;Resource name="jdbc/oracle"&gt; 설정</button>
+    <div class="expl">✅ context.xml에 등록한 name(key)과 DAO의 lookup(key)이 정확히 일치해야 톰캣의 JNDI 저장소에서 커넥션풀(value)을 꺼낼 수 있습니다.</div>
+  </div>
+
+  <div class="quiz" data-q="q3">
+    <h4>Q3. 커넥션풀 환경에서 con.close()의 실제 동작은?</h4>
+    <button class="opt" onclick="grade(this,true)">연결을 끊지 않고 풀에 반납한다</button>
+    <button class="opt" onclick="grade(this,false)">DB 서버를 종료한다</button>
+    <button class="opt" onclick="grade(this,false)">연결 객체를 메모리에서 즉시 삭제한다</button>
+    <div class="expl">✅ 풀에서 빌린 연결의 close()는 "반납"입니다. 반납해야 다음 요청이 그 연결을 다시 빌릴 수 있습니다. 그래서 finally에서 반드시 호출합니다.</div>
+  </div>
+</section>
+
+<!-- ══════════ 핵심 정리 ══════════ -->
+<section class="finale">
+  <span class="step-tag" style="background:var(--amber)">핵심 정리 3줄</span>
+  <ol>
+    <li><b>커넥션풀</b> = DB 연결을 미리 여러 개 만들어 두고 <b>빌려 쓰고 반납</b>하는 방식. (생성은 한 번, 사용은 여러 번)</li>
+    <li><b>JNDI</b> = 톰캣이 만든 풀을 <b>이름(key)으로 등록</b>해 두고, DAO는 <b>lookup(이름)</b>으로만 꺼내 쓴다. (코드에 URL·계정 불필요)</li>
+    <li>설정 4단계 = <b>ojdbc jar → dbcp jar → context.xml의 &lt;Resource&gt; → DAO의 lookup + getConnection</b>.</li>
+  </ol>
+</section>
+
+</div><!-- /wrap -->
+
+<div id="dash">진행률 <b id="dashPct">0%</b> · 퀴즈 <b id="dashQuiz">0/3</b></div>
+
+<script>
+/* ───────── 공통 ───────── */
+function cp(btn){
+  try{
+    var t=btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(t).then(function(){btn.textContent='복사됨!';setTimeout(function(){btn.textContent='복사';},1200);});
+  }catch(e){btn.textContent='Ctrl+C로 복사하세요';}
+}
+function downloadDoc(){
+  try{
+    var blob=new Blob(['<!DOCTYPE html>\n'+document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download='ConnectionPoolTutorial.html';a.click();URL.revokeObjectURL(a.href);
+  }catch(e){alert('브라우저에서 Ctrl+S로 저장해 주세요.');}
+}
+
+/* ───────── STEP1 : 속도 비교 ───────── */
+var racing=false;
+function animBar(id,msId,ms,delay){
+  return new Promise(function(res){
+    setTimeout(function(){
+      var el=document.getElementById(id),lab=document.getElementById(msId);
+      el.style.transition='width '+(ms/1000)+'s linear';el.style.width='100%';
+      var t0=0,iv=setInterval(function(){t0+=50;lab.textContent=Math.min(t0,ms)+'ms';if(t0>=ms){clearInterval(iv);res();}},50);
+    },delay);
+  });
+}
+function runRace(){
+  if(racing)return;racing=true;resetRace(true);
+  document.getElementById('raceLog').textContent='측정 중...';
+  var old=Promise.all([ // 접속생성 800ms + SQL 200ms = 1000ms씩 순차
+    animBar('o1','om1',1000,0),animBar('o2','om2',1000,1000),animBar('o3','om3',1000,2000)
+  ]);
+  var neu=Promise.all([ // SQL 200ms만, 풀에서 3개 동시에 빌려 병렬 처리
+    animBar('n1','nm1',200,0),animBar('n2','nm2',200,0),animBar('n3','nm3',200,0)
+  ]);
+  Promise.all([old,neu]).then(function(){
+    document.getElementById('raceLog').textContent='✅ 기존 방식 총 3000ms  vs  커넥션풀 200ms — 접속 "생성" 시간이 사라진 차이입니다. (수치는 이해를 돕기 위한 예시)';
+    racing=false;mark('race');
+  });
+}
+function resetRace(keep){
+  ['o1','o2','o3','n1','n2','n3'].forEach(function(i){var e=document.getElementById(i);e.style.transition='none';e.style.width='0%';});
+  ['om1','om2','om3','nm1','nm2','nm3'].forEach(function(i){document.getElementById(i).textContent='';});
+  if(!keep)document.getElementById('raceLog').textContent='';
+}
+
+/* ───────── STEP2 : 풀 시뮬레이터 ───────── */
+var busy=[false,false,false],done=0,waiting=0,reqNo=0;
+function paint(){
+  document.getElementById('busyCnt').textContent=busy.filter(Boolean).length;
+  document.getElementById('doneCnt').textContent=done;
+  document.getElementById('waitCnt').textContent=waiting;
+  document.getElementById('waitq').textContent=waiting>0?('⏳ 대기 중인 요청 '+waiting+'건 — 빈 커넥션이 생길 때까지 기다립니다 (maxWait)'):'';
+}
+function takeConn(no){
+  var i=busy.indexOf(false);
+  if(i===-1){ // 전부 사용중 → 대기
+    waiting++;paint();
+    log2('요청'+no+' : 빈 커넥션 없음 → 대기열에서 기다립니다 (maxActive=3 초과)');
+    var iv=setInterval(function(){var j=busy.indexOf(false);if(j!==-1){clearInterval(iv);waiting--;useConn(j,no,true);}},200);
+    return;
+  }
+  useConn(i,no,false);
+}
+function useConn(i,no,fromWait){
+  busy[i]=true;
+  var chip=document.getElementById('c'+i);chip.classList.add('busy');
+  document.getElementById('t'+i).textContent='요청'+no+' 사용중';
+  log2('요청'+no+' : 커넥션'+(i+1)+'을(를) '+(fromWait?'대기 후 ':'')+'빌렸습니다 → SQL 실행 중...');
+  paint();
+  setTimeout(function(){
+    busy[i]=false;done++;
+    chip.classList.remove('busy');
+    document.getElementById('t'+i).textContent='대기중';
+    log2('요청'+no+' : 처리 완료 → 커넥션'+(i+1)+' 반납(close) → 풀로 복귀');
+    paint();mark('sim');
+  },1800);
+}
+function sendReq(){reqNo++;takeConn(reqNo);}
+function log2(m){document.getElementById('simLog').textContent=m;}
+function resetSim(){busy=[false,false,false];done=0;waiting=0;reqNo=0;
+  [0,1,2].forEach(function(i){document.getElementById('c'+i).classList.remove('busy');document.getElementById('t'+i).textContent='대기중';});
+  log2('풀이 준비되었습니다. 요청을 보내 보세요.');paint();}
+
+/* ───────── STEP3 : JNDI lookup ───────── */
+function runLookup(){
+  var kv=document.getElementById('kv1'),ar=document.getElementById('jarrow'),lg=document.getElementById('jndiLog');
+  kv.classList.remove('found');lg.textContent='';ar.style.color='var(--cyan)';
+  lg.textContent='1) 키 "jdbc/oracle" 로 JNDI 저장소를 조회합니다...';
+  setTimeout(function(){kv.classList.add('found');lg.textContent='2) 키가 일치하는 항목 발견! value(커넥션풀 객체)를 찾았습니다.';},900);
+  setTimeout(function(){ar.style.color='var(--green)';lg.textContent='3) ✅ DataSource(커넥션풀 객체)가 dataFactory 변수에 저장되었습니다. 이제 getConnection()으로 연결을 빌릴 수 있습니다.';mark('jndi');},1900);
+}
+
+/* ───────── STEP4 : 설정 4단계 ───────── */
+var flowIdx=1;
+function nextFlow(){
+  if(flowIdx>=4)return;
+  flowIdx++;
+  document.getElementById('f'+flowIdx).classList.add('on');
+  var b=document.getElementById('flowBtn');
+  if(flowIdx===4){b.textContent='✅ 설정 완료 (4/4)';b.disabled=true;mark('flow');}
+  else b.textContent='▶ 다음 단계 ('+flowIdx+'/4)';
+}
+function resetFlow(){
+  flowIdx=1;
+  [2,3,4].forEach(function(i){document.getElementById('f'+i).classList.remove('on');});
+  var b=document.getElementById('flowBtn');b.disabled=false;b.textContent='▶ 다음 단계 (1/4)';
+}
+
+/* ───────── STEP5 : 코드 diff ───────── */
+var L={ // 각 줄 : [텍스트, 원본/1/2/3/4 단계별 클래스]
+ con:'private Connection con;',
+ pst:'private PreparedStatement pstmt;'
+};
+var notes=[
+ '<b>원본</b> — 지금까지의 방식입니다. 4가지 접속 정보를 코드에 직접 적고, 요청마다 connDB()로 새 접속을 만들었습니다.',
+ '<b>수정1</b> — 접속 정보 상수 4개와 connDB() 메소드를 <b>주석 처리</b>합니다. 접속 정보는 이제 context.xml이 가지고 있으므로 자바 코드에서는 더 이상 사용되지 않습니다.',
+ '<b>수정2</b> — 커넥션풀 객체를 저장할 <b>DataSource 변수(dataFactory)</b>를 추가합니다. import도 3개(Context, InitialContext, DataSource) 추가됩니다.',
+ '<b>수정3</b> — <b>생성자</b>에서 JNDI 기본 경로(java:/comp/env)로 들어간 뒤, context.xml에 등록한 이름 <b>"jdbc/oracle"</b>로 lookup해서 톰캣이 미리 만든 커넥션풀을 받아옵니다. (DAO 객체가 생성되는 순간 1번만 실행)',
+ '<b>수정4</b> — listMembers()에서 connDB() 대신 <b>dataFactory.getConnection()</b>으로 풀에서 연결을 <b>빌립니다</b>. 이후의 SQL 실행 코드는 이전과 완전히 동일합니다.'
+];
+function code(step){
+  function c(cls,txt){return step>=0?'<span class="'+cls+'">'+txt+'</span>':txt;}
+  var s=step;
+  var out='';
+  out+='<span class="cm">package sec02.ex01;</span>\n\n';
+  out+=(s>=2?'<span class="'+(s===2?'hl-on':'hl-add')+'">import javax.naming.Context;\nimport javax.naming.InitialContext;\nimport javax.sql.DataSource;</span>\n':'<span class="cm">// (수정2에서 import 3개 추가 예정)</span>\n');
+  out+='\npublic class MemberDAO {\n\n';
+  var cst='    private static final String driver = "oracle.jdbc...OracleDriver";\n    private static final String url = "jdbc:oracle:thin:@localhost:1521:XE";\n    private static final String user = "scott";\n    private static final String pwd  = "tiger";';
+  out+= s>=1 ? '<span class="'+(s===1?'hl-on':'hl-del')+'">'+cst.replace(/^    /gm,'    /* ').replace(/;$/gm,'; */')+'</span>\n' : cst+'\n';
+  out+='\n    private Connection con;\n    private PreparedStatement pstmt;\n';
+  out+= s>=2 ? '<span class="'+(s===2?'hl-on':'hl-add')+'">    private DataSource dataFactory;  <span class="cm">// 커넥션풀을 저장할 변수 추가!</span></span>\n' : '';
+  out+='\n';
+  if(s>=3){
+    out+='<span class="'+(s===3?'hl-on':'hl-add')+'">    public MemberDAO() {  <span class="cm">// 생성자 추가!</span>\n        try {\n            <span class="cm">// JNDI 기본 경로(java:/comp/env)로 진입</span>\n            Context ctx = new InitialContext();\n            Context envContext = (Context) ctx.lookup("java:/comp/env");\n\n            <span class="cm">// context.xml의 name과 같은 "jdbc/oracle"로 커넥션풀 받아오기</span>\n            dataFactory = (DataSource) envContext.lookup("jdbc/oracle");\n        } catch (Exception e) { e.printStackTrace(); }\n    }</span>\n\n';
+  } else {
+    out+='<span class="cm">    // (수정3에서 생성자 추가 예정)</span>\n\n';
+  }
+  var cdb='    private void connDB() {\n        Class.forName(driver);\n        con = DriverManager.getConnection(url, user, pwd);\n    }';
+  out+= s>=1 ? '<span class="'+(s===1?'hl-on':'hl-del')+'">    /* '+cdb.trim().replace(/\n/g,'\n    ')+' */</span>\n' : cdb+'\n';
+  out+='\n    public List listMembers() {\n        List list = new ArrayList();\n        try {\n';
+  if(s>=4){
+    out+='<span class="hl-del">            // connDB();  <span class="cm">← 더 이상 직접 접속하지 않음</span></span>\n';
+    out+='<span class="hl-on">            con = dataFactory.getConnection();  <span class="cm">// 풀에서 연결을 "빌려옴"</span></span>\n';
+  }else{
+    out+='            connDB();  <span class="cm">// 4가지 정보로 매번 새로 접속</span>\n';
+  }
+  out+='            String query = "select * from t_member";\n            pstmt = con.prepareStatement(query);\n            ResultSet rs = pstmt.executeQuery();\n            while (rs.next()) { <span class="cm">... MemberVO에 담아 list.add(vo) ...</span> }\n';
+  out+='            rs.close();  pstmt.close();\n';
+  out+= s>=4 ? '            con.close();    <span class="cm">// 끊는 게 아니라 풀에 "반납"!</span>\n' : '            con.close();    <span class="cm">// 접속을 완전히 종료</span>\n';
+  out+='        } catch (Exception e) { e.printStackTrace(); }\n        return list;\n    }\n}';
+  return out;
+}
+function showDiff(n){
+  for(var i=0;i<=4;i++)document.getElementById('d'+i).classList.toggle('act',i===n);
+  document.getElementById('diffnote').innerHTML=notes[n];
+  document.getElementById('diffcode').innerHTML=code(n);
+  if(n===4)mark('diff');
+}
+showDiff(0);
+
+/* ───────── 퀴즈 + 대시보드 ───────── */
+var state={race:0,sim:0,jndi:0,flow:0,diff:0,q1:0,q2:0,q3:0};
+try{var sv=localStorage.getItem('cpTutorial');if(sv)state=JSON.parse(sv);}catch(e){}
+function mark(k){state[k]=1;save();}
+function grade(btn,ok){
+  var q=btn.closest('.quiz');
+  q.querySelectorAll('.opt').forEach(function(o){o.disabled=true;});
+  btn.classList.add(ok?'ok':'no');
+  if(!ok)q.querySelectorAll('.opt').forEach(function(o){if(o.getAttribute('onclick').indexOf('true')>-1)o.classList.add('ok');});
+  q.querySelector('.expl').classList.add('show');
+  if(ok)state[q.dataset.q]=1;save();
+}
+function save(){
+  try{localStorage.setItem('cpTutorial',JSON.stringify(state));}catch(e){}
+  var steps=['race','sim','jndi','flow','diff'].reduce(function(a,k){return a+state[k];},0);
+  var quiz=['q1','q2','q3'].reduce(function(a,k){return a+state[k];},0);
+  document.getElementById('dashPct').textContent=Math.round((steps+quiz)/8*100)+'%';
+  document.getElementById('dashQuiz').textContent=quiz+'/3';
+}
+save();
+</script>
+</body>
+</html>
