@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+	<script type="text/javascript">
+		
+		//아이디와 비밀번호 입력후 로그인 요청 버튼을 클릭하면 호출되는 함수로써
+		//모두 입력 했는지 유효성 검사 하는 함수.
+		//-> 모두 입력 했으면  <form>의 action속성에 설정된 /pro06/login5 매핑주소에 의해 서블릿 페이지에 요청 전송!
+		function fn_validate(){
+			
+			//<form>태그의 name속성에 설정된 "login5"을 이용해 <form></form> 태그 한쌍을 선택해서 가져와 변수에 저장
+			let frmLogin = document.login5;
+			//<form></form>
+			
+			//<form></form>태그 내부에 작성된 자식<input>태그 2개에 입력한 value속성에 설정된 값 얻기 
+			//작성방법 :  선택한 <form></form>.<input>의 name.value;
+			let user_id = frmLogin.user_id.value; //1. 입력한 아이디 얻어 저장
+			let user_pw = frmLogin.user_pw.value; //2. 입력한 비밀번호 얻어 저장
+			
+			//모두 입력 했는지 유효성 검사
+			//-> 아이디 또는 비밀번호 둘 중 하나라도 입력하지 않았다면? "아이디와 비밀번호는 필수로 입력 해야 합니다" 메세지 보여주기 
+			if( (user_id.length == 0 || user_id == "")  ||  (user_pw.length == 0  ||  user_pw == "") ){
+				
+				window.alert("아이디와 비밀번호는 필수로 입력 해야 합니다.");
+			
+			}else{ //-> 아이디 비밀번호 둘을 모두 입력 했다면?
+				
+				//자바스크립트 언어의 문법으로 아래의 <form>태그의 요청 전송방식을 get->post 로 다시 설정
+				frmLogin.method = "post";
+				
+				//자바스크립트 언어의 문법으로 <form>태그의 action속성에 설정된 login -> login5 로 다시 설정
+				frmLogin.action = "login5";
+				
+				//<form action="login5" method="post" name="login5"> ...</form> <-- 로 변경되고 
+				
+				//자바스크립트 언어의 뭄법으로 <form>태그의 action속성에 설정된 login5를 이용해 
+				//LoginServlet5 서블릿 클래스에 로그인 요청 시도!
+				frmLogin.submit();
+			}						
+		}
+	</script>
+</head>
+<body>
+<!-- 
+	[로그인 요청 디자인 페이지 역할]
+	- 사용자로 부터 아이디/비밀번호 입력 
+	- POST 전송 요청 방식으로 LoginServlet5에 요청 전송합니다.
+ -->
+	<form action="login" method="get" name="login5">		
+	
+		<!-- type="hidden" 으로 설정하면 <input> 디자인은 웹브라우저 화면에 노출 하지 않고
+			 요청할 값 (user_address-"서울시 성북구") 묶어서 HttpServletRequest객체 메모리에 담아서 
+			 LoginServlet5 의 doPost() 메소드의 매개변수로 전달 됩니다.   
+		 -->
+		<input type="hidden" name="user_address" value="서울시 성북구">	
+	
+		아이디 : <input type="text" name="user_id" > <br>
+		비밀번호 : <input type="password" name="user_pw" > <br>
+		
+		<input type="button" value="로그인 요청"  onclick="fn_validate();" >
+		<input type="reset" value="다시입력">
+	</form>
+  
+
+</body>
+</html>
+
+
+
+

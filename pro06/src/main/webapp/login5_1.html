@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+	<script type="text/javascript">
+	
+		//아이디와 비밀번호 입력후  로그인 요청 버튼을 클릭하면 호출되는 함수로써
+		//모두 입력 했는지 유효성 검사 하는 함수.
+		//-> 모두 입력 했으면 <form>의 action속성에 설정된 login5 매핑주소에 의해 서블릿(서버페이지)에 요청 전송!
+		function fn_validate(event){
+			//1. event매개변수로 전송한 이벤트(onsubmit)가 발생한 <form>태그의 정보가 저장된 onsubmit이벤트객체를 전달 받아
+			//  <form>의 기본 제출 동작(서버페이지로 전송 요청하는 동작)을 막음  -> event.preventDefault();
+			//  이유 : 기본적으로 <form> 태그는 <input type=submit>버튼을 누르면 서버페이지로 데이터를 전송 요청하는데....
+			//        유효성 검사 코드를 먼저 수행 하기 위해 이를 중지 할 용도로 사용.
+			event.preventDefault();
+			
+			//유효성 검사 코드 작성
+			
+			//2. <form></form>태그 한쌍 선택 해서 저장
+			let frmLogin = document.login5;
+ 			
+			//3. 사용자 입력 값 <input>에서 얻기 
+			let user_id = frmLogin.user_id.value; //입력한 아이디 얻기 
+			let user_pw = frmLogin.user_pw.value; //입력한 비밀번호 얻기 
+			
+			//4. 아이디 또는 비밀번호가 제대로 입력 되지 않은 경우 
+			if( user_id.trim() === "" || user_pw.trim() === ""){
+			   //-> 공백 제거 후 길이가 0이면 입력되지 않은 경우
+			   
+			   alert("아이디와 비밀번호 필수로 입력해야 합니다.");
+			   
+			}else{
+				//5. 모든 입력이 정상적으로 되었을때,  톰캣서버가 실행할  서블릿 페이지로 입력된 데이터들을 전송 준비
+				frmLogin.method="post"; //전송 요청 방식 변경 (기본 설정은 get 이었습니다.-> post로 변경)
+				frmLogin.action="login5"; //요청할 모든 데이터를 전송할 서블릿 페이지 요청 주소 설정 
+				//6. 모든 입력이 정상적으로 되었을때,  톰캣서버가 실행할  서블릿 페이지로 입력된 데이터들을 전송
+				frmLogin.submit();
+			}
+		}
+	</script>
+</head>
+<body>
+	<!-- 서블릿(서버페이지)에게 입력한 아이디, 비밀번호를 전달 요청 전송해  로그인 요청을 하는 정적 디자인 페이지 -->
+	
+	<!-- onsubmit 이벤트(로그인 요청 버튼 을 눌러 전송 요청 하는 행위)를 <form>태그에 등록 후  이벤트가 발생하면 fn_validate함수 호출해서 처리 -->
+    <form action="login"  method="get" name="login5"  onsubmit="fn_validate(event)"   >
+    
+    	<!-- 
+    		type="hidden"으로 설정하면 <input>디자인은 웹브라우저 화면에 출력해서 노출 하지 않고
+    		요청할 값 (name-value)묶어서  HttpServletRequest객체 메모리에 담아서 서블릿의 doPost메소드의 매개변수로 전달 됩니다.
+    	 -->
+    	<input type="hidden" name="user_address" value="서울시 성북구">
+    	
+    	아이디 : <input type="text" name="user_id"> <br>
+    	비밀번호 : <input type="password" name="user_pw"> <br>
+    
+    	<input type="submit" value="로그인 요청">
+    	<input type="reset" value="다시입력">
+    
+    </form>
+
+
+
+</body>
+</html>
+
+
+
+
+
+

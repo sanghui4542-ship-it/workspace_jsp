@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+
+	<script type="text/javascript">
+	
+	//1.DOMContentLoaded 이벤트 등록
+	//  - 웹브라우저는 HTML 문서를 위->아래 순서로 읽는다.
+	//  - 이 이벤트는 HTMl 태그들이 모두 메모리에 생성된 직후 발생한다.
+	//요약 :  브라우저가 이 HTML문서 내부에 모든 HTML태그들을 읽어들인 동작(이벤트)을 등록
+	
+	document.addEventListener("DOMContentLoaded", function() {
+		
+		//2. <form> 태그 선택해서 저장
+		//- id="loginForm" 이 작성된 <form>태그 전체를 가져온다.
+		const form = document.getElementById("loginForm");
+		
+		//3.<form> 태그에 submit이벤트 등록
+		//- submit 이벤트는 다음 순간에 발생한다.
+		//  1. 로그인 요청 버튼을 클릭 했을때
+		//  2. 입력창에서 Enter 키 입력 했을때
+		form.addEventListener("submit", function(e){
+			
+			//4. 아이디 입력 값 가져오기
+			const userId = form.user_id.value.trim();
+			//5. 비밀번호 입력 값 가져오기 
+			const userPw = form.user_pw.value.trim();
+			//6. 필수 입력(아이디, 비밀번호) 값 검증
+			if(userId == "" || userPw == "") {
+				//7. 사용자에게 즉시 경고 메세지 표시
+				alert("아이디와 비밀번호는 필수 입력 항목입니다.");
+				//8. submit 전송 이벤트 차단
+				e.preventDefault();
+				//9. 함수 function 종료 
+				return;
+			}  	
+		});
+		
+	});
+	</script>
+</head>
+<body>
+<!-- 
+	[로그인 요청 디자인 페이지 역할]
+	- 사용자로 부터 아이디/비밀번호 입력
+	- POST전송요청 방식으로 LoginServlet5에 요청 전송 합니다.
+ -->
+	<form action="/pro06/login5" method="post" id="loginForm">
+	
+		<input type="hidden" name="user_address" value="서울시 성북구">
+	
+		<div>
+			아아디 : <input type="text" name="user_id" required> <br>
+			비밀번호 : <input type="password" name="user_pw" required> <br>
+			<button type="submit">로그인 요청</button> 
+			<button type="reset">다시입력</button>
+		</div>
+	
+	</form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
