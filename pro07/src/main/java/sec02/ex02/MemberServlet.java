@@ -78,6 +78,7 @@ public class MemberServlet extends HttpServlet{
 		// ----->  MemberServlet이 어떤 요청(회원 조회?  회원추가?  회원수정? 중 회원추가요청)을 받았는지 판단
 		String command = request.getParameter("command");
 		//회원 추가 요청한 조건값  "addMember"얻기 
+		//회원 삭제 요청한 조건값  "delMember"얻기 
 		
 		//----->  DB의  t_member 테이블에 새회원 추가 요청("addMember")을 서블릿이 받았다면?
 		if(command != null  &&  command.equals("addMember")) {
@@ -98,11 +99,25 @@ public class MemberServlet extends HttpServlet{
 			int result = dao.addMember(vo);
 			
 			System.out.println("회원가입(추가)에 성공하면 1 출력, 회원가입(추가)에 실패하면 0 출력 = " + result);
-		}else if(command != null && command.equals("delMember")) {
-			String id = request.getParameter("id");
-			dao.addMember(id);
-		}
 		
+		// 회원 한사람의 삭제 요청을 서블릿이 받았다면?
+		// command 변수에 저장된 요청 조건 값이 "delMember" 과 같다면? 	
+		} else if(command != null &&  command.equals("delMember")) {
+			
+		// http://localhost:8181/pro07/member3?command=delMember&id=hong  <- 삭제 요청을 받은 요청 주소 
+			
+			//요청한 삭제할 회원 아이디 얻기
+				//삭제할 회원의 아이디를 HttpservletRequest객체 메모리에서 꺼내오기
+				//얻는 이유 : DELETE 구문 작성시 어떤 아이디를 가진 회원 레코드를 삭제 할것인지 판단해서 회원 레코드 하나만 삭제 시키기 위함
+				//		예 : delete from t_member where id='hong';
+			String id = request.getParameter("id"); //'hong'
+			
+			//요청 받은 삭제할 회원 아이디를 이용해  DB의 t_member테이블에 저장된 하나의 회원 레코드 삭제하기 위해
+			//MemberDAO에 만들어 놓은 delMember메소드 호출!
+			dao.delMember(id);
+			
+			
+		}
 		
 		
 		
@@ -131,7 +146,7 @@ public class MemberServlet extends HttpServlet{
 					out.print("<th>이메일</th>");
 					out.print("<th>가입일</th>");
 					out.print("<th>삭제</th>");
-					out.print("<th>수정</th>");
+					out.print("<th>수정</th>");				
 				out.print("</tr>");
 
 				/*
@@ -154,12 +169,15 @@ public class MemberServlet extends HttpServlet{
 						out.print("<td>" + memberVO.getName() + "</td>");
 						out.print("<td>" + memberVO.getEmail() + "</td>");
 						out.print("<td>" + memberVO.getJoinDate() + "</td>");
-						out.print("<td><a href='/pro07/member3?command=delMember&id="+memberVO.getId()+"'></a>삭제</td>");
-						out.print("<td><a href='/pro07/member3?command=delMember&id="+memberVO.getId()+"'></a>수정</td>");
+						out.print("<td><a href='/pro07/member3?command=delMember&id="+memberVO.getId()+"'>삭제</a></td>");
+						out.print("<td><a href='/pro07/member3?command=delMember&id="+memberVO.getId()+"'>수정</a></td>");
 					out.print("</tr>");
 				}
 
 			out.print("</table>");
+			
+			out.print("<a href='/pro07/memberForm.html'>회원가입</a>");
+			
 		out.print("</body>");
 	out.print("</html>");		
 		

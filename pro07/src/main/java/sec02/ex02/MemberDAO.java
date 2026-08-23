@@ -186,6 +186,56 @@ public class MemberDAO {
 			
 		}	
 	}
+	
+	//=============================================================================
+	//delMember() 메소드 정의 : t_member 테이블에 저장된 회원 한사람의 정보 삭제 하는 기능의 메소드
+	// - 삭제 <a> 링크를 클릭했을때... MemberServlet서블릿으로 전송요청한 삭제할 회원아이디를
+	//   현재 보고 있는 delMember메소드의 매개변수 String id로 전달받아
+	//   delete SQL문을 완성한 후 ~~  DB의 t_member테이블에 저장된 하나의 회원레코드 정보 삭제 시킨다.
+	//==============================================================================
+	public  void  delMember(String id) {
+		
+		try {
+			//순서1. 커넥션 풀 공간에서 커넥션 객체 하나 얻기 
+			//요약 :  ( DB와의 연결 )
+			con = dataSource.getConnection();
+			
+			//순서2. 위 String id 매개변수로 전달받은 삭제할 회원 아이디에 해당하는 회원레코드(행) 삭제시키는 DELETE 문 작성
+			//요약 : 실행할 SQL문 작성 
+			String query = "delete from t_member where id=?";
+			
+			//순서3. query 변수에 저장된 전체 "delete" 문자열을 미리 로드한 PreparedStatement 실행 객체 얻기
+			pstmt = con.prepareStatement(query);
+			//"delete from t_member where id=?"
+			
+			//순서3-1. PreparedStatement 실행객체 메모리에 미리 로드한  전체 delete 문자열 중에서
+			//		  ? 기호 대신 String id 매개변수로 받은 삭제할 회원 아이디로 설정 해서 delete 전체 문장 완성 시킨다.
+			//요약 : ? 설정
+			pstmt.setString(1, id);  //"delete from t_member where id='hong'"
+  			
+			//순서4. PreparedStatement 실행객체 메모리에 완성된 위 delete 전체 문장을 DB의 t_member테이블에 전송해서 실행!
+			pstmt.executeUpdate();
+			
+			//참고  executeUpdate(); <-- INSERT, UPDATE, DELETE 구문 실행시 사용
+			//                      <-- SQL문 실행시 성공하면 성공한 레코드 갯수 1반환 실패하면 0반환
+			
+			//     executeQuery();  <-- SELECT 구문 실행시 사용
+			//						<-- SQL문 실행시 조회된 결과 데이터들을 ReusltSet임시메모리객체에 담아 반환				
+			
+		} catch (Exception e) {
+			System.out.println("MemberDAO의 delMember 메소드 내부의 코드에서 delete문 실행 오류 : " + e);
+		} finally {
+			//순서5. 사용한 메모리들(PreparedStatemement,  Connection 객체) 자원 해제(반납)
+			ResourceClose();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
 	//========================================================================
 	//addMember() 메소드 정의  :  t_member 테이블에 새 회원 정보 하나를 추가 하는 기능의 메소드 
 	//
@@ -239,22 +289,14 @@ public class MemberDAO {
 											//insert 문장 실행에 실패하면 0을 반환 			
 		}catch(Exception e) {
 			e.printStackTrace();
+		}finally {
+			//순서5. 위 DB관련 작업할 삼총사 객체 메모리들 사용 끝나면 메모리 낭비이므로 자원 반납
+			ResourceClose();
 		}
-	}
 	
-	public void delMember(String id) {
-		try {
-			con = dataFactory.getConnection();
-			String query = "delete frOm t_member where id+?";
-			pstmt = con.prepareStatement(query);
-			pstmt.setString(1,  id);
-			pstmt.executeUpdate();
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}	
+		//순서6.  새회원 추가(회원 가입 성공) 1 또는  (실패) 0을  MemberServlet 사장에게 보고(반환)
+		return result;
+	}
 	
 
 	//=========================================================================
