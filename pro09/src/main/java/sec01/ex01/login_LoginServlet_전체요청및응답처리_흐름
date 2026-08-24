@@ -1,0 +1,67 @@
+ [Browser]                [Network]        [Tomcat]                      [Servlet]
+==================================================================================================
+
+---- 브라우저 주소창 -----
+로그인 요청 주소 입력 : http://localhost:8181/pro09/login 
+
+ login.html  <form action="login" method="post">
+ 
+  user_id="hong"  user_pw="1234"  user_address="서울시 성북구"  user_email/user_hp=hidden
+       |
+       | [로그인] 클릭 -> name 있는 태그만 수집(submit/reset 제외) -> URL 인코딩 + & 조립
+       v
+ 웹브라우저가 HTTP Request 요청 메세지 완성
+ +----------------------+
+ | POST /pro09/login    | -- TCP 8181 -->  TomCat이 요청행 분석 / URL 매핑 검색
+ | Host: localhost:8181 |                       |
+ | Content-Type: form   |                       v
+ | Content-Length: 143  |                  LoginServlet 객체 확보 -> body 파싱
+ |                      |                       |
+ | user_id=hong&...     |                       v
+ +----------------------+          +--------------------------+
+                                   | HttpServletRequest #100  |
+                                   |  user_id      -> hong    |
+                                   |  user_pw      -> 1234    |
+                                   |  user_address -> 서울..  |
+                                   |  user_email   -> test..  |
+                                   |  user_hp      -> 010..   |
+                                   +--------------------------+
+                                   | HttpServletResponse #200 |
+                                   |  ContentType : 미설정    |
+                                   |  응답버퍼    : 비어있음  |
+                                   +--------------------------+
+                                                |
+                                   method=post 이므로 doPost() 호출
+                                                +----> doPost(request, response)
+                                                              |
+                                                              v
+                                                       (1) setCharacterEncoding("UTF-8")
+                                                       (2) getParameter("user_id") x 5
+==================================================================================================
+                                                              |  <-- 여기부터 응답 구간
+                                                              v
+                                                       (3) data 조립 (문자열 5줄 누적)
+                                                       (4) setContentType(text/html;UTF-8)
+                                                       (5) getWriter().print(data)
+                                                              |
+                                   #200 응답버퍼 적재 <---------+
+                                                |
+                                                v
+                                   doPost() 종료 -> 톰캣이 자동 flush
+                                   상태행 200 OK / Content-Length 178 / 빈 줄 자동 생성
+                                                |
+요청한 브라우저에  HTTP Response 응답 메세지 도착         v
+ +--------------------------+                   |
+ | HTTP/1.1 200 OK          | <-- TCP 8181 -----+
+ | Content-Type: text/html; |
+ |          charset=UTF-8   |
+ | Content-Length: 178      |
+ |                          |
+ | 안녕하세요!<br> ...         |
+ +--------------------------+
+       |
+       | 200 확인 -> charset=UTF-8로 한글 복원 -> <br>을 줄바꿈으로 렌더링
+       v
+ 브라우저 화면 출력
+  안녕하세요! / 로그인하셨습니다. / 아이디:hong / 비번:1234 / 주소:서울시 성북구 / ...
+==================================================================================================

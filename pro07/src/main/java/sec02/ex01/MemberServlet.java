@@ -21,7 +21,7 @@ MemberServlet 클래스
 [브라우저] <--HTML 표 응답-- [MemberServlet] <--ArrayList 반환-- [MemberDAO] <--결과-- [t_member]
 */
 
-@WebServlet("/member3")
+@WebServlet("/member4")
 public class MemberServlet extends HttpServlet{
 
 	// doGet 메소드 오버라이딩 (alt + shift + s 누른후  v)  :  GET 방식 요청이 오면 톰캣이 자동 호출하는 메소드 

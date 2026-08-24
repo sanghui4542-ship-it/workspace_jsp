@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원 수정 요청 화면</title>
+
+	<!-- JQuery 사용을 위한 jquery-latest.min.js 불러오기  -->
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+	<script type="text/javascript">
+
+	/*
+	    [이 화면이 열리기까지의 흐름]
+	    회원목록에서 수정<a> 클릭
+	      -> /pro08/member5?command=modMember&id=hong (서블릿에 수정화면 요청)
+	      -> 서블릿이 DB에서 hong 조회 후 "자바스크립트 재요청"으로 이 화면으로 이동시킴
+	      -> 이때 주소 뒤에 조회값이 붙어서 온다!
+	         /pro08/memberModForm.html?id=hong&pwd=1212&name=%ED%99%8D...&email=hong@gmail.com
+	      -> 아래 [값 채우기] 코드가 주소 뒤의 값들을 꺼내 <input>에 미리 채워 넣는다.
+	*/
+		$(function(){
+			/*
+		    location.search 분해
+		    ---------------------------------------------------------
+		    location        : 브라우저가 제공하는 "현재 주소창 정보" 객체
+		    .search         : 그중에서 ? 부터 끝까지의 문자열만 꺼낸 것
+
+		    [텍스트 모델링 (2)] 현재 주소와 location.search
+		    전체 주소 : http://localhost:8090/pro08/memberModForm.html?id=hong&pwd=1212&name=%ED%99%8D%EA%B8%B8%EB%8F%99&email=hong@gmail.com
+		    location.search = "?id=hong&pwd=1212&name=%ED%99%8D%EA%B8%B8%EB%8F%99&email=hong@gmail.com"
+		                       ^ 물음표부터 끝까지. 서블릿이 붙여 보낸 조회값 4쌍이 들어있다.
+
+		    new URLSearchParams(문자열) 분해
+		    ---------------------------------------------------------
+		    - "?이름=값&이름=값" 형태의 문자열을 받아서
+		      이름표로 값을 꺼낼 수 있는 "목록 객체"로 만들어 주는 브라우저 내장 도구.
+		    - new : 그 목록 객체를 메모리에 새로 생성한다는 뜻.
+
+		    [텍스트 모델링 (3)] params = new URLSearchParams( location.search ); 객체 내부 모습 (HashMap과 같은 구조!)
+		    +---------+--------------------------------+
+		    | key     | value                          |
+		    +---------+--------------------------------+
+		    | "id"    | "hong"                         |
+		    | "pwd"   | "1212"                         |
+		    | "name"  | "홍길동"  <- %ED%99%8D... 를   |
+		    |         |            자동으로 원래 한글로 |
+		    |         |            되돌려서(디코딩) 보관|
+		    | "email" | "hong@gmail.com"               |
+		    +---------+--------------------------------+
+		*/
+			let params = new URLSearchParams( location.search );
+
+		    //<input> 입력 공간 선택해서 수정전 조회된 회원의 정보들을 <input>의 value속성에 설정해서 브라우저로 보여준다.
+		    //|| "" 의 뜻 : 주소에 해당 값이 없으면(null) 빈 문자열을 대신 채워 오류를 막는다.
+		    $("input[name='id']").val(params.get("id")  ||  "");
+		    $("input[name='pwd']").val(params.get("pwd") ||  "");
+		    $("input[name='name']").val(params.get("name")  || "");
+		    $("input[name='email']").val(params.get("email") || "");
+		});
+
+
+		//아래의 <form>태그 내부에 작성된 <input>태그들에 수정할 내용이
+		//입력되었는지 검사하는 함수로 "수정요청" 버튼을 클릭했을때 호출됩니다.
+		function fn_sendMember(){
+
+			//아이디,비밀번호,이름,이메일을 입력할수 있는 <input>을 선택해서 가져와 변수에 저장
+			let idInput = $("input[name='id']");
+			let pwdInput = $("input[name='pwd']");
+			let nameInput = $("input[name='name']");
+			let emailInput = $("input[name='email']");
+
+			//아래의 <form></form>한쌍을 선택해서 변수에 저장
+			let formTag = document.frmMember;
+
+			//아이디, 비밀번호, 이름 , 이메일을 입력했는지 검사
+			//1. 아이디 미입력 했다면?
+			if(idInput.val() == "" || idInput.val().length  == 0 ){
+
+				alert("아이디를 입력해야 합니다.");
+
+			//2. 비밀번호 미입력 했다면?
+			}else if(pwdInput.val() == "" || pwdInput.val().length == 0){
+
+				alert("비밀번호를 입력해야 합니다.");
+
+			//3. 이름을 미입력 했다면?
+			}else if(nameInput.val() == "" || nameInput.val().length == 0){
+
+				alert("이름을 입력해야 합니다.");
+
+			//4. 이메일 미입력 했다면?
+			}else if(emailInput.val() == "" || emailInput.val().length == 0){
+
+				alert("이메일을 입력해야 합니다.");
+
+			//5. 수정할 내용을 모두 입력했다면?
+			}else{
+				//아래의 <form></form>선택해서 가져와
+				//method속성에 "post"로 설정하고,
+				//action속성에 "member5"로 설정하고
+				//submit(); 함수를 호출해  MemberServlet서블릿으로 회원수정 요청 합니다.
+				formTag.method = "post";
+				formTag.action = "member5";
+				formTag.submit();
+
+			//post 요청일 경우!!!!!!!!
+			//HTTP Request메세지의 헤더영역과 본문영역이 있는데...
+				//============================================================================
+				//			헤더 영역에는 아래의 회원수정 요청 주소가 보관됨
+				//============================================================================
+				//http://localhost:8090/pro08/member5   회원수정요청 주소!
+				//
+				//
+				//=============================================================================
+				//			본문 영역에는 <form>안의 모든 <input> 수정을 위해 입력한 값들이 name=값 쌍으로 묶어서 보관
+				//=============================================================================
+				//
+				//command=modMember2&id=hong&pwd=9999&name=홍길동2&email=hong2@a.com
+				//
+				//-> 서블릿의 doHandle이 command 값 "modMember2"를 판단해
+				//   updateMember 메소드를 호출! UPDATE 실행 후 회원목록 화면으로 응답한다.
+				//==============================================================================
+
+			}
+
+		}
+	</script>
+</head>
+<body>
+
+	<h1>회원 수정 요청 화면</h1>
+
+<!--  회원 수정 요청을 위해 입력하는 디자인 화면 페이지  -->
+	<form name="frmMember">
+
+		<!-- 화면에는 안 보이지만 전송되는 값 : 서블릿이 "수정완료 요청"임을 판단할 조건값 -->
+		<input type="hidden" name="command" value="modMember2" >
+
+		<table>
+			<tr>
+				<td>아이디</td>
+				<!-- readonly : 아이디는 UPDATE의 where 조건이므로 수정 못 하게 잠금 -->
+				<td><input type="text" name="id" readonly></td>
+			</tr>
+			<tr>
+				<td>비밀번호</td>
+				<td><input type="password" name="pwd"></td>
+			</tr>
+			<tr>
+				<td>이름</td>
+				<td><input type="text" name="name"></td>
+			</tr>
+			<tr>
+				<td>이메일</td>
+				<td><input type="email" name="email"></td>
+			</tr>
+		</table>
+		<input type="button" value="수정요청" onclick="fn_sendMember();">
+		<input type="reset" value="다시입력">
+	</form>
+
+
+</body>
+</html>

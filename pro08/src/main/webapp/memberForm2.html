@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원 가입 화면</title>
+
+	<!-- jQuery 라이브러리 불러오기
+	     - https + 버전을 고정한 파일을 사용한다.
+	       버전을 고정해야 배포 후에도 동작이 갑자기 바뀌지 않는다. -->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<script type="text/javascript">
+
+		/*
+		    ============================================================
+		    회원가입 폼 검증 스크립트
+		    ============================================================
+		    구성 (위에서부터 4블록)
+		    1. 설정      : 필수 입력 항목 목록 (REQUIRED_FIELDS)
+		    2. 검증 함수 : validateMemberForm() - 미입력 검사만 담당
+		    3. 전송 함수 : sendMember()         - 검증 통과 시 전송만 담당
+		    4. 이벤트    : 문서 로딩 후 버튼과 함수를 연결
+
+		    -> 함수 하나가 한 가지 일만 하도록 나누면
+		       오류가 났을 때 원인 위치를 바로 찾을 수 있다.
+		*/
+
+		// ------------------------------------------------------------
+		// 1. [설정] 필수 입력 항목 목록
+		// - name  : <input>태그의 name 속성값 (서버로 전송될 이름표)
+		// - label : 경고창에 보여줄 한글 항목명
+		// - 필수 항목이 늘어나면 이 배열에 한 줄만 추가하면 된다.
+		// ------------------------------------------------------------
+		const REQUIRED_FIELDS = [
+			{ name: "id",    label: "아이디"   },
+			{ name: "pwd",   label: "비밀번호" },
+			{ name: "name",  label: "이름"     },
+			{ name: "email", label: "이메일"   }
+		];
+
+		// ------------------------------------------------------------
+		// 2. [검증 함수] 필수 항목이 모두 입력되었는지 검사
+		// - 반환값 : 전부 입력됨 true / 하나라도 비었으면 false
+		// - 문제를 발견한 즉시 return false로 끝내는 방식(early return)이라
+		//   조건문을 층층이 쌓지 않아도 되어 읽기 쉽다.
+		// ------------------------------------------------------------
+		function validateMemberForm() {
+
+			// 배열의 항목 수만큼 반복하며 순서대로 검사
+			for (const field of REQUIRED_FIELDS) {
+
+				// name 속성으로 해당 <input>을 선택 (예: input[name='id'])
+				const $input = $("input[name='" + field.name + "']");
+
+				// 입력값의 앞뒤 공백을 제거한 뒤 검사
+				// -> "   " 처럼 공백만 입력한 경우도 미입력으로 걸러진다
+				const value = $input.val().trim();
+
+				// 비어 있으면 : 안내 → 해당 칸으로 커서 이동 → 즉시 종료
+				if (value === "") {
+					alert(field.label + "을(를) 입력해야 합니다.");
+					$input.focus();   // 문제의 입력칸으로 커서를 이동시켜 준다
+					return false;     // 검증 실패로 즉시 종료
+				}
+			}
+
+			// 반복문을 무사히 통과 = 전부 입력됨
+			return true;
+		}
+
+		// ------------------------------------------------------------
+		// 3. [전송 함수] 검증 통과 시 서블릿으로 회원가입 요청
+		// ------------------------------------------------------------
+		function sendMember() {
+
+			// 검증 실패면 여기서 종료 (경고창은 검증 함수가 이미 띄웠음)
+			if (!validateMemberForm()) {
+				return;
+			}
+
+			// name이 frmMember인 <form>을 선택
+			const $form = $("form[name='frmMember']");
+
+			// 전송 방식과 목적지 주소를 설정
+			// - attr(속성명, 값)  : 태그의 속성을 JS에서 설정하는 jQuery 함수
+			// - method "post"     : 입력값을 주소창이 아닌 요청 본문에 담아 전송
+			// - action "member3"  : MemberServlet(/member3)으로 요청
+			$form.attr("method", "post");
+			$form.attr("action", "member3");
+
+			// submit() : <form> 안의 입력값들을 action 주소로 전송
+			// - 실제 form 태그의 submit을 호출해야 하므로
+			//   [0] 으로 jQuery 객체에서 순수 DOM 요소를 꺼내 호출한다
+			$form[0].submit();
+		}
+
+		// ------------------------------------------------------------
+		// 4. [이벤트 연결] 문서(HTML) 로딩이 끝난 뒤 실행되는 영역
+		// - $(function(){ ... }) : "HTML을 다 그린 다음에 실행해라"는 뜻.
+		//   이 안에서 연결해야 버튼이 아직 만들어지기 전에
+		//   연결을 시도하는 오류를 막을 수 있다.
+		// ------------------------------------------------------------
+		$(function () {
+
+			// id가 btnJoin인 버튼을 클릭하면 sendMember 함수가 실행되도록 연결
+			// (화면 담당인 HTML과 동작 담당인 JS를 분리하는 방식)
+			$("#btnJoin").on("click", sendMember);
+		});
+
+	</script>
+</head>
+<body>
+
+	<h1>회원 가입 화면</h1>
+
+	<!-- 회원 가입 정보를 입력받아 서블릿으로 전송하는 화면 -->
+	<form name="frmMember">
+
+		<!-- hidden 입력 : 화면에는 안 보이지만 서버로 함께 전송되는 값.
+		     서블릿이 "이 요청은 회원추가(addMember) 요청"임을 구분하는 용도 -->
+		<input type="hidden" name="command" value="addMember">
+
+		<table>
+			<tr>
+				<td>아이디</td>
+				<td><input type="text" name="id"></td> <!-- 입력한 아이디가 id=값 으로 전송됨 -->
+			</tr>
+			<tr>
+				<td>비밀번호</td>
+				<td><input type="password" name="pwd"></td>
+			</tr>
+			<tr>
+				<td>이름</td>
+				<td><input type="text" name="name"></td>
+			</tr>
+			<tr>
+				<td>이메일</td>
+				<td><input type="email" name="email"></td>
+			</tr>
+		</table>
+
+		<!-- 가입요청 버튼 : 클릭 동작은 위 4번 블록에서 JS로 연결되어 있다 -->
+		<input type="button" id="btnJoin" value="가입요청">
+		<input type="reset" value="다시입력">
+	</form>
+
+</body>
+</html>

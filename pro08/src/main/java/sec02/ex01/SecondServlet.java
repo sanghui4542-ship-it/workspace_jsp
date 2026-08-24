@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
    -> 포워딩(재요청) 받는 주소 : http://localhost:8181/pro08/second?name=lee
 */
 
-@WebServlet("/second")
+//@WebServlet("/second")
 public class SecondServlet extends HttpServlet {
 
 	//alt + shift + s  누른 후 v  <--- 메소드 오버라이딩 

@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
       두번째 서블릿인 SecondServlet을 포워딩(재요청기술)할 코드를 작성 함.  
                      	
 */
-@WebServlet("/first")
+//@WebServlet("/first")
 public class FirstServlet extends HttpServlet {
 
 	@Override
