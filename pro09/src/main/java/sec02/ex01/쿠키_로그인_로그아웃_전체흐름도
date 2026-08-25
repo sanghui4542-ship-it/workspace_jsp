@@ -1,0 +1,100 @@
+ [Browser]              [Network]        [Tomcat]                    [Servlet]
+================================================================================================
+◆ 1왕복 : 로그인        POST /pro09/login3                          (LoginServlet)
+------------------------------------------------------------------------------------------------
+ login3.html 에서 admin / 1234 입력 -> [로그인] 클릭
+       |
+       v
+  웹브라우저가 HTTP Request 요청 메세지 완성				[Tomcat]    
+ +----------------------------+
+ | POST /pro09/login3         | -- TCP 8181 요청 -->  /login3 매핑 -> LoginServlet 의 doPost() 호출
+ | Content-Type: form         |                                        |
+ |                            |                                        v
+ | user_id=admin&user_pw=1234 |                     (1) getParameter 로 아이디/비번 얻기
+ +----------------------------+                     (2) "admin".equals && "1234".equals ?
+                                                        |                        |
+                                                      [true]                  [false]
+                                                        |                        |
+                                                        v                        v
+                                       (3) new Cookie("user_id","admin")   out.print("로그인 실패..")
+                                       (4) setMaxAge(60*60*24*7) 7일 유지       (200 OK 로 끝)
+                                       (5) setPath("/")     사이트 전체 사용
+                                       (6) setHttpOnly(true) JS 접근 차단
+                                       (7) response.addCookie(userCookie)
+                                       (8) response.sendRedirect("welcome")
+                                       				   |
+  요청한 브라우저에 HTTP Response 응답 메세지 도착             |
+ +----------------------------+ <-- TCP 8090 응답--------+
+ | HTTP/1.1 302 Found         |     ** sendRedirect = body 없는 302 응답
+ | Location: welcome          |     ** 이동할 주소는 Location 헤더에 담긴다
+ | Set-Cookie: user_id=admin; |
+ |   Max-Age=604800; Path=/;  |
+ |   HttpOnly                 |
+ +----------------------------+
+       |
+       v
+ (a) Set-Cookie 를 쿠키파일로 저장 (7일 유지 / [Disk])
+ (b) 302 이므로 Location 주소를 "브라우저가 스스로" 재요청  --> 2왕복으로 이어짐
+ 
+ 
+================================================================================================
+◆ 2왕복 : 로그인 유지 확인   GET /pro09/welcome                     (WelcomeServlet)
+------------------------------------------------------------------------------------------------
+       |
+       v
+ 웹브라우저가 HTTP Request 요청 메세지 완성	
+ +----------------------------+                    [Tomcat]    
+ | GET /pro09/welcome         | --TCP 8181 요청-->  /welcome 매핑 -> WelcomeServlet의  doGet() 호출
+ | Cookie: user_id=admin;     |                                        |
+ |         JSESSIONID=..      |     ** Path=/ 이므로 자동 첨부             v
+ +----------------------------+                     (1) request.getCookies() -> Cookie[]
+                                                    (2) null 검사 (첫 방문 대비)
+                                                    (3) for 순회 + "user_id".equals(getName())
+                                                    (4) userid = decode(getValue()) = "admin"
+                                                    (5) userid != null ?
+                                                        |                        |
+                                                      [있음]                  [없음]
+                                                        |                        |
+                                                        v                        v
+                                          out.println("환영합니다..")   sendRedirect("login3.html")
+                                          out.println(<a href='logout'>)   (302 로 로그인화면 복귀)
+                                          		       |		
+                                         			   |
+ 요청한 브라우저에 HTTP Response 응답 메세지 도착              |
+ +----------------------------+ <-- TCP 8181응답 -------+
+ | HTTP/1.1 200 OK            |
+ | <h1>환영합니다, admin님!       |
+ | <a href='logout'>로그아웃     |
+ +----------------------------+
+       |
+       v
+ 브라우저 환영 화면 표시  ->  브라우저를 껐다 켜도 7일 안이면 쿠키파일이 남아 다시 로그인 상태 유지
+ 
+ 
+================================================================================================
+◆ 3왕복 : 로그아웃        GET /pro09/logout                         (LogoutServlet)
+------------------------------------------------------------------------------------------------
+ [로그아웃] 링크 클릭
+       |
+       v
+ +----------------------------+
+ | GET /pro09/logout          | -- TCP 8181 요청 -->  /logout 매핑 -> LogoutServlet 의 doGet() 호출
+ | Cookie: user_id=admin; ..  |                                        |
+ +----------------------------+                                        v
+                                                    (1) new Cookie("user_id","")  값은 의미 없음
+                                                    (2) setMaxAge(0)   "지금 당장 삭제해라"
+                                                    (3) setPath("/")   저장 때와 같아야 삭제됨
+                                                    (4) response.addCookie(cookie)
+                                                    (5) sendRedirect("login3.html")
+                                                        |
+ +----------------------------+ <-- TCP 8181 응답 -------+
+ | HTTP/1.1 302 Found         |
+ | Location: login3.html      |     ** "삭제 명령"도 결국 Set-Cookie 헤더로 전달된다
+ | Set-Cookie: user_id=;      |
+ |   Max-Age=0; Path=/        |
+ +----------------------------+
+       |
+       v
+ (a) Max-Age=0 확인 -> 쿠키파일에서 user_id 즉시 삭제
+ (b) Location 재요청 -> login3.html (이때부터 Cookie 헤더에 user_id 없음 = 완전한 로그아웃)
+================================================================================================

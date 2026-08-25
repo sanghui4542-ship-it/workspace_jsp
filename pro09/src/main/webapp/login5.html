@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- 
+		 login5.html 파일 설명
+		 - 클라이언트가 웹브라우저 프로그램을 이용해 로그인 요청하는 디자인 화면 파일
+		 - 로그인 요청 주소 : http://톰캣서버IP주소:톰캣서버PORT/컨텍스트경로/요청할서블릿자원주소 
+		 				  http://192.168.20.2:8181/pro09/login5
+		 				  http://localhost:8181/pro09/login5    <======= 사용 
+		 				  http://127.0.0.1:8181/pro09/login5
+		 - 로그인 요청 받을 서블릿 클래스 명 : LoginServlet5 클래스 				  
+	 -->
+	 <form action="login5" method="post" name="loginForm">
+	 
+	    <!-- 입력한 아이디, 비밀번호를 톰캣이 HttpServletRequest객체에 보관후 
+	         LoginServlet의 doPost메소드로 전달할것이다. -->
+	 	아이디 : <input type="text" name="user_id"><br>
+	 	비밀번호 : <input type="password" name="user_pw"><br>
+	 	
+	 	<!-- 위 입력한 아이디, 비밀번호 와  설정된 주소, 이메일 , 전화번호를 서블릿 페이지로 전송해서 요청할 전송요청 버튼만들기 -->
+	 	<input type="submit" value="로그인">
+	 	
+	 	<!-- 위 입력한 아이디, 비밀번호 한번에 삭제 해서 입력할수 있도록 초기화 버튼 만들기  -->
+	 	<input type="reset" value="다시입력">
+	
+	 </form>
+	 
+	 
+
+
+</body>
+</html>
+
+
+
+
+

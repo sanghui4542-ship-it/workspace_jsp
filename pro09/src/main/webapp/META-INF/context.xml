@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+--><!-- The contents of this file will be loaded for each web application -->
+<Context>
+
+    <!-- Default set of monitored resources. If one of these changes, the    -->
+    <!-- web application will be reloaded.                                   -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <WatchedResource>WEB-INF/tomcat-web.xml</WatchedResource>
+    <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
+
+    <!-- Uncomment this to disable session persistence across Tomcat restarts -->
+    <!--
+    <Manager pathname="" />
+    -->
+    
+<!--
+    ================================================================
+    context.xml : 톰캣 서버의 설정 파일 (커넥션풀 등록서)
+    ================================================================
+
+    [1] 이 파일은 누가, 언제 읽는가?
+    . 읽는 주체 : 자바 코드가 아니라 "톰캣 서버"가 읽는다.
+    . 읽는 시점 : 톰캣이 시작(Start)되는 순간 단 1번 읽는다.
+      (그래서 이 파일을 수정하면 반드시 톰캣을 재시작해야 반영된다!)
+
+    [2] 톰캣이 이 파일을 읽고 하는 일 (텍스트 모델링)
+
+    톰캣 시작
+      |
+      | 1) 아래 <Resource> 태그를 읽음
+      v
+    [톰캣 서버 메모리]
+      +.. [커넥션풀 객체 생성]
+      |     url, username, password로 오라클 DB에 접속해서
+      |     Connection을 maxActive 개수(50개)만큼 미리 만들어 보관
+      |
+      +.. [JNDI 저장소에 등록]
+            java:/comp/env 구역 안에
+            key   = "jdbc/oracle"   (name 속성의 값)
+            value = 방금 만든 커넥션풀 객체의 주소
+
+    [3] DAO 코드와의 연결 고리
+      MemberDAO.java의  lookup("jdbc/oracle")  의 문자열과
+      아래 name="jdbc/oracle" 의 문자열이 철자까지 정확히 일치해야
+      DAO가 이 커넥션풀을 꺼내 쓸 수 있다. (다르면 NameNotFoundException)
+
+    [4] 이 방식의 장점
+      DB 주소, 아이디, 비밀번호가 전부 이 파일에만 있다.
+      자바 코드에는 이름("jdbc/oracle") 하나만 있으면 되므로,
+      비밀번호가 바뀌어도 자바 코드는 수정할 필요가 없다. (보안 + 유지보수)
+-->    
+    
+  
+    <!-- 커넥션풀(DataSource 객체 공간) 생성 리소스 설정  : 속성 하나하나의 뜻은 아래 표 주석 참고  -->
+    <Resource 
+    	name="jdbc/oracle"
+    	auth="Container"
+    	type="javax.sql.DataSource"
+    	driverClassName="oracle.jdbc.OracleDriver"
+    	url="jdbc:oracle:thin:@localhost:1521:XE"
+    	username="scott"
+    	password="tiger"
+    	maxActive="50"
+    	maxWait="-1"
+    
+    />
+    
+ 
+     <!--
+        ============================================================
+        <Resource /> 태그의 속성 상세 설명 (위에서부터 순서대로)
+        ============================================================
+
+        name = "jdbc/oracle"
+          . 이 커넥션 풀(DataSource 객체 메모리 공간)에 붙이는 JNDI 이름(key).
+          . DAO에서 lookup("jdbc/oracle")로 꺼낼 때 쓰는 이름표이므로
+            DAO 코드의 문자열과 대소문자, 철자까지 반드시 일치해야 한다.
+          . 이름 자체는 자유롭게 지을 수 있지만 관례상 "jdbc/DB이름" 형태를 쓴다.
+
+        auth = "Container"
+          . DB 접속 계정 인증을 누가 관리하는가를 지정.
+          . Container = 톰캣(서블릿 컨테이너)이 관리한다는 뜻.
+            (아래의 username, password를 톰캣이 대신 사용해 접속함)
+          . 반대 값인 Application은 앱이 직접 인증하는 방식이며 여기서는 쓰지 않는다.
+
+        type = "javax.sql.DataSource"
+          . JNDI 저장소에 등록될 value(값)의 자료형.
+          . DAO에서 꺼낸 뒤 (DataSource)로 형변환하는 타입과 같아야 한다.
+          . DataSource는 커넥션풀의 표준 인터페이스 이름이다.
+
+        driverClassName = "oracle.jdbc.OracleDriver"
+          . 연결할 DB 종류에 따른 JDBC 드라이버(OracleDriver) 클래스의 전체 경로.
+          . 톰캣이 커넥션 풀(DataSource 객체 메모리 공간)을 만들 때 이 JDBC 드라이버(OracleDriver) 클래스를 로딩해서 오라클과 대화한다.
+            (자바 코드에서 하던 Class.forName의 역할을 톰캣이 대신함)
+          . 이 클래스가 들어 있는 ojdbc6.jar 파일이 WEB-INF/lib 폴더에 없으면
+            톰캣 시작 시 ClassNotFoundException으로 풀 생성에 실패한다.
+          . 참고 : 구버전 경로 oracle.jdbc.driver.OracleDriver 도 동작하지만
+            현재는 oracle.jdbc.OracleDriver 표기가 권장 경로이다.
+
+        url = "jdbc:oracle:thin:@localhost:1521:XE"
+          . 접속할 DB의 주소. 구조 분해는 다음과 같다.
+            jdbc      : 자바 DB 접속 표준 규칙 이름
+            oracle    : DB 종류
+            thin      : 순수 자바 드라이버 사용
+            localhost : 오라클이 설치된 컴퓨터 주소 (내 컴퓨터)
+            1521      : 오라클이 요청을 받는 포트 번호
+            XE        : SID. 여러 DB 중 XE라는 DB에 접속
+
+        username = "scott"  /  password = "tiger"
+          . DB에 접속할 계정 아이디와 비밀번호.
+          . 이 두 값이 자바 코드가 아닌 "이 파일"에만 존재한다는 것이
+            커넥션풀 + JNDI 방식의 핵심 장점이다.
+
+        maxActive = "50"
+          . 커넥션 풀(DataSource 객체 메모리 공간)이 동시에 빌려줄 수 있는 Connection 연결 통로 객체의 최대 개수.
+          . 톰캣 시작 시 DB와 미리 접속을 맺은 연결을 이 개수 한도로 관리한다.
+          . 51번째 요청부터는 빈 연결이 반납될 때까지 대기하게 된다.
+
+        maxWait = "-1"
+          . 커넥션 풀(DataSource 객체 메모리 공간)에 반납한 Connection 객체가  없을 때, 
+            새 요청이 연결을 얻을 때까지 기다릴 수 있는 최대 시간(밀리초).
+          . -1 은 "무한정 기다린다"는 뜻이다.
+            (예: maxWait="10000" 이면 10초까지만 기다리고 예외 발생)
+
+        (이 파일에는 없지만 함께 알아둘 속성)
+        maxIdle
+          . 아무도 안 쓰는 대기(idle) 상태로 풀에 보관할 수 있는 최대 연결 수.
+
+        다른 속성들은 고정적으로 사용되며,
+        실무에서는 주로 driverClassName, url, username, password 만
+        프로젝트에 맞게 변경해서 사용한다.
+    -->   
+</Context>
+
+
+
+
+
+
+
+
+

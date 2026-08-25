@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	 <!-- 로그인 요청하는 디자인  -->
+	 
+	 <form action="login" method="post" name="loginForm">	 
+	    <!-- 입력한 아이디, 비밀번호를 톰캣이 HttpServletRequest객체에 보관후 
+	         LoginTest 서블릿 클래스의 doPost메소드로 전달할것이다. -->
+	 	아이디 : <input type="text" name="user_id"><br>
+	 	비밀번호 : <input type="password" name="user_pw"><br>
+	 	
+	 	<!-- 위 입력한 아이디, 비밀번호 와  설정된 주소, 이메일 , 전화번호를 서블릿 페이지로 전송해서 요청할 전송요청 버튼만들기 -->
+	 	<input type="submit" value="로그인">
+	 	
+	 	<!-- 위 입력한 아이디, 비밀번호 한번에 삭제 해서 입력할수 있도록 초기화 버튼 만들기  -->
+	 	<input type="reset" value="다시입력">
+	
+	 </form>
+	 
+	 
+
+
+</body>
+</html>
+
+
+
+
+
