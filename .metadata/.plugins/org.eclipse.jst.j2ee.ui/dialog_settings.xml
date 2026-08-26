@@ -6,13 +6,15 @@
 		<item value="Apache Tomcat v9.0"/>
 	</list>
 	<list key="J2EE_EXPORT_JST_WEB">
+		<item value="C:\Users\KHBS_D_016\Desktop\pro12(숙제).war"/>
 		<item value="C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps\webShop.war"/>
 	</list>
 	<list key="J2EE_IMPORT_null">
+		<item value="C:\Users\KHBS_D_016\Downloads\FunWeb_include.war"/>
+		<item value="C:\Users\KHBS_D_016\Downloads\FunWeb.war"/>
 		<item value="C:\Users\KHBS_D_016\Downloads\pro10.war"/>
 		<item value="C:\Users\KHBS_D_016\Downloads\pro09.war"/>
 		<item value="C:\Users\KHBS_D_016\Downloads\pro09-2.war"/>
 		<item value="C:\Users\KHBS_D_016\Downloads\pro07-1.war"/>
-		<item value="C:\Users\KHBS_D_016\Downloads\pro08.war"/>
 	</list>
 </section>

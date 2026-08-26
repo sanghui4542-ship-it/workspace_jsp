@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<!-- SessionListenerFlow30.html · v1 · 2026-08-26 -->
+<!-- HttpSessionListener 예제(sec04.ex02) : 30단계 흐름 애니메이션 · 이벤트는 딱 3번! -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세션 리스너 30단계 — 이벤트는 딱 3번 울린다</title>
+<style>
+:root{
+  --bg:#0d1424; --panel:#141d33; --panel2:#1b2745; --line:#2b3a5c;
+  --txt:#e6ecf7; --dim:#8fa3c8;
+  --c1:#4fc3f7; --c2:#ffb74d; --c3:#81c784; --c4:#ba68c8; --c5:#f06292; --warn:#ff8a65;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--txt); padding:14px 12px 64px;
+  font-family:'Malgun Gothic','맑은 고딕',-apple-system,sans-serif;
+  line-height:1.6; -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px;margin:0 auto}
+header{
+  background:linear-gradient(135deg,#16233f,#101a30);
+  border:1px solid var(--line); border-radius:14px;
+  padding:16px; margin-bottom:12px; text-align:center;
+}
+header h1{font-size:1.2rem;color:var(--c4)}
+header p{font-size:.82rem;color:var(--dim);margin-top:4px}
+.dlbtn{
+  margin-top:10px; padding:9px 20px; background:var(--c4); color:#08111f;
+  border:none; border-radius:8px; font-size:.86rem; font-weight:bold; cursor:pointer;
+}
+.dlbtn:hover{background:#ce93d8}
+
+/* 배우 노드 4개 */
+.actors{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.actor{
+  background:#101a30;border:1px solid var(--line);border-radius:10px;
+  padding:9px 6px;text-align:center;font-size:.78rem;font-weight:bold;color:var(--dim);
+  transition:all .3s;
+}
+.actor small{display:block;font-weight:normal;font-size:.64rem;margin-top:2px;color:var(--dim)}
+.actor.on{color:#08111f;transform:scale(1.05)}
+.actor.on small{color:#08111f}
+#a-browser.on{background:var(--c1);border-color:var(--c1)}
+#a-tomcat.on{background:var(--c3);border-color:var(--c3)}
+#a-listener.on{background:var(--c2);border-color:var(--c2)}
+#a-servlet.on{background:var(--c4);border-color:var(--c4)}
+@keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(255,183,77,0)}50%{box-shadow:0 0 0 12px rgba(255,183,77,.35)}}
+.actor.bell{animation:ring 1s ease-in-out 2}
+
+/* 상태 보드 */
+.board{display:grid;grid-template-columns:1fr 1.2fr 1.2fr 1fr;gap:8px;margin-bottom:10px}
+.stat{
+  background:#0f1729;border:1px solid var(--line);border-radius:10px;padding:9px;
+  font-size:.72rem;
+}
+.stat h5{font-size:.66rem;color:var(--dim);margin-bottom:5px;letter-spacing:.5px}
+.stat .big{font-size:1.7rem;font-weight:bold;color:var(--c2);line-height:1.1;transition:transform .3s}
+.stat .big.bump{transform:scale(1.35)}
+.stat .mono{font-family:'Consolas',monospace;font-size:.7rem;color:var(--c3);word-break:break-all}
+.stat .sess{background:#152341;border-radius:4px;padding:3px 6px;margin-top:3px;
+  font-family:monospace;font-size:.68rem}
+.stat .sess.dead{opacity:.35;text-decoration:line-through}
+
+/* 장면 + 진행 */
+.scenebar{display:flex;gap:6px;margin-bottom:8px}
+.scene{
+  flex:1;text-align:center;padding:6px;border-radius:8px;font-size:.72rem;
+  background:#101a30;border:1px solid var(--line);color:var(--dim);
+}
+.scene.on{background:var(--panel2);color:var(--txt);border-color:var(--c4)}
+.bar{height:6px;background:#101a30;border-radius:3px;overflow:hidden;margin-bottom:10px}
+.bar>i{display:block;height:100%;width:3.4%;background:var(--c4);transition:width .3s}
+
+/* 메인 카드 */
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:16px;min-height:250px;position:relative;
+}
+.stepnum{
+  display:inline-block;background:var(--c4);color:#08111f;font-weight:bold;
+  border-radius:8px;padding:3px 12px;font-size:.82rem;margin-bottom:8px;
+}
+.stepnum.evt{background:var(--c2)}
+.evtbadge{
+  display:inline-block;margin-left:8px;background:rgba(255,183,77,.15);
+  border:1px solid var(--c2);color:var(--c2);border-radius:16px;
+  padding:2px 10px;font-size:.72rem;font-weight:bold;
+}
+.quietbadge{
+  display:inline-block;margin-left:8px;background:rgba(143,163,200,.12);
+  border:1px solid var(--dim);color:var(--dim);border-radius:16px;
+  padding:2px 10px;font-size:.72rem;
+}
+.card h2{font-size:1.02rem;margin-bottom:8px}
+.card .desc{font-size:.85rem;color:#c7d3ea;white-space:pre-line}
+.card pre{
+  margin-top:11px;background:#0f1729;border:1px solid var(--line);border-radius:9px;
+  padding:11px;font-family:'D2Coding','Consolas',monospace;font-size:.75rem;
+  line-height:1.55;white-space:pre-wrap;word-break:break-all;color:var(--c3);
+}
+.card pre b{color:var(--c5);font-weight:bold}
+
+.ctrl{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:rgba(13,20,36,.96);border-top:1px solid var(--line);
+  padding:9px 12px;display:flex;gap:8px;justify-content:center;align-items:center;
+}
+.ctrl button{
+  background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+  border-radius:7px;padding:8px 14px;font-size:.8rem;cursor:pointer;
+}
+.ctrl button:hover{border-color:var(--c4)}
+.ctrl button.main{background:var(--c4);color:#08111f;border-color:var(--c4);font-weight:bold}
+.ctrl .pos{font-size:.76rem;color:var(--dim);font-family:monospace;min-width:56px;text-align:center}
+
+@media(max-width:760px){
+  .board{grid-template-columns:1fr 1fr}
+  .actors{gap:5px}
+  .actor{font-size:.68rem;padding:7px 3px}
+  .actor small{display:none}
+  header h1{font-size:1rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>🔔 세션 리스너 30단계 — 이벤트는 딱 3번 울린다</h1>
+  <p>HttpSessionListener 예제 · hong 로그인 → kim 합류 → hong 로그아웃</p>
+  <button class="dlbtn" onclick="dl()">⬇️ 이 문서 다운로드</button>
+</header>
+
+<div class="actors">
+  <div class="actor" id="a-browser">브라우저<small>요청/응답·화면</small></div>
+  <div class="actor" id="a-tomcat">톰캣<small>매핑·세션 관리</small></div>
+  <div class="actor" id="a-listener">리스너 LoginImpl<small>세션 생성/소멸 감시</small></div>
+  <div class="actor" id="a-servlet">서블릿<small>로그인/로그아웃 처리</small></div>
+</div>
+
+<div class="board">
+  <div class="stat"><h5>총 접속자 수 (static)</h5><div class="big" id="st-count">0</div></div>
+  <div class="stat"><h5>user_list (Context 공유)</h5><div class="mono" id="st-list">[ ]</div></div>
+  <div class="stat"><h5>서버 세션 저장소</h5><div id="st-sess">(비어있음)</div></div>
+  <div class="stat"><h5>hong 브라우저 쿠키</h5><div class="mono" id="st-cookie">(없음)</div></div>
+</div>
+
+<div class="scenebar">
+  <div class="scene" id="sc1">장면1 hong 로그인 [1~16]</div>
+  <div class="scene" id="sc2">장면2 kim 합류 [17~19]</div>
+  <div class="scene" id="sc3">장면3 hong 로그아웃 [20~30]</div>
+</div>
+<div class="bar"><i id="bar"></i></div>
+
+<div class="card">
+  <div>
+    <span class="stepnum" id="num">[1]</span>
+    <span class="evtbadge" id="badge" style="display:none">🔔 리스너 자동 실행!</span>
+    <span class="quietbadge" id="quiet" style="display:none">🤫 이 순간은 조용하다</span>
+  </div>
+  <h2 id="title"></h2>
+  <div class="desc" id="desc"></div>
+  <pre id="code" style="display:none"></pre>
+</div>
+
+</div>
+
+<div class="ctrl">
+  <button onclick="go(0)">⏮ 처음</button>
+  <button onclick="mv(-1)">◀ 이전</button>
+  <button class="main" id="play" onclick="tg()">▶ 재생</button>
+  <button onclick="mv(1)">다음 ▶</button>
+  <span class="pos" id="pos">1 / 30</span>
+</div>
+
+<script>
+/* 단계 데이터
+   actor: browser|tomcat|listener|servlet
+   scene: 1|2|3
+   evt: 리스너 이벤트 / quiet: "조용함" 강조
+   patch: {count, list, sess, cookie} 상태 변화 (누적 적용)          */
+var S = [
+{n:1, a:'browser', sc:1, t:'hong 이 로그인 화면에서 입력한다',
+ d:'login2.html 의 ID 칸에 hong, PASSWORD 칸에 1234 를 입력하고 [로그인] 버튼을 클릭한다.\n버튼을 누르기 전까지는 아무 통신도 일어나지 않는다.'},
+{n:2, a:'browser', sc:1, t:'HTTP 요청 메시지를 만들어 보낸다',
+ d:'브라우저가 4부분(요청행·헤더·빈 줄·본문)을 자동으로 조립한다.\nCookie 헤더가 아예 없다 = 서버가 "처음 온 사람"으로 안다.',
+ c:'1.요청행  POST /pro10/loginTest2 HTTP/1.1\n2.헤더    Host: localhost:8090\n          Content-Type: application/x-www-form-urlencoded\n          <b>Cookie: (이 줄이 없음 - 첫 방문)</b>\n3.빈 줄   (헤더 끝 경계선)\n4.본문    user_id=hong&user_pw=1234'},
+{n:3, a:'tomcat', sc:1, t:'톰캣이 담당 서블릿을 찾는다',
+ d:'요청행의 주소 /loginTest2 를 읽고 @WebServlet("/loginTest2") 등록 정보에서\nLoginTestServlet2 를 찾아 doPost() 를 호출한다.'},
+{n:4, a:'servlet', sc:1, t:'서블릿 시작 — 한글/응답 설정',
+ d:'요청 본문의 한글이 깨지지 않게 해석 방식을 UTF-8로,\n응답도 HTML + UTF-8 로 설정한다.',
+ c:'request.setCharacterEncoding("UTF-8");\nresponse.setContentType("text/html;charset=utf-8");'},
+{n:5, a:'servlet', sc:1, t:'입력값을 꺼낸다',
+ d:'본문에서 name 이름표로 값을 꺼낸다.',
+ c:'String user_id = request.getParameter("user_id");  // "hong"\nString user_pw = request.getParameter("user_pw");  // "1234"'},
+{n:6, a:'servlet', sc:1, t:'LoginImpl 객체를 생성한다', quiet:true,
+ d:'아이디/비밀번호를 담은 로그인 정보 객체를 만든다.\n이번 방식(HttpSessionListener)의 이벤트는 "세션 생성" 순간이므로\n객체가 만들어지는 이 순간에는 아무 이벤트도 없다.',
+ c:'LoginImpl loginUser = new LoginImpl(user_id, user_pw);'},
+{n:7, a:'servlet', sc:1, t:'세션 객체를 요청한다',
+ d:'"세션 객체 주세요" — 요청에 세션ID가 있으면 찾아주고, 없으면 새로 만든다.',
+ c:'HttpSession session = request.getSession();'},
+{n:8, a:'tomcat', sc:1, t:'세션 객체를 새로 만든다',
+ d:'요청에 세션ID가 없었으므로 톰캣이 hong 전용 세션 객체를 새로 만들고\n세션ID "A1B2C3" 를 발급한다.',
+ p:{sess:['A1B2C3 (hong)']}},
+{n:9, a:'listener', sc:1, evt:true, t:'sessionCreated() 자동 실행!',
+ d:'세션 객체가 "만들어지는" 바로 이 순간, 톰캣이 리스너를 자동으로 실행한다.\n서블릿이 부르는 게 아니다!\n\n콘솔: HttpSession객체 메모리 생성\n총 접속자 수 : 0 → 1',
+ p:{count:1}},
+{n:10, a:'servlet', sc:1, t:'isNew() 검사 → 예(새 세션)',
+ d:'"방금 만든 세션인가?" → 예. if 블록에 진입한다.',
+ c:'if (session.isNew()) {   // true'},
+{n:11, a:'servlet', sc:1, t:'세션에 로그인 정보를 저장한다', quiet:true,
+ d:'6번의 객체를 "loginUser" 이름표로 세션 객체 안에 저장한다.\n이번 방식에서는 이 순간이 조용하다!\n(지난 ex01의 BindingListener 방식은 반대로 여기서 이벤트가 울린다)',
+ c:'session.setAttribute("loginUser", loginUser);'},
+{n:12, a:'servlet', sc:1, t:'접속 아이디 목록에 추가한다',
+ d:'user_list 에 "hong" 을 넣는다.',
+ c:'user_list.add(user_id);   // [hong]', p:{list:['hong']}},
+{n:13, a:'servlet', sc:1, t:'목록을 전체 공유 공간에 보관한다',
+ d:'ServletContext 는 웹프로젝트의 모든 사용자가 함께 쓰는 공간이다.\n여기에 넣어야 다른 사용자 화면에서도 목록이 보인다.',
+ c:'context.setAttribute("user_list", user_list);'},
+{n:14, a:'servlet', sc:1, t:'응답 HTML을 조립한다',
+ d:'아이디, 총 접속자 수(static 값), 접속 목록, 로그아웃 링크를 HTML로 만든다.'},
+{n:15, a:'browser', sc:1, t:'HTTP 응답 메시지가 도착한다',
+ d:'8번에서 세션이 새로 생겼기 때문에 톰캣이 Set-Cookie 를 자동으로 붙였다.',
+ c:'1.상태행  HTTP/1.1 200 OK\n2.헤더    Content-Type: text/html;charset=utf-8\n          <b>Set-Cookie: JSESSIONID=A1B2C3</b>\n3.빈 줄\n4.본문    아이디는 hong ... 총 접속자수는 1명 ...'},
+{n:16, a:'browser', sc:1, t:'쿠키 저장 + 화면 그리기',
+ d:'(a) Set-Cookie 를 보고 세션ID를 쿠키 저장소에 저장한다.\n(b) 본문 HTML을 화면에 그린다.\n\n화면: 아이디는 hong / 총 접속자수는 1명 / 목록: hong / [로그아웃]',
+ p:{cookie:'JSESSIONID=A1B2C3'}},
+{n:17, a:'browser', sc:2, t:'다른 컴퓨터에서 kim 이 로그인한다',
+ d:'kim 의 브라우저에는 세션ID가 없으므로 이번 요청에도 Cookie 헤더가 없다.\nkim / 5678 입력 → [로그인] 클릭.'},
+{n:18, a:'tomcat', sc:2, t:'kim 전용 세션 객체를 또 만든다',
+ d:'세션 객체는 사용자(브라우저) 1명당 1개씩이다.\nkim 에게는 별도의 세션ID "B2C3D4" 가 발급된다.',
+ p:{sess:['A1B2C3 (hong)','B2C3D4 (kim)']}},
+{n:19, a:'listener', sc:2, evt:true, t:'sessionCreated() 또 실행!',
+ d:'또 "만들어지는 순간"이므로 리스너가 또 울린다.\n총 접속자 수 : 1 → 2\n목록에도 kim 이 추가된다 → [hong, kim]\n\nhong 화면도 새로고침하면 2명으로 보인다.\n(count 와 목록은 모든 사용자가 함께 쓰는 값이니까)',
+ p:{count:2, list:['hong','kim']}},
+{n:20, a:'browser', sc:3, t:'hong 이 [로그아웃] 링크를 클릭한다',
+ d:'링크의 목적지: logout?user_id=hong\n주소 뒤에 ?이름=값 형태로 아이디를 함께 전달하는 방식(쿼리스트링)이다.'},
+{n:21, a:'browser', sc:3, t:'로그아웃 요청 메시지',
+ d:'링크 클릭은 GET 방식이라 본문이 없다.\n브라우저가 쿠키 저장소의 세션ID를 자동으로 붙인다.',
+ c:'1.요청행  GET /pro10/logout?user_id=hong HTTP/1.1\n2.헤더    Host: localhost:8090\n          <b>Cookie: JSESSIONID=A1B2C3</b>  (자동 첨부)\n3.빈 줄\n4.본문    (없음 - GET 방식)'},
+{n:22, a:'tomcat', sc:3, t:'/logout 담당 서블릿을 찾는다',
+ d:'@WebServlet("/logout") 등록 정보에서 LogoutTest2 를 찾아 doGet() 을 호출한다.'},
+{n:23, a:'servlet', sc:3, t:'쿼리스트링에서 아이디를 꺼낸다',
+ d:'주소 뒤 ?user_id=hong 의 값도 getParameter 로 똑같이 꺼낸다.',
+ c:'String user_id = request.getParameter("user_id");  // "hong"'},
+{n:24, a:'servlet', sc:3, t:'기존 세션 객체에 연결한다',
+ d:'요청의 세션ID A1B2C3 로 hong 의 세션 객체를 찾아 연결한다.',
+ c:'HttpSession session = request.getSession();'},
+{n:25, a:'servlet', sc:3, t:'세션 삭제를 명령한다',
+ d:'"세션 객체를 삭제하라" — 로그아웃 처리의 핵심 한 줄.',
+ c:'session.invalidate();'},
+{n:26, a:'tomcat', sc:3, t:'세션 객체 A1B2C3 삭제',
+ d:'hong 의 세션 객체가 서버 메모리에서 사라진다.\n안에 저장돼 있던 loginUser 객체도 함께 사라진다.',
+ p:{sess:['B2C3D4 (kim)']}},
+{n:27, a:'listener', sc:3, evt:true, t:'sessionDestroyed() 자동 실행!',
+ d:'세션 객체가 "없어지는" 바로 이 순간, 리스너가 세 번째로 울린다.\n\n콘솔: HttpSession객체 메모리 소멸\n총 접속자 수 : 2 → 1',
+ p:{count:1}},
+{n:28, a:'servlet', sc:3, t:'공유 목록에서 hong 을 제거한다',
+ d:'목록: [hong, kim] → [kim]\n변경된 목록을 context 에 다시 저장한다.',
+ c:'user_list.remove(user_id);\ncontext.setAttribute("user_list", user_list);',
+ p:{list:['kim']}},
+{n:29, a:'browser', sc:3, t:'응답 메시지가 돌아온다',
+ d:'세션을 새로 만들지 않았으므로 이번 응답에는 Set-Cookie 가 없다.',
+ c:'1.상태행  HTTP/1.1 200 OK\n2.헤더    Content-Type: text/html;charset=UTF-8\n          (Set-Cookie 없음)\n3.빈 줄\n4.본문    로그아웃 했습니다.'},
+{n:30, a:'browser', sc:3, t:'화면: 로그아웃 했습니다',
+ d:'hong 의 화면에 로그아웃 완료 문구가 표시된다.\nkim 화면을 새로고침하면 : 총 접속자수 1명 / 목록: kim\n\n★ 30단계 전체에서 리스너가 울린 건 딱 3번 — [9] [19] [27] 뿐이다!'}
+];
+
+var cur=0, T=S.length, timer=null, prevCount=0;
+
+function state(n){ /* 0..n 스텝의 patch 누적 적용 */
+  var st={count:0, list:[], sess:[], cookie:'(없음)'};
+  for(var i=0;i<=n;i++){
+    var p=S[i].p; if(!p) continue;
+    if(p.count!==undefined) st.count=p.count;
+    if(p.list) st.list=p.list;
+    if(p.sess) st.sess=p.sess;
+    if(p.cookie) st.cookie=p.cookie;
+  }
+  return st;
+}
+
+function render(){
+  var s=S[cur], st=state(cur);
+  /* 배우 하이라이트 */
+  var map={browser:'a-browser',tomcat:'a-tomcat',listener:'a-listener',servlet:'a-servlet'};
+  for(var k in map){
+    var el=document.getElementById(map[k]);
+    el.classList.toggle('on', k===s.a);
+    el.classList.remove('bell');
+  }
+  if(s.evt){
+    var L=document.getElementById('a-listener');
+    L.classList.remove('bell'); L.offsetHeight; L.classList.add('bell');
+  }
+  /* 장면 */
+  for(var i=1;i<=3;i++) document.getElementById('sc'+i).classList.toggle('on', s.sc===i);
+  /* 상태 보드 */
+  var cEl=document.getElementById('st-count');
+  cEl.textContent=st.count;
+  if(st.count!==prevCount){ cEl.classList.remove('bump'); cEl.offsetHeight; cEl.classList.add('bump'); }
+  prevCount=st.count;
+  document.getElementById('st-list').textContent = st.list.length? '[ '+st.list.join(', ')+' ]' : '[ ]';
+  var sh = st.sess.length? st.sess.map(function(x){return '<div class="sess">'+x+'</div>'}).join('') : '(비어있음)';
+  document.getElementById('st-sess').innerHTML=sh;
+  document.getElementById('st-cookie').textContent=st.cookie;
+  /* 카드 */
+  var num=document.getElementById('num');
+  num.textContent='['+s.n+']';
+  num.className='stepnum'+(s.evt?' evt':'');
+  document.getElementById('badge').style.display = s.evt? 'inline-block':'none';
+  document.getElementById('quiet').style.display = s.quiet? 'inline-block':'none';
+  document.getElementById('title').textContent=s.t;
+  document.getElementById('desc').textContent=s.d;
+  var code=document.getElementById('code');
+  if(s.c){ code.style.display='block'; code.innerHTML=s.c; }
+  else{ code.style.display='none'; }
+  /* 진행 */
+  document.getElementById('bar').style.width=((cur+1)/T*100)+'%';
+  document.getElementById('pos').textContent=(cur+1)+' / '+T;
+}
+function go(n){cur=n;render();}
+function mv(d){cur+=d;if(cur<0)cur=T-1;if(cur>=T)cur=0;render();}
+function tg(){
+  var b=document.getElementById('play');
+  if(timer){clearInterval(timer);timer=null;b.textContent='▶ 재생';}
+  else{
+    b.textContent='⏸ 정지';
+    timer=setInterval(function(){
+      if(cur>=T-1){clearInterval(timer);timer=null;b.textContent='▶ 재생';return;}
+      mv(1);
+    },3500);
+  }
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight')mv(1);
+  if(e.key==='ArrowLeft')mv(-1);
+});
+function dl(){
+  try{
+    var html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+    var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='SessionListenerFlow30.html';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(function(){URL.revokeObjectURL(a.href);},1500);
+  }catch(err){
+    alert('다운로드가 차단되었습니다. Ctrl+S 로 저장해 주세요.');
+  }
+}
+render();
+</script>
+</body>
+</html>
