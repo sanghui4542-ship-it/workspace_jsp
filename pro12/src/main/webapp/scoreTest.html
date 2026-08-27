@@ -2,12 +2,19 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>시험 점수를 입력해 주세요</title>
+<title>Insert title here</title>
 </head>
 <body>
-<form method=get action="scoreTest.jsp">
-시험점수 :<input type=text name="score" /> <br>
-		<input type="submit" value="변환하기">
-</form>
+	<!-- 
+		 시험 점수를 입력받아  서버페이지(scoreTest.jsp)로 get 전송 요청해서
+		 입력받은 시험점수에 관한 학점을 브라우저로 응답 받을수 있도록 요청!
+	 -->
+	 <h1>시험 점수 입력해서 학점 요청해주세요!</h1>
+	 <form action="scoreTest.jsp" method="get">
+	 	시험점수 입력 : <input type="text" name="score"> <br>
+	 				 <input type="submit" value="학점 변환 요청!">
+	 </form>
+	 
+
 </body>
 </html>

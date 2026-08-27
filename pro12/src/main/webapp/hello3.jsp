@@ -22,12 +22,13 @@
 			-  지역변수 선언 해 놓거나  다른 자바코드를 작성해 놓을 태그 영역 
 	 --%>
 	 <%
- 	//스토리 : 클라이언트가 브라우저 주소창에 요청할 URL http://localhost:8181/pro12/hello3.jsp?age=22 을 작성해서 
- 	//       톰캣 서버에 hello3.jsp 페이지를 요청 합니다. 
- 	//       톰캣 서버는 요청한 URL주소에 관한  HttpServletRequest 객체 메모리에 요청한 주소  + 요청데이터들을 저장해서 
- 	//       hello3.jsp 서버페이지로 전달하게 됩니다.
- 	//       우리 개발자가 hello3.jsp 서버페이지 개발 코드를 작성해서 요청데이터들을 HttpServletRequest객체 메모리 내부에서 꺼내와 얻는다.	 	
-	
+	 	/*
+	 	스토리 : 클라이언트가 브라우저 주소창에 요청할 URL http://localhost:8181/pro12/hello3.jsp?age=22 을 작성해서 
+	 	       톰캣 서버에 hello3.jsp 페이지를 요청 합니다. 
+	 	       톰캣 서버는 요청한 URL주소에 관한  HttpServletRequest 객체 메모리에 요청한 주소  + 요청데이터들을 저장해서 
+	 	       hello3.jsp 서버페이지로 전달하게 됩니다.
+	 	       우리 개발자가 hello3.jsp 서버페이지 개발 코드를 작성해서 요청데이터들을 HttpServletRequest객체 메모리 내부에서 꺼내와 얻는다.	 	
+		*/
  		//요청한 데이터 =========>   ?age=22
  	
  		String requestAge =  request.getParameter("age");  //요청한 데이터 얻기 

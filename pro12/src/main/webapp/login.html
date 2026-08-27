@@ -5,11 +5,52 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form name="frmLogin" method="post" action="result.jsp" encType="UTF-8">
-	   아이디 :<input type="text" name="user_id"><br>
-	   비밀번호 :<input type="password" name="user_pw"><br>
-	   <input type="submit" value="로그인">
-	   <input type="reset" value="다시 입력">
-	 </form>
+	<!-- 로그인 요청 하면 디자인 -->
+
+	<!-- 아이디, 비밀번호를 입력한 후 톰캣서버가 실행하는 result.jsp로  로그인 요청시!
+		 입력한 정보(아이디, 비밀번호)를  HttpServletRequest 객체 메모리에 담아 전달!
+	
+	  1.	 
+		 result.jsp 서버페이지 요청 URL
+		 -> http://localhost:8181/pro12/result.jsp
+		
+	  2.	 
+		 HttpRequest 요청 메세지 가 웹브라우저를 통해  만들어지면서 톰캣서버에 전달 됩니다.
+		 ------------------------------------------------
+		   header 영역
+		     URL : http://localhost:8181/pro12/result.jsp
+		 --------------------------------------------------
+		 	body 영역
+		 	 요청 데이터들 저장 
+		 	 (user_id-admin)
+		 	 (user_pw-1234)
+		 -------------------------------------------------
+	 3.	
+		 톰캣 서버가 HttpRequest 요청메세지를 전달 받아  HttpServletRequest객체 생성후 요청데이터들을 보관 하게 됩니다.
+		
+		 그리고 마지막으로 result.jsp로  HttpServletRequest객체 메모리를 전달해서   
+		 
+		 우리개발자가 요청한 데이터 얻어 응답코드를 작성해 브라우저로 보여줍니다.
+		
+	 -->
+<!--<form action="result.jsp" method="post">  -->	
+<!--<form action="result2.jsp" method="post"> -->	
+
+	<form action="result3.jsp" method="post">
+	
+		ID : <input type="text" name="user_id"> <br>		
+		PASS : <input type="password" name="user_pw"> <br>
+		
+		<button type="submit">로그인</button>
+		<button type="reset">취소</button>
+		
+	</form>
+
+
+
+
+
+
+
 </body>
 </html>

@@ -63,21 +63,18 @@
 			<span>선택하기</span>
 		</li>
 		<%-- for 반복문을 이용해 <li>태그 한쌍을 연속 반복해서 행단위로 출력 --%>
-		<% 
-		for(int i=0; i<10; i++){
-		%>
+		
+<%for(int i=0;  i<10;  i++){%>
 		
 		<li>
-			<a href='#' style='margin-left:50px'>
-				<img src='image/duke.png' width='90' height='90' alt='' /></a>
-			<a href='#'><strong>이미지 이름: 듀크<%=i%> </strong></a>
-			<a href='#'><input name='chk<%=i%>' type='checkbox' /></a>
-		</li>
-		<%
-		}
-		%>
-	
+			<a href="#" style="margin-left: 50px"><img src="./image/duke.png" width="90" height="90"></a>
+			<a href="#"> <strong>이미지 이름 : 듀크<%=i%></strong></a>
+			<a href="#"> 선택하기 : <input type="checkbox" name="chk<%=i%>"></a>
+		</li>		
+<%}%>			
+
 	</ul>
+
 </body>
 </html>
 
