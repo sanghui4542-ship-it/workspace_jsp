@@ -144,19 +144,21 @@ public class MemberController extends HttpServlet {
 	private void join(HttpServletRequest request, HttpServletResponse response) 
 				 throws ServletException, IOException {
 		
+		//1. 요청한 데이터 읽기 
 		// 폼에서 id, pass, name, email 입력값 4개 꺼내기
 		String id = request.getParameter("id");
 		String pass = request.getParameter("pass");
 		String name = request.getParameter("name");
 		String email = request.getParameter("email");
-
+		
+		//2. VO에 담는다.
 		// 입력값 4개를 MemberVO 상자에 포장 (회원가입용 생성자 사용)
 		MemberVO memberVO = new MemberVO(id, pass, name, email);
 
 
-		// Service 에 회원가입 업무를 맡기고 결과 받기
+		//3. MemberService 에 회원가입 업무를 맡기고 결과 받기
 		boolean isJoined = memberService.join(memberVO);
-
+		
 		// 가입 성공이면 세션에 userId 저장 (가입 즉시 로그인 처리)
 		if(isJoined) {
 			HttpSession session = request.getSession();

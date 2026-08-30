@@ -75,7 +75,7 @@ public class MemberService {
 		// 중복이 아니면 DAO 에게 저장을 시키고 결과 저장
 		boolean result  = memberDAO.insertMember(memberVO);
 
-		// 회원 저장 결과 true 또는 false 를 MemberController 사장의 join 메소드 내부에  반환
+		// 가입할 아이디가 DB에 존재하지 않고, 회원 저장(추가,가입) 결과 true 또는 false 를 MemberController 사장의 join 메소드 내부에  반환
 		return result;
 	}
 

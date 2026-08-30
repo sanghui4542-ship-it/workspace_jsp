@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  
   <display-name>pro12</display-name>
+  
+   <!-- 
+  	 <welcome-file-list>...</welcome-file-list>
+  	 - 클라이언트가 웹브라우저 주소창에 웹애플리케이션(웹사이트)의 첫화면(메인홈페이지화면)의 서버페이지 URL 요청 합니다.
+  	     이때 URL 주소 중에서  도메인 주소 의 경로를 작성해서 요청하면 첫화면의 서버페이지 주소 경로 설정 하는 태그 입니다.
+  
+  	요청 URL -> http://localhost:8181/pro12/
+ 
+   --> 
   <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.xhtml</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.xhtml</welcome-file>
+    <welcome-file>/test02/main.jsp</welcome-file> <!-- /test02/main.jsp가  만들어져 있으면 첫화면 으로 보여줌 -->
+    <welcome-file>/hello.jsp</welcome-file> <!-- /test02/main.jsp가 만들어져 있지 않으면? 첫화면으로 /hello.jsp 보여줌 -->
+    <welcome-file>/scoreTest.html</welcome-file><!-- /hello.jsp도 만들어져 있지 않으면? 첫화면으로 /scoreTest.html 보여줌 -->   
   </welcome-file-list>
+  
+  <!--  각각 발생한 예외 코드 번호 종류에따라 예외처리할 jsp 파일 경로를 다르게 설정 해 놓자.  -->  
+  <error-page>
+  	<error-code>404</error-code>
+  	<location>/err/error_404.jsp</location>
+  </error-page>
+  
+  <error-page>
+  	<error-code>500</error-code>
+  	<location>/err/error_500.jsp</location>
+  </error-page>
+  
+  
 </web-app>
+
+
+
+
+
+
+
+
