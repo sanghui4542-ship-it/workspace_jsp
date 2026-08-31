@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   context.xml : 톰캣이 이 웹앱을 위해 만들어 줄 "DB 커넥션풀" 설정 파일
+   (MySQL 8 기준으로 수정한 버전)
+-->
+<Context>
+	<Resource
+		name="jdbc/jspdb"
+		auth="Container"
+		type="javax.sql.DataSource"
+
+		driverClassName="com.mysql.cj.jdbc.Driver"
+		url="jdbc:mysql://localhost:3306/jspdb?serverTimezone=Asia/Seoul&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;characterEncoding=UTF-8"
+
+		username="root"
+		password="0000"
+
+		maxTotal="20"
+		maxIdle="10"
+		maxWaitMillis="5000"
+	/>
+	<!--
+	   [MySQL 5 -> 8 변경 포인트]
+	   driverClassName : com.mysql.jdbc.Driver  ->  com.mysql.cj.jdbc.Driver
+	                     (8 버전 커넥터의 새 드라이버 클래스 이름)
+	   url 추가 옵션
+	     serverTimezone=Asia/Seoul       : 시간대 미지정 오류 방지 (8 필수)
+	     useSSL=false                    : 로컬 실습에서 SSL 경고 제거
+	     allowPublicKeyRetrieval=true    : 8의 새 비밀번호 방식 접속 허용
+	     characterEncoding=UTF-8         : 한글 데이터 처리
+	   풀 크기 옵션 (DBCP2)
+	     maxTotal=20     : 최대 연결 20개까지 생성
+	     maxIdle=10      : 대기 상태로 보관할 연결 수
+	     maxWaitMillis   : 연결을 5초까지 기다리고 안 되면 오류
+	-->
+</Context>
