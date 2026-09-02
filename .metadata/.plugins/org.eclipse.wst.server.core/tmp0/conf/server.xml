@@ -156,7 +156,7 @@
 
       
       
-      <Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\pro14" path="/pro14" reloadable="true" source="org.eclipse.jst.jee.server:pro14"/></Host>
+      <Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/></Host>
     </Engine>
   </Service>
 </Server>
