@@ -27,7 +27,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 	         요청한 파라미터에 대한 정보를 가져와 파일업로드 기능을 처리하고 요청한 파라미터들을 얻어 브라우저에 출력합니다.        
 */
 
-@WebServlet("/upload.do")
+//@WebServlet("/upload.do")
 public class FIleUpload extends HttpServlet {
 	
 	//클라이언트가 GET  또는 POST 요청을 하면 모든 요청(request)을 받아서 처리 하는 메소드 

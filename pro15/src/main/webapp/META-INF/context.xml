@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	참고. 이 파일의 위치와 역할
+
+		위치 : 프로젝트/WebContent/META-INF/context.xml
+		      (이클립스 동적 웹 프로젝트라면 src/main/webapp/META-INF/context.xml)
+
+		역할 : 톰캣이 시작될 때 이 파일을 읽어서
+		      DB와 연결을 맺은 Connection객체 여러 개를 미리 만들어
+		      커넥션 풀(Pool)이라는 창고에 담아 놓습니다.
+
+		중요. 이 파일의 위치가 틀리면 톰캣이 읽지 못해서
+		     NameNotFoundException: Name [jdbc/file] is not bound 예외가 발생합니다.
+-->
+<Context>
+
+	<!--
+		참고. Resource 태그의 각 속성 설명
+
+			name            : 이 커넥션 풀에 붙일 이름표 입니다.
+			                  FileDAO.java에서 아래처럼 이 이름으로 찾아옵니다.
+			                  ctx.lookup("java:comp/env/jdbc/file")
+			                  앞의 java:comp/env/ 는 내 웹프로젝트 전용 보관소를 뜻하는 고정 접두어 입니다.
+
+			auth            : 인증을 누가 관리하는지 지정합니다.
+			                  Container = 톰캣(컨테이너)이 관리한다는 뜻으로 항상 이 값을 씁니다.
+
+			type            : 이 자원의 종류입니다. 커넥션 풀은 항상 javax.sql.DataSource 입니다.
+
+			driverClassName : MySQL 8 이상은 com.mysql.cj.jdbc.Driver 를 사용합니다.
+			                  MySQL 5 이하는 com.mysql.jdbc.Driver 였습니다. (cj 없음)
+
+			url             : 연결할 DB의 주소입니다.
+			                  localhost:3306  -> 내 컴퓨터의 MySQL 서버, 3306은 MySQL 기본 포트
+			                  /FILE           -> 연결할 데이터베이스 이름
+			                  serverTimezone  -> 시간대를 지정하지 않으면 MySQL 8에서 연결 오류가 납니다.
+			                  characterEncoding -> 한글 데이터가 깨지지 않도록 UTF-8 지정
+			                  &amp;           -> XML 파일에서는 & 기호를 그대로 쓸 수 없어 &amp; 로 적습니다.
+
+			username        : MySQL 접속 아이디 (본인 환경에 맞게 수정하세요)
+			password        : MySQL 접속 비밀번호 (본인 환경에 맞게 수정하세요)
+
+			maxTotal        : 창고에 만들어 둘 Connection객체의 최대 개수
+			maxIdle         : 사용하지 않을 때 창고에 남겨 둘 Connection객체 개수
+			maxWaitMillis   : 창고에 남은 Connection이 없을 때 기다릴 최대 시간 (5000 = 5초)
+			                  5초를 넘기면 예외를 발생시켜 무한정 대기하는 것을 막습니다.
+
+		중요. 접속 정보가 이 파일에 있으므로
+		     비밀번호가 바뀌어도 자바 파일을 고치고 다시 컴파일할 필요가 없습니다.
+	-->
+	<Resource
+		name="jdbc/file"
+		auth="Container"
+		type="javax.sql.DataSource"
+		driverClassName="com.mysql.cj.jdbc.Driver"
+		url="jdbc:mysql://localhost:3306/FILE?serverTimezone=Asia/Seoul&amp;characterEncoding=UTF-8"
+		username="root"
+		password="0000"
+		maxTotal="20"
+		maxIdle="10"
+		maxWaitMillis="5000" />
+
+</Context>

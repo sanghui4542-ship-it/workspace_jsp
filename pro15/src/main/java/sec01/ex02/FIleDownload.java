@@ -21,7 +21,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 // 업로드된 파일을 브라우저로 다운로드 되게 서비스를 제공하는 서블릿 
 
-@WebServlet("/download.do")
+//@WebServlet("/download.do")
 public class FIleDownload extends HttpServlet {
 	
 	//클라이언트가 GET  또는 POST 요청을 하면 모든 요청(request)을 받아서 처리 하는 메소드 
