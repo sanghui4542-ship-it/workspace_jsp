@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+   <script type="text/javascript">
+ 
+		//XMLHttpRequest객체를 저장할 javascript문법의 참조변수 xhttp를 선언
+		var xhttp;
+	
+		//XMLHttpRequest객체를 얻는 방법
+		//-> createHttpRequest()함수를 호출하면 얻을수 있음
+		function createHttpRequest(){
+			
+			//XMLHttpRequest객체를 생성하여 xhttp변수에 저장
+			xhttp = new XMLHttpRequest();
+		}
+		
+		
+		function mySend(){
+			//createHttpRequest함수를 호출하여 XMLHttpRequest객체를 생성하고
+			createHttpRequest();
+			
+			//서버의 응답을 처리 하기 위해서 onreadystatechange프로퍼티에서는
+			//readyState프로퍼티의 반환값에 따라 자동으로 호출하는 이벤트 처리함수인
+			//callFunction함수를 설정 한다
+			xhttp.onreadystatechange = callFunction;
+
+			
+			xhttp.open("GET", "sample2.jsp?userid=홍길동&passwd=json", true);
+	
+			
+			//open()메소드로 요청을 초기화한 후에 send()메서드를 이용하여 실제로 요청 한다.
+			xhttp.send(null);
+
+		}
+		
+		function callFunction(){
+			//서버와 클라이언트 간의 통신이 모두 성공적으로 완료된시점이
+			//readyState는 4이고 , status는 200이다.
+			//따라서 2개의 값으로 조건 검사를  하여  
+			if(xhttp.readyState == 4){
+				
+				if(xhttp.status == 200){
+										
+					//응답 한 sample2.jsp 의  <%="{'userid':'"+ userid +"', 'passwd':'" + passwd + "'}"%>; 코드 출력으로 
+					//현재 xhttp.responseText 프로퍼티에 전달되어  요청한 5.html에서 받게 된다.
+					let responseData = xhttp.responseText;
+					//"{'userid':'홍길동', 'passwd':'json'}"
+					
+					//    key   : value ,  key   : value
+					
+					//문자열을 JSONObject로 변환
+					let jsonObject = eval( '('  + responseData + ')' );
+					
+					console.log(jsonObject);
+									
+					//id속성값이 result인 <div>요소를 선택해서
+					//텍스트노드자리에 innerHTML속성에 웹브라우저로 응답할값 설정
+					document.getElementById("result").innerHTML =  jsonObject.userid +  "\t" + jsonObject.passwd;
+																 //             홍길동                    json
+				}												
+				
+			}	
+		}//-------------------------callFunction()
+	
+		
+   </script>
+
+</head>
+<body>
+	
+	<!-- 파일 수신 요청 버튼을 클릭 하면 mySend()함수를 호출하는 이벤트 핸들러 함수 설정 -->
+	<button onclick="mySend();">파일 수신 요청</button>
+	
+	<!-- 외부 텍스트 파일의 내용을 비동기 통신을 이용해 불러와 보여줄 영역 -->
+	<div id="result"></div>
+<!-- 
+	테스트 실습
+	:[파일수신요청]버튼을 클릭하면 Ajax통신을 이용하여  서버에 sample.jsp파일을 요청한다.
+	 서버는 sample.jsp파일의 내용을 읽어 클라이언트에 응답 하고 클라이언트는 응답 데이터를 
+	 <div id="result"></div>태그 사이에 출력 한다.
+	 따라서 sample.jsp파일 내에 저장된 문자열 "동적 데이터를 활용한 Ajax실습입니다"를 
+	 화면전환없이 동적으로 사용자의 웹브라우저에 출력 할수 있다.	 
+ -->	
+	
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

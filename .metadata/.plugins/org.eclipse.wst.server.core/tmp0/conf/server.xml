@@ -156,7 +156,7 @@
 
       
       
-      <Context docBase="C:\workspace_jsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/></Host>
+      <Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\pro16_JSON\src\main\webapp" path="/pro16_JSON" reloadable="true" source="org.eclipse.jst.jee.server:pro16_JSON"><Resources><PreResources base="C:\Users\KHBS_D_016\Desktop\workspace_jsp\pro16_JSON\build\classes" classLoaderOnly="false" className="org.apache.catalina.webresources.DirResourceSet" internalPath="/" webAppMount="/WEB-INF/classes"/></Resources></Context></Host>
     </Engine>
   </Service>
 </Server>

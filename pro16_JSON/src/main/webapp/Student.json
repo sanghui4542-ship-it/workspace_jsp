@@ -1,0 +1,16 @@
+{
+	"student" : {
+		
+		"name" : "kim Jiho",
+		"age"  : 21,
+		"major": "Computer Science",
+		"courses" : [ {"name" : "DataStructrues",    "grade":"A"}, 
+					  {"name" : "Algorithms",        "grade":"B"}, 
+					  {"name" : "Operation Systems", "grade":"C"} 
+				  	],
+		"isGraduated" : false
+		
+		}
+	
+	
+}

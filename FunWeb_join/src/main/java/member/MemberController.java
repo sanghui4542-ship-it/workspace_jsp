@@ -2,6 +2,7 @@ package member;
 
 // 입출력 예외 처리를 위한 IOException import
 import java.io.IOException;
+import java.io.PrintWriter;
 
 // 서블릿 작성에 필요한 javax.servlet 도구들 import
 import javax.servlet.ServletException;
@@ -65,7 +66,8 @@ public class MemberController extends HttpServlet {
 
 		// 요청 주소에서 프로젝트 이름을 뺀 경로 얻기 (예: /member/login.do)
 		String action = request.getServletPath();
-
+		
+		
 		// 주소가 /login.do 로 끝나면 login() 호출
 		if (action.endsWith("/login.do")) {
 			login(request, response);
@@ -79,6 +81,31 @@ public class MemberController extends HttpServlet {
 			
 			join(request, response);
 
+		//요청 주소가 /idCheck.do 로 끝나면 (아이디 중복검사 요청을 받았다면)	
+		} else if(action.endsWith("/idCheck.do")) {
+			
+			//클라이언트의 브라우저로 응답할 데이터 유형 설정 및 한글처리
+			response.setContentType("text/html; charset=utf-8");
+			
+			//클라이언트의 웹브라우저와 연결된 출력스트림 생성
+			PrintWriter out = response.getWriter();
+			
+			//"아이디 중복 검사"를 하기 위해 입력한 아이디 얻기
+			String id = request.getParameter("userid");
+			
+			//부장인 MemberService에게  "아이디 중복검사" 기능 처리해서 결과줘!
+			//   1  : 아이디 중복
+			//   0  : 아이디 중복 아님 
+			int checkReuslt = memberService.idCheck(id);
+			
+			//입력한 아이디가 DB의 t_member테이블에서 조회 되면?(아이디 중복이면?)
+			if(checkReuslt == 1) {
+				out.print("아이디 중복"); //MemberController로 AJAX통신으로 요청한 join.jsp의 success:function의 response매개변수로 보냄
+			}else {
+				out.print("사용가능한 아이디"); //MemberController로 AJAX통신으로 요청한 join.jsp의 success:function의 response매개변수로 보냄
+			}
+			
+			
 		// 등록되지 않은 주소는 메인 화면으로 redirect
 		} else {
 			response.sendRedirect(request.getContextPath() + "/index.jsp");
@@ -144,13 +171,13 @@ public class MemberController extends HttpServlet {
 	private void join(HttpServletRequest request, HttpServletResponse response) 
 				 throws ServletException, IOException {
 		
-		//1. 요청한 데이터 읽기 
+		//1. 요청한 데이터 얻기 
 		// 폼에서 id, pass, name, email 입력값 4개 꺼내기
 		String id = request.getParameter("id");
 		String pass = request.getParameter("pass");
 		String name = request.getParameter("name");
 		String email = request.getParameter("email");
-		
+
 		//2. VO에 담는다.
 		// 입력값 4개를 MemberVO 상자에 포장 (회원가입용 생성자 사용)
 		MemberVO memberVO = new MemberVO(id, pass, name, email);
@@ -158,7 +185,7 @@ public class MemberController extends HttpServlet {
 
 		//3. MemberService 에 회원가입 업무를 맡기고 결과 받기
 		boolean isJoined = memberService.join(memberVO);
-		
+
 		// 가입 성공이면 세션에 userId 저장 (가입 즉시 로그인 처리)
 		if(isJoined) {
 			HttpSession session = request.getSession();
@@ -177,3 +204,10 @@ public class MemberController extends HttpServlet {
 	}
 
 }//MemberController
+
+
+
+
+
+
+

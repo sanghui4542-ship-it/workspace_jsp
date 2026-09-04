@@ -1,0 +1,182 @@
+<!--
+================================================================================
+ 파일명   : JQueryAjax/3.html
+ 주제     : jQuery $.getJSON 으로 JSON 배열을 받아 반복 출력하기
+ 대상     : 비전공자
+================================================================================
+
+ 참고. ex1.json 파일의 구조
+
+   [                                  <- 대괄호 : 배열(여러 개의 목록)
+     {                                <- 중괄호 : 객체(단어 카드 하나)
+       "term"       : "BACCHUS. 바쿠스",
+       "part"       : "명사.",
+       "definition" : "고대인들이 ...",
+       "quote"      : [ "꼴딱꼴딱...", "꿀꺽꿀꺽..." ],   <- 값이 또 배열
+       "author"     : "애주가"
+     },
+     {
+       "term"       : "BACKBITE. 험담하다",
+       "part"       : "동사.",
+       "definition" : "상대방에게 ..."
+                                      <- quote 와 author 가 없음
+     },
+     .....
+   ]
+
+   중요. 첫 번째 객체에만 quote 와 author 가 있습니다.
+        확인 없이 출력하면 나머지 카드에 undefined 라는 글자가 찍힙니다.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jQuery $.getJSON 으로 JSON 파일 읽는 3.html 화면</title>
+
+	<!-- jQuery 문법 사용을 위한 파일 불러오기 -->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<style type="text/css">
+		body    { font-family:'Malgun Gothic'; padding:24px; background:#f7f9fc; }
+		h2      { color:#1d5fa8; }
+		.box    { background:#fff; border:1px solid #cbd5e2; border-radius:8px; padding:20px; max-width:680px; }
+		button  { background:#1d5fa8; color:#fff; border:none; padding:8px 18px;
+		          border-radius:6px; cursor:pointer; }
+		.entry  { border-bottom:1px solid #e0e7f0; padding:10px 0; }
+		.term   { color:#1d5fa8; margin:0 0 4px 0; font-size:15px; }
+		.part   { color:#6b7c93; font-size:12px; font-style:italic; }
+		.definition { margin:4px 0; }
+		.quote  { color:#7a6a3a; font-size:13px; margin-left:12px; }
+		.author { color:#6b7c93; font-size:12px; margin-left:12px; }
+	</style>
+
+	<!--
+		=================================================================
+		 참고. $.getJSON() 메소드 정리
+		=================================================================
+
+			JSON 데이터를 비동기 통신으로 요청하고
+			응답받은 데이터를 쉽게 처리할 수 있도록 도와주는 jQuery 메소드입니다.
+
+			기본적으로 GET 방식만 사용하며
+			주로 서버가 제공하는 JSON 데이터를 받아올 때 사용합니다.
+
+			작성 문법
+
+				$.getJSON( "요청할 서버페이지 URL",
+				           서버로 보낼 요청 데이터,        <- 객체 형태, 생략 가능
+				           통신 성공시 실행할 콜백함수 function(data){}
+				         );
+
+			$.ajax() 와의 관계
+
+				$.getJSON('ex1.json', function(data){ ... });
+
+				위 한 줄은 아래 $.ajax() 코드와 완전히 같습니다.
+
+				$.ajax({
+					url : 'ex1.json',
+					type : 'get',
+					dataType : 'json',
+					success : function(data){ ... }
+				});
+
+			요약 : GET 방식으로 JSON 만 받아올 때는 $.getJSON 이 훨씬 짧습니다.
+
+			주의. $.getJSON 에는 error 콜백을 넣는 자리가 없습니다.
+			      오류 처리가 필요하면 뒤에 .fail() 을 붙이거나
+			      처음부터 $.ajax() 를 사용합니다.
+
+				$.getJSON('ex1.json', function(data){ ... })
+				 .fail(function(){ alert("불러오기 실패"); });
+	-->
+</head>
+<body>
+
+<h2>4. jQuery $.getJSON — JSON 배열을 반복 출력하기</h2>
+
+<div class="box">
+	<div id="container">
+		<div class="letters">
+			<!-- 이 div 를 클릭하면 목록을 불러옵니다.
+			     안쪽의 button 을 눌러도 바깥 div 의 클릭 이벤트가 함께 발생합니다.
+			     (이것을 이벤트 버블링이라고 부릅니다) -->
+			<div class="letter" id="target">
+				<button>단어 목록 불러오기</button>
+			</div>
+		</div>
+
+		<!-- 완성된 단어 카드들이 이 div 안쪽에 채워집니다. -->
+		<div id="dictionary"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	//1. <div id="target"> 요소를 선택해서 CLICK 이벤트 등록
+	$("#target").click(function(){
+
+		//2. $.getJSON(url, callback) 메소드 호출
+		//   첫 번째 인자 : 톰캣서버가 제공하는 ex1.json 파일의 요청 주소
+		//   두 번째 인자 : 응답받은 데이터를 처리할 콜백함수
+		$.getJSON('ex1.json', function(data){ 
+			/*
+			data 매개변수로 전달받은 ex1.json 파일의 데이터 모습
+
+			[
+			  { "term":"BACCHUS. 바쿠스", "part":"명사.", "definition":"...", "quote":[...], "author":"애주가" },
+			  { "term":"BACKBITE. 험담하다", "part":"동사.", "definition":"..." },
+			  .....
+			]
+
+			대괄호 [ ] 로 감싸져 있으므로 배열입니다.
+			배열 안의 각 칸에 중괄호 { } 로 된 객체가 하나씩 들어 있습니다.
+
+			dataType 이 자동으로 json 이므로
+			이미 자바스크립트 배열로 변환된 상태로 넘어옵니다.
+
+			data.length  ->  카드 개수 (여기서는 7)
+			data[0]      ->  첫 번째 카드 객체
+			data[0].term ->  "BACCHUS. 바쿠스"
+		*/
+		
+			//3. 화면에 넣을 HTML문자열을 누적해서 저장할 변수 선언
+			let html = '';
+			
+			/*
+			참고. $.each 반복 메소드 문법
+
+				$.each(순회할 배열, function(인덱스, 값){
+
+					반복해서 실행할 코드 작성;
+
+				});
+
+				인덱스 : 지금 몇 번째 칸인지를 나타내는 숫자 (0부터 시작)
+				값     : 그 칸에 들어 있는 실제 데이터 (여기서는 객체 하나)
+
+			참고. 기본 자바스크립트로는 아래처럼 씁니다.
+
+				data.forEach(function(entry, entryIndex){ ... });
+				data.map(entry => { ... });
+		*/
+			
+			
+		});
+		
+
+	});
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

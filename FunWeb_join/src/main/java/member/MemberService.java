@@ -46,7 +46,7 @@ public class MemberService {
 		// DAO 의 isDuplicated(id) 를 호출해 결과 저장
 		boolean result =   memberDAO.isDuplicated(id);
 
-		// 결과를 Controller 에게 반환
+		// 아이디 중복 여부 결과를 MemberService의 join 메소드 안으로  반환
 		return result;
 
 	}
@@ -75,11 +75,28 @@ public class MemberService {
 		// 중복이 아니면 DAO 에게 저장을 시키고 결과 저장
 		boolean result  = memberDAO.insertMember(memberVO);
 
-		// 가입할 아이디가 DB에 존재하지 않고, 회원 저장(추가,가입) 결과 true 또는 false 를 MemberController 사장의 join 메소드 내부에  반환
+		// 가입할 아이디가 DB에 존재하지 않고, 회원 저장(추가,가입) 결과 => true 또는 false 를 MemberController 사장의 join 메소드 내부에  반환
 		return result;
 	}
 
-}//MemberService
+	//아이디 중복 검사 기능 
+	public int idCheck(String id) {
+		
+		//사원 인 MemberDAO야 ~ 입력한 아이디 전달 할테이 니가 DB작업해서 결과만 줘~ 
+		return   memberDAO.idCheck(id);
+		
+		//=> 끝으로 MemberController 서블릿(사장)에게 보고 (반환)
+	}
+
+}//MemberService (부장)
+
+
+
+
+
+
+
+
 
 
 

@@ -128,7 +128,7 @@ public class MemberDAO {
 			e.printStackTrace();
 		}
 
-		// 중복 여부 반환
+		// 아이디 중복 여부 true(가입 아이디가 DB에 존재) 또는 false(가입 아이디가 DB에 미존재)를  MemberService 부장에게 반환
 		return result;
 
 	}//isDuplicated
@@ -178,9 +178,42 @@ public class MemberDAO {
 		
 		// 저장(회원 추가,가입) 결과 반환
 		return result;   //회원가입 성공시   MemberDAO.java ---- true 반환 ----> MemberService.java의 join 메소드 내부로 
+	}
+
+	//idCheck메소드 기능
+	//- 회원가입 전! 입력한 아이디가 DB에 저장되어 있는지 없는지 유무 체크 하는 기능 
+	//- 설명 : 회원가입을 위해 입력한 아이디를 매개변수 String id로 전달 받아
+	//		 DB의 테이블에 저장되어 있는지 유무를 검사하는 메소드 입니다.
+	//		 만약 입력한 아이디가 DB의 테이블에 저장되어 있으면? 1을 check변수에 저장하고 반환하며,
+	//	     만약 입력한 아이디가 DB의 테이블에 저장되어 있지 않으면? 0을 check변수에 저장하여 반환 시킵니다. 
+	public int idCheck(String id) {
+		
+		int check = 0;
+		
+		//아이디 중복 검사를 위해 사용자가 입력한 아이디에 해당하는 회원레코드 조회 하는 select문 만들기 
+		String sql = "select * from t_member where id='"+ id + "'";
+		
+		try(Connection con = dataFactory.getConnection();
+			PreparedStatement pstmt = con.prepareStatement(sql)) {
+			
+			//조회 실행해서 결과 ReusltSet으로 받기
+			try(ResultSet rs  = pstmt.executeQuery()){
+				
+				//입력한 아이디에 해당하는 회원레코드 한행이 조회 되면?(아이디 중복)
+				if(rs.next()) {
+					check = 1;
+				}else { //입력한 아이디에 해당하는 회원레코드 한행이 조회되지 않으면?(가입가능한 아이디)
+					check = 0;
+				}
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		//입력한 아이디가 가입가능한지 불가능한지 유무 1(아이디 중복) 또는 0(가입가능한 아이디) 부장(MemberService클래스)으로 반환 
+		return  check;
 	}	
 
-}//MemberDAO
+}//MemberDAO (사원)
 
 
 
