@@ -155,17 +155,35 @@
 
 				인덱스 : 지금 몇 번째 칸인지를 나타내는 숫자 (0부터 시작)
 				값     : 그 칸에 들어 있는 실제 데이터 (여기서는 객체 하나)
-
-			참고. 기본 자바스크립트로는 아래처럼 씁니다.
-
-				data.forEach(function(entry, entryIndex){ ... });
-				data.map(entry => { ... });
-		*/
-			
-			
+		   */
+		 	//4. 배열에 저장된 객체의 개수 만큼 반복
+		 	//   ex1.json 에 카드가 7개 있으므로 이 안쪾 코드가 7번 반복 실행
+		 	$.each(data, function(entryIndex, entry){	 		
+		 		//4.1. 카드 하나를 감쌀 바깥 div 태그의 시작 부분
+		 		html += '<div class="entry">';	 		
+		 			//4.2. entry.term -> 현재 회차의 객체에서 term 키의 값을 꺼냅니다.
+		 			html += '<h3 class="term">' +  entry.term    + '</h3>';		 			
+		 			html += '<div class="part">' + entry.part    + "</div>";		 		
+		 			html += '<div class="definition">'  +  entry.definition  + '</div>';  			
+		 			//4.3. quote 키가 있는 객체에만 인용문을 출력
+					//    if(entry.quote) 의 의미
+					//      -> quote 가 있으면 그 값(배열)이 참으로 취급됩니다.
+					//      -> quote 가 없으면 undefined 이고 거짓으로 취급됩니다.
+		 			if(entry.quote){		 				
+		 				//quote의 값도 배열이므로  다시 반복문으로 한 줄씩 꺼냅니다.
+		 				$.each(entry.quote, function(lineIndex, line){		 					
+		 					html += '<div class="quote">' + line  + '</div>';	 		
+		 				});		 				
+		 				//인용문이 있는 카드에만 지은이도 함꼐 출력합니다.
+		 				html += '<div class="author">' +  entry.author   + "</div>";	 				
+		 			}  		
+		 		//4.4. 카드 하나를 감쌋던 div 태그 닫는 부분
+		 		html += '</div>';	
+		 	});
+		 		
+		 	//5. 반복문으로 완성한 HTML 문자열을 id="dictionary" 요소사이에 보여주자
+		 	$('#dictionary').html(html);	 
 		});
-		
-
 	});
 </script>
 

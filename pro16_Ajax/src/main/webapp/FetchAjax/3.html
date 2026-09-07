@@ -1,0 +1,150 @@
+<!--
+================================================================================
+ 파일명   : FetchAjax/3.html
+ 주제     : fetch 로 POST 방식 데이터 보내기 + 중복 클릭 방지
+ 대상     : 비전공자
+================================================================================
+
+ 이 파일에서 배우는 것
+ --------------------------------------------------------------------------
+ 1. GET 방식과 POST 방식의 차이
+ 2. fetch 의 두 번째 인자(옵션 객체)에 method, headers, body 를 넣는 방법
+ 3. JSON.stringify() 로 객체를 문자열로 바꾸는 이유
+ 4. 버튼을 잠가 같은 요청이 여러 번 나가는 사고를 막는 방법
+ 5. finally 블록에 뒷정리 코드를 쓰는 이유
+
+ 참고. 이 화면의 동작 순서
+ --------------------------------------------------------------------------
+
+   [브라우저] 3.html
+       |
+       | (1) [저장] 버튼 클릭
+       | (2) 버튼을 잠금 (disabled = true) -> 연타해도 요청이 안 나감
+       | (3) 입력값을 객체로 만들고 JSON 문자열로 변환
+       | (4) POST 방식으로 save.jsp 에 본문(body) 에 담아 전송
+       V
+   [톰캣서버] save.jsp
+       |
+       | (5) request.getReader() 로 본문 전체를 읽음
+       | (6) 1초 대기 (저장하는 척)
+       | (7) {"success":true, "received":{...}} 응답
+       V
+   [브라우저] 3.html
+       |
+       | (8) 결과를 <div id="result"> 에만 표시
+       | (9) finally 에서 버튼 잠금 해제
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>fetch 로 POST 전송하는 3.html 화면</title>
+
+	<style type="text/css">
+		body     { font-family:'Malgun Gothic'; padding:24px; background:#f7f9fc; }
+		h2       { color:#1d5fa8; }
+		.box     { background:#fff; border:1px solid #cbd5e2; border-radius:8px; padding:20px; max-width:660px; }
+		.row     { margin-bottom:12px; }
+		label    { display:inline-block; width:60px; font-weight:bold; vertical-align:top; }
+		input, textarea { padding:6px; border:1px solid #93a5bd; border-radius:4px; width:400px; }
+		textarea { height:70px; }
+		button   { background:#1d5fa8; color:#fff; border:none; padding:9px 20px;
+		           border-radius:6px; cursor:pointer; font-size:14px; }
+		/* button:disabled -> 버튼이 잠긴 상태일 때만 적용되는 스타일입니다.
+		   색이 회색으로 변해 사용자가 "지금은 누를 수 없다" 는 것을 눈으로 알 수 있습니다. */
+		button:disabled { background:#8fa2bb; cursor:not-allowed; }
+		#result  { margin-top:14px; padding:12px; background:#e8f0fb; border-radius:6px;
+		           color:#1d5fa8; min-height:22px; word-break:break-all; }
+		.note    { color:#6b7c93; font-size:13px; margin-top:12px; }
+	</style>
+</head>
+<body>
+
+<h2>3. fetch + async/await — POST로 데이터 보내기</h2>
+
+<div class="box">
+	<div class="row">
+		<label>제목</label>
+		<input type="text" id="title" value="첫 번째 글입니다">
+	</div>
+
+	<div class="row">
+		<label>내용</label>
+		<!-- textarea 는 여러 줄을 입력할 수 있는 큰 입력칸입니다.
+		     input 과 달리 value 속성이 아니라 태그 사이에 기본값을 씁니다.
+		     값을 꺼낼 때는 input 과 똑같이 .value 를 사용합니다. -->
+		<textarea id="content">fetch로 POST 전송하는 예제입니다.</textarea>
+	</div>
+
+	<!-- id="saveBtn" : 자바스크립트가 이 버튼을 잠그기 위해 찾아낼 이름표입니다. -->
+	<button id="saveBtn" onclick="save()">저장</button>
+
+	<div id="result"></div>
+
+	<p class="note">저장 버튼을 연타해 보세요. 처리 중에는 버튼이 잠겨
+	   같은 글이 여러 번 저장되는 사고를 막습니다.</p>
+</div>
+
+<script type="text/javascript">
+/*
+	참고. GET 방식과 POST 방식의 차이 (반드시 외워야 하는 내용)
+
+		GET
+		  - 주소 뒤에 ? 를 붙여 값을 전달합니다.
+		      calc.jsp?v1=10&v2=20
+		  - 값이 주소창에 그대로 보입니다.
+		    따라서 비밀번호나 주민번호를 보내면 절대 안 됩니다.
+		  - 길이 제한이 있습니다. (브라우저마다 다르지만 약 2KB)
+		  - 주로 "조회" 할 때 사용합니다. (목록 보기, 검색, 중복체크)
+
+		POST
+		  - 요청 본문(body) 이라는 보이지 않는 공간에 값을 담아 전달합니다.
+		  - 주소창에 보이지 않고 길이 제한도 사실상 없습니다.
+		  - 주로 "저장, 수정, 삭제" 할 때 사용합니다.
+		    (글 등록, 회원가입, 로그인, 파일 업로드)
+
+		그림으로 비교
+
+		  GET   요청 :  주소  save.jsp?title=제목&content=내용
+		                본문  (비어 있음)
+
+		  POST  요청 :  주소  save.jsp
+		                본문  {"title":"제목","content":"내용"}
+*/
+
+
+
+
+
+
+
+
+
+/*
+	참고. 기존 JSP 서블릿을 고치지 않고 POST 를 보내는 방법
+
+		위 방식은 JSON 문자열을 보내므로
+		서버에서 request.getParameter("title") 로 읽을 수 없습니다.
+		request.getReader() 로 본문 전체를 직접 읽어야 합니다.
+
+		기존 서블릿의 getParameter() 를 그대로 쓰고 싶다면
+		아래처럼 "폼 형식" 으로 보내면 됩니다.
+
+			await fetch("save.jsp", {
+				method : "POST",
+				headers : { "Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8" },
+				body : new URLSearchParams({ title:"제목", content:"내용" })
+			});
+
+		URLSearchParams 는 객체를 title=제목&content=내용 형태의 문자열로 바꿔 줍니다.
+		이렇게 보내면 서버에서 request.getParameter("title") 로 바로 읽을 수 있습니다.
+
+		정리
+			새로 만드는 프로젝트          -> JSON 방식 (위 코드)
+			기존 서블릿을 그대로 쓸 때    -> URLSearchParams 방식
+*/
+</script>
+
+</body>
+</html>

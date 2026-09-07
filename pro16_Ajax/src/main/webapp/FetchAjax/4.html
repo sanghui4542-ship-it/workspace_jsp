@@ -1,0 +1,115 @@
+<!--
+================================================================================
+ 파일명   : FetchAjax/4.html
+ 주제     : 여러 요청을 동시에 보내기 (Promise.all)
+ 대상     : 비전공자
+================================================================================
+
+ 이 파일에서 배우는 것
+ --------------------------------------------------------------------------
+ 1. await 를 연달아 쓰면 왜 느려지는지
+ 2. Promise.all 로 요청을 동시에 출발시키는 방법
+ 3. 구조 분해 할당 문법  const [a, b, c] = 배열
+ 4. Date.now() 로 걸린 시간을 재는 방법
+ 5. Promise.all / allSettled / race 의 차이
+
+ 참고. 순차 실행과 동시 실행 비교 (시간 그림)
+ --------------------------------------------------------------------------
+
+   [순차 실행]  await 를 세 번 연달아 사용
+
+     0초        1초        2초        3초
+     |--회원정보--|--게시글---|--댓글----|
+
+     -> 총 3초 걸림
+     -> 앞의 요청이 끝나야 다음 요청이 출발함
+
+
+   [동시 실행]  Promise.all 사용
+
+     0초        1초
+     |--회원정보--|
+     |--게시글---|
+     |--댓글----|
+
+     -> 총 1초 걸림
+     -> 세 요청이 동시에 출발함
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>fetch 로 여러 요청을 동시에 보내는 4.html 화면</title>
+
+	<style type="text/css">
+		body    { font-family:'Malgun Gothic'; padding:24px; background:#f7f9fc; }
+		h2      { color:#1d5fa8; }
+		.box    { background:#fff; border:1px solid #cbd5e2; border-radius:8px; padding:20px; max-width:680px; }
+		button  { background:#1d5fa8; color:#fff; border:none; padding:9px 20px;
+		          border-radius:6px; cursor:pointer; font-size:14px; margin-right:8px; }
+		button:disabled { background:#8fa2bb; cursor:not-allowed; }
+		/* white-space:pre-wrap 은 줄바꿈 문자(\n)를 실제 줄바꿈으로 보여 주는 설정입니다.
+		   이 설정이 없으면 로그가 한 줄로 길게 이어져 보입니다. */
+		#log    { margin-top:14px; padding:12px; background:#0f1c2e; color:#8ff0b6;
+		          border-radius:6px; min-height:100px; font-family:monospace; font-size:13px;
+		          white-space:pre-wrap; }
+		.note   { color:#6b7c93; font-size:13px; margin-top:12px; }
+	</style>
+</head>
+<body>
+
+<h2>4. fetch + Promise.all — 여러 요청을 동시에 보내기</h2>
+
+<div class="box">
+	<!-- 자바스크립트 함수 이름에는 한글도 사용할 수 있습니다.
+	     실무에서는 영어로 쓰지만 수업에서는 이해를 돕기 위해 한글로 지었습니다. -->
+	<button id="seqBtn" onclick="순차실행()">순차 실행 (느림)</button>
+	<button id="allBtn" onclick="동시실행()">동시 실행 (빠름)</button>
+
+	<!-- 진행 과정을 한 줄씩 출력할 영역입니다. -->
+	<div id="log">버튼을 눌러 걸린 시간을 비교해 보세요.</div>
+
+	<p class="note">서버가 각각 1초씩 걸리는 요청 3개를 보냅니다.
+	   순차 실행은 약 3초, 동시 실행은 약 1초가 걸립니다.</p>
+</div>
+
+<script type="text/javascript">
+
+
+
+
+
+
+
+/*
+	참고. Promise 관련 메소드 3가지 비교
+
+		Promise.all
+		  - 전부 성공해야 성공합니다.
+		  - 하나라도 실패하면 전체가 catch 로 넘어갑니다.
+		  - 셋 다 반드시 있어야 화면을 그릴 수 있을 때 사용합니다.
+
+		Promise.allSettled
+		  - 실패한 것이 있어도 나머지 결과를 모두 받습니다.
+		  - 각 결과에 status 값이 "fulfilled" 또는 "rejected" 로 담겨 옵니다.
+		  - 일부가 실패해도 화면을 그릴 수 있을 때 사용합니다.
+
+		Promise.race
+		  - 가장 먼저 끝난 하나의 결과만 사용합니다.
+		  - 여러 서버 중 빠른 쪽의 답만 쓰고 싶을 때 사용합니다.
+
+	참고. 순차 실행을 반드시 써야 하는 경우
+
+		앞의 결과가 뒤 요청에 꼭 필요한 경우에는 순차 실행이 맞습니다.
+
+			const user  = await callApi("로그인");
+			const board = await callApi("글목록?userNo=" + user.no);
+			                                              ^^^^^^^ 앞의 결과가 필요함
+
+		이런 관계가 없다면 무조건 동시 실행이 유리합니다.
+*/
+</script>
+
+</body>
+</html>
