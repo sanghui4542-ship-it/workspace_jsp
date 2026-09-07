@@ -112,13 +112,61 @@
 		  POST  요청 :  주소  save.jsp
 		                본문  {"title":"제목","content":"내용"}
 */
+	//==================================================================
+	//저장 함수
+	//=================================================================
+	async function save(){
+	
+		//함수 안에서 여러번 사용할 태그를 미리 찾아(선택해) 변수에 담아 둡니다.
+		const btn = document.getElementById("saveBtn");   //1.<button id="saveBtn" onclick="save()">저장</button>		
+		const result = document.getElementById("result"); //2.<div id="result"></div>
+		
+		//1. 중복으로 저장 버튼 클릭 방지 하기 위해  <button id="saveBtn">저장</button>의 disabled 속성값이 true 경우 save() 즉시 종료
+		if(btn.disabled) return;
+		
+		//2. 저장 버튼을 즉시 잠그고 처리 중임을 표시
+		btn.dsiabled = true;   			//disabled = true  -> 버튼을 눌러도 아무 반응이 없게 됩니다.
+		btn.textContent = "저장 중...";	//저장 -> 저장 중...으로 버튼 글자 변경
+		result.textContent = "";        //<div id="result">""</div>
+		
+		try{ //3. 브라우저 화면에서 입력한 값을 얻어 자바스크립트 {} 객체로 만들기
+			const data = {  title : document.getElementById("title").value, 
+				          content : document.getElementById("content").value };
+			
+			//4. POST 방식으로 요청 보내기
+			//   fetch함수의 두번째 인자에 옵션 객체를 넘겨 요청방식과 요청데이터를 지정합니다.
+			const res = await fetch("save.jsp",{
+							
+				method : "POST", //4.1. 요청 방식을 POST로 지정
+				
+				//                           application/json   -> 요청 메세지의 BODY본문에  요청데이터가 JSON 문자열이다
+				headers : {"Content-Type" : "application/json"},//4.2. 요청을 보내는 데이터의 형식을 톰캣서버에 알림
+				
+				body : JSON.stringify(data)  //4.3. 실제 요청 보낼 데이터 설정
+				
+			});
+			
+			//5. 상태 검사 (fetch함수는 404, 500 에서도 예외를 던지지 않으므로 필수)
+			if(!res.ok){
+				throw new Error(`저장 실패 (${res.status})`);
+			}
+			
+			//6. 응답받은 `{"success":true, "received":<%=jsonBody% >}` 문자열--객체로 변환-> {"success":true, "received":<%=jsonBody% >}
+			const json = await res.json();
+			
+			//7. 결과를 화면의 <div id="result"></div> 사이에 응답 데이터를 보여주자
+			result.textContent = "저장 성공. 서버가 받은 데이터 : " + JSON.stringify(json.received);
 
-
-
-
-
-
-
+		}catch(err){
+			//요청 통신 실패, 서버 오류가 모두 여기로 넘어옵니다.
+			result.textContent = "저장에 실패 했습니다.";
+		}finally{
+			//8. 요청 성공 하든 실패 하든 저장 버튼을 원래대로 되돌림(활성화 시켜 버튼이 클릭되게 하자)
+			btn.disabled = false;
+			btn.textContent = "저장";
+		}
+		
+	}
 
 
 /*

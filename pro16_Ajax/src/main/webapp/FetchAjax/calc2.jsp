@@ -21,3 +21,30 @@
                       -> 이름표가 붙어 있어 여러 값을 한 번에 보낼 수 있습니다.
                       -> 실무에서는 거의 항상 이 JSON 방식을 사용합니다.
 --%>
+
+<%
+	//1. 요청한 데이터의 한글 인코딩 설정(request.getParameter 보다 먼저 작성)
+	request.setCharacterEncoding("UTF-8");
+
+	//2. 요청화면(1.html)이 보낸 값 2개 꺼내기
+	int v1 = Integer.parseInt(request.getParameter("v1"));
+	int v2 = Integer.parseInt(request.getParameter("v2"));
+
+	//3. JSONObject 형태의 문자열을 직접 작성해서 응답합니다.
+%>
+{"v1" : <%=v1%>, "v2" : <%=v2%>,  "result" : <%=v1+v2%>}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

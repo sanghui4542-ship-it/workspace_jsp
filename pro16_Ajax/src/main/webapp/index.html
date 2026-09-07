@@ -1,0 +1,112 @@
+<!--
+================================================================================
+ 파일명 : index.html
+ 역할   : 이 프로젝트의 예제 목록 화면 (시작 페이지)
+================================================================================
+
+ 참고. 이 파일이 시작 페이지가 되는 이유
+
+   WEB-INF/web.xml 파일 안의 <welcome-file-list> 에 index.html 이 적혀 있어서
+   아래 주소로 접속하면 톰캣이 자동으로 이 파일을 열어 줍니다.
+
+     http://localhost:8181/pro16_Ajax7/
+
+ 참고. 권장 학습 순서
+
+   1) JQueryAjax/1.html   $.ajax 기본 구조 익히기
+   2) JQueryAjax/2.html   JSON 응답 다루기
+   3) JQueryAjax/3.html   배열 반복 출력
+   4) JQueryAjax/4.html   실전 아이디 중복체크
+   5) FetchAjax/1.html    같은 동작을 fetch 로 바꿔 보기
+   6) FetchAjax/2~5.html  실무 표준 기법 익히기
+
+   두 폴더의 예제는 동작이 거의 같습니다.
+   같은 번호끼리 나란히 열어 코드를 비교하면 차이가 한눈에 보입니다.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ajax 예제 목록</title>
+<style type="text/css">
+	body   { font-family:'Malgun Gothic'; padding:24px; background:#f7f9fc; }
+	h1     { color:#1d5fa8; font-size:22px; }
+	h3     { color:#1d5fa8; margin-top:24px; }
+	.box   { background:#fff; border:1px solid #cbd5e2; border-radius:8px;
+	         padding:20px; max-width:760px; }
+	table  { border-collapse:collapse; width:100%; margin-top:8px; }
+	th,td  { border:1px solid #cbd5e2; padding:9px; text-align:left; font-size:14px; }
+	th     { background:#e8f0fb; color:#1d5fa8; }
+	a      { color:#1d5fa8; font-weight:bold; text-decoration:none; }
+	a:hover{ text-decoration:underline; }
+	.tag   { display:inline-block; background:#e8f0fb; color:#1d5fa8; border-radius:10px;
+	         padding:2px 8px; font-size:12px; }
+	.tag.std { background:#173d2a; color:#8ff0b6; }
+	.note  { color:#6b7c93; font-size:13px; margin-top:14px; }
+	pre    { background:#0f1c2e; color:#e6edf7; padding:12px; border-radius:6px;
+	         font-size:12px; overflow-x:auto; line-height:1.5; }
+</style>
+</head>
+<body>
+
+<h1>Ajax 비동기 통신 예제</h1>
+
+<div class="box">
+
+	<h3>jQuery Ajax <span class="tag">기존 JSP 프로젝트 유지보수용</span></h3>
+	<table>
+		<tr><th width="8%">번호</th><th width="52%">내용</th><th width="40%">핵심 문법</th></tr>
+		<tr><td><a href="JQueryAjax/1.html">1</a></td><td>$.ajax 로 text 응답받기</td><td>dataType : "text"</td></tr>
+		<tr><td><a href="JQueryAjax/2.html">2</a></td><td>$.ajax 로 json 응답받기</td><td>dataType : "json"</td></tr>
+		<tr><td><a href="JQueryAjax/3.html">3</a></td><td>JSON 배열 반복 출력</td><td>$.getJSON + $.each</td></tr>
+		<tr><td><a href="JQueryAjax/4.html">4</a></td><td>아이디 중복체크 (실전)</td><td>$.ajax + 디바운스</td></tr>
+	</table>
+
+	<h3>fetch + async/await <span class="tag std">실무 표준</span></h3>
+	<table>
+		<tr><th width="8%">번호</th><th width="52%">내용</th><th width="40%">핵심 문법</th></tr>
+		<tr><td><a href="FetchAjax/1.html">1</a></td><td>기본 문법 (text / json)</td><td>async · await · try~catch</td></tr>
+		<tr><td><a href="FetchAjax/2.html">2</a></td><td>아이디 중복체크 (실무 표준)</td><td>공통 함수 + 타임아웃 + 디바운스</td></tr>
+		<tr><td><a href="FetchAjax/3.html">3</a></td><td>POST로 데이터 보내기</td><td>JSON.stringify + 중복클릭 방지</td></tr>
+		<tr><td><a href="FetchAjax/4.html">4</a></td><td>여러 요청 동시에 보내기</td><td>Promise.all</td></tr>
+		<tr><td><a href="FetchAjax/5.html">5</a></td><td>JSON 배열 반복 출력</td><td>map + join + 백틱</td></tr>
+	</table>
+
+	<h3>두 방식의 코드 비교</h3>
+<pre>
+[jQuery]                              [fetch + async/await]
+
+$.ajax({                              async function f(){
+    url : "calc.jsp",                     try {
+    type : "get",                             const res = await fetch("calc.jsp?v1=10");
+    data : { v1 : 10 },                       if(!res.ok) throw new Error(res.status);
+    dataType : "json",                        const data = await res.json();
+    success : function(response){             // 화면 갱신
+        // 화면 갱신                      } catch(err) {
+    },                                        // 오류 안내
+    error : function(xhttp){              } finally {
+        // 오류 안내                          // 뒷정리
+    },                                    }
+    complete : function(){            }
+        // 뒷정리
+    }
+});
+
+차이점 정리
+  1. jQuery 는 404, 500 이 오면 자동으로 error 로 넘어간다.
+     fetch 는 res.ok 를 직접 검사해야 한다.
+  2. jQuery 는 dataType:"json" 이면 자동 변환된다.
+     fetch 는 await res.json() 을 직접 호출해야 한다.
+  3. jQuery 는 별도의 파일을 불러와야 동작한다.
+     fetch 는 브라우저에 기본으로 들어 있다.
+</pre>
+
+	<p class="note">모든 예제는 화면 전체를 새로 그리지 않고 특정 부분만 갱신합니다.
+	   F12를 눌러 개발자도구의 Network탭을 함께 보면 실제 요청과 응답을 확인할 수 있습니다.
+	   Network탭에서 요청 하나를 클릭하면 Headers(요청 정보), Payload(보낸 값),
+	   Response(서버가 보낸 답) 를 각각 눈으로 확인할 수 있습니다.</p>
+</div>
+
+</body>
+</html>
