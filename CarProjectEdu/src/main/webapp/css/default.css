@@ -1,0 +1,365 @@
+@CHARSET "UTF-8";   /* 이 파일의 글자 인코딩이 UTF-8 이라고 알린다 (한글이 깨지지 않게) */
+
+/* =============================================
+   [CSS 변수 - 색상 테마]
+   수정 방법: 이 변수들만 바꾸면 전체 색상이 한번에 바뀜
+   예) --primary-color: #cc0000; → #0055cc; 로 변경시 파란 테마
+   ============================================= */
+:root {
+    --primary-color:   #cc0000; /* 주 색상: 빨강 (메뉴, 버튼 등) */
+    --secondary-color: #ff6600; /* 보조 색상: 주황 (hover 효과 등) */
+    --text-color:      #333333; /* 기본 글자색 */
+    --bg-color:        #ffffff; /* 기본 배경색 */
+    --nav-bg:          #cc0000; /* 네비게이션 배경색 */
+    --nav-hover:       #aa0000; /* 네비게이션 마우스 올릴때 배경색 */
+    --footer-bg:       #1a1a2e; /* 푸터 배경색: 짙은 남색 */
+    --border-color:    #dddddd; /* 테두리 색 */
+}
+
+/* =============================================
+   [전체 초기화]
+   모든 요소의 기본 여백 제거, box-sizing 통일
+   ============================================= */
+* {
+    margin: 0;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    padding: 0;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+    box-sizing: border-box; /* 안여백이 전체 너비에 포함되게 설정 */
+}
+
+/* =============================================
+   [기본 바디] 전체 페이지 공통
+   수정 방법: font-family 값으로 글자체 변경
+   ============================================= */
+body {
+    font-size: 0.875rem;  /* 기본 글자 크기 (14px) */
+    line-height: 1.5em;   /* 줄 간격 */
+    color: var(--text-color);   /* 글자색 */
+    background-color: var(--bg-color);   /* 배경색 */
+    font-family: 'Malgun Gothic', '맑은 고딕', Verdana, sans-serif;   /* 글꼴. 앞에서부터 찾아 쓰고 없으면 다음 것을 쓴다 */
+}
+/* 밖여백 0 안여백 0 글자크기 0.875rem 줄간격 1.5em 글자색 #333 */
+
+
+/* =============================================
+   [전체 감싸는 영역] 반응형 설정
+   - PC: 최대 1200px, 가운데 정렬
+   - 모바일: 화면 전체 너비 사용
+   - 수정 방법: max-width 값으로 최대 너비 조절
+   ============================================= */
+#wrap {
+    max-width: 1200px;  /* 최대 너비: PC에서 이 값을 넘지 않음 */
+    width: 100%;        /* 모바일: 화면 전체 너비 사용 */
+    text-align: left;   /* 글자 가로 정렬. left/center/right */
+    margin: 0 auto;     /* 좌우 자동 여백으로 가운데 정렬 */
+    min-height: 780px;   /* 세로 최소 크기 (내용이 적어도 이만큼은 높이를 잡는다) */
+    background-color: var(--bg-color);   /* 배경색 */
+}
+/* 너비 100%(최대 1200px) 글자정렬 left 밖여백 0 auto 최소높이 780px */
+/* 기존: background-image: url("../images/shadow.png") → CSS 배경색으로 대체 */
+
+
+/* =============================================
+   [로그인/회원가입 버튼 영역]
+   - 헤더 오른쪽 상단에 위치
+   - 수정 방법: margin 값으로 위치 조정
+   ============================================= */
+#login {
+    float: right;           /* 오른쪽 정렬 */
+    margin: 10px 20px 0 0;  /* 위 오른쪽 아래 왼쪽 여백 */
+    font-family: Arial, Helvetica, sans-serif;   /* 글꼴. 앞에서부터 찾아 쓰고 없으면 다음 것을 쓴다 */
+    font-size: 0.75rem;   /* 글자 크기 */
+    word-spacing: 4px;   /* 단어 사이 간격 */
+}
+/* 정렬 오른쪽 밖여백 글자체 Arial,Helvetica,sans-serif 크기 12px 단어간격 5px */
+
+#login a {
+    text-decoration: none; /* 링크 밑줄 없애기 */
+    color: var(--text-color);   /* 글자색 */
+}
+
+/* 마우스 올릴때 색상 변경 */
+#login a:hover {
+    color: var(--secondary-color); /* 주황색으로 변경 */
+}
+
+/* =============================================
+   [유틸리티 클래스] float 해제용
+   ============================================= */
+.clear {
+    clear: both; /* 영역구분 - float 요소 해제 */
+}
+
+
+/* =============================================
+   [메인 로고 영역]
+   - 이미지(RENT.jpg) 제거 → CSS 텍스트 로고로 대체
+   - 수정 방법: .logo-text 안의 내용 변경으로 회사명 수정
+   ============================================= */
+#logo {
+    float: left;           /* 왼쪽 정렬 */
+    margin: 15px 0 10px 20px;   /* 바깥 여백 (요소와 요소 사이 거리) */
+}
+/* 정렬 왼쪽 너비 265px→자동 밖여백 */
+/* 기존: width: 265px → 자동 너비 반응형으로 변경 */
+
+/* 로고 링크 */
+#logo a {
+    text-decoration: none;   /* 밑줄 등 장식. none 이면 a 태그 밑줄을 없앤다 */
+    display: flex;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+    align-items: center;   /* 교차축(세로) 방향 정렬 */
+    gap: 10px;   /* flex/grid 자식들 사이의 간격 */
+}
+
+/* CSS 아이콘 박스 (이미지 대체) */
+#logo .logo-icon {
+    width: 44px;   /* 가로 크기 */
+    height: 44px;   /* 세로 크기 */
+    background-color: var(--primary-color); /* 빨간 배경 */
+    border-radius: 8px;   /* 모서리를 둥글게. 값이 클수록 더 동그래진다 */
+    display: flex;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+    align-items: center;   /* 교차축(세로) 방향 정렬 */
+    justify-content: center;   /* 주축(가로) 방향 정렬 */
+    color: white;   /* 글자색 */
+    font-weight: 900;   /* 글자 굵기. bold 또는 100~900 숫자 */
+    font-size: 1.1rem;   /* 글자 크기 */
+    letter-spacing: -1px;   /* 글자 사이 간격 */
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.2); /* 그림자 효과 */
+    flex-shrink: 0; /* 크기 고정 */
+}
+
+/* 로고 텍스트 영역 */
+#logo .logo-text-wrap {
+    display: flex;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+    flex-direction: column;   /* flex 자식을 쌓는 방향. row=가로, column=세로 */
+}
+
+/* 회사명 (수정 방법: 여기 텍스트 변경) */
+#logo .logo-text {
+    font-size: 1.5rem;              /* 글자 크기 */
+    font-weight: 900;   /* 글자 굵기. bold 또는 100~900 숫자 */
+    color: var(--primary-color);    /* 빨간색 */
+    letter-spacing: 2px;   /* 글자 사이 간격 */
+    line-height: 1.1;   /* 줄 간격 (줄과 줄 사이 높이) */
+}
+
+/* 부제목 */
+#logo .logo-sub {
+    font-size: 0.6rem;   /* 글자 크기 */
+    color: #999;   /* 글자색 */
+    letter-spacing: 1px;   /* 글자 사이 간격 */
+    text-transform: uppercase;   /* 대소문자 변환. uppercase=전부 대문자 */
+}
+
+
+/* =============================================
+   [상단 헤더 영역]
+   - 로고 + 로그인버튼 포함
+   ============================================= */
+header {
+    height: auto;   /* 세로 크기 */
+    min-height: 80px;   /* 세로 최소 크기 (내용이 적어도 이만큼은 높이를 잡는다) */
+    margin: 0;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    padding: 0;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+    overflow: hidden;    /* float 요소 감싸기 */
+    border-bottom: 3px solid var(--primary-color); /* 하단 빨간 라인 */
+    background-color: #fafafa;   /* 배경색 */
+}
+/* 높이 자동(최소 80px) 밖여백 0 안여백 0 */
+
+
+/* =============================================
+   [상단 네비게이션 메뉴]
+   - 이미지(blue.gif) 없이 CSS 효과로 대체
+   ============================================= */
+nav#top_menu {
+    max-width: 600px;   /* 가로 최대 크기 (이보다 커지지 않는다) */
+    width: auto;   /* 가로 크기 */
+    margin: 20px 10px 0 0;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    float: right;   /* 요소를 왼쪽/오른쪽으로 띄워 옆으로 글이 흐르게 한다 (옛 배치 방식) */
+}
+/* 너비 자동(최대 600px) 밖여백 정렬 오른쪽 */
+
+nav#top_menu ul {
+    list-style: none;    /* 리스트 점 없애기 */
+    font-family: Verdana, sans-serif;   /* 글꼴. 앞에서부터 찾아 쓰고 없으면 다음 것을 쓴다 */
+    font-size: 0.8rem;   /* 글자 크기 */
+    font-weight: bold;   /* 글자 굵기. bold 또는 100~900 숫자 */
+    color: var(--text-color);   /* 글자색 */
+    padding: 0;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+    margin: 0;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    display: flex;       /* 가로 방향 정렬 */
+    flex-wrap: wrap;     /* 화면 작으면 줄바꿈 */
+}
+/* 스타일없음 글자체 verdana 글자크기 0.8rem 굵기 bold 글자색 #333 */
+
+nav#top_menu li {
+    float: left;   /* 요소를 왼쪽/오른쪽으로 띄워 옆으로 글이 흐르게 한다 (옛 배치 방식) */
+    margin: 0 2px;   /* 바깥 여백 (요소와 요소 사이 거리) */
+}
+/* 정렬 왼쪽 밖여백 0 2px */
+
+nav#top_menu a {
+    display: block;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+    height: 20px;   /* 세로 크기 */
+    padding: 8px 12px;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+    text-decoration: none;   /* 밑줄 없음 */
+    color: var(--text-color);   /* 글자색 */
+    border-bottom: 2px solid transparent; /* 기본: 투명 */
+    transition: all 0.2s;    /* 부드러운 애니메이션 */
+}
+/* block 높이 20px 안여백 밑줄 없음 글자색 #333 */
+
+/* 이미지(blue.gif) → CSS 밑줄 효과로 대체 */
+nav#top_menu a:hover {
+    color: var(--primary-color);                   /* 빨간 글자 */
+    border-bottom: 2px solid var(--primary-color); /* 빨간 아래 밑줄 */
+    background-color: rgba(204,0,0,0.05);          /* 옅은 빨간 배경 */
+}
+/* 배경이미지 blue.gif 대체 → CSS hover 효과 */
+
+
+/* =============================================
+   [푸터 - 하단 영역]
+   - 이미지(under_logo.gif) 없이 CSS 배경색으로 대체
+   - 수정 방법: --footer-bg 변수값 변경으로 배경색 조정
+   ============================================= */
+
+/* 커스텀 폰트 seo - 이미지 없이 시스템 폰트 사용 */
+@font-face {
+    font-family: "seo";   /* 글꼴. 앞에서부터 찾아 쓰고 없으면 다음 것을 쓴다 */
+    src: local("Segoe UI"), local("맑은 고딕");   /* 불러올 글꼴 파일 위치 */
+}
+/* 글자체 seo → 시스템에 설치된 폰트 사용 */
+
+footer {
+    margin: 0;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    min-height: 80px;   /* 세로 최소 크기 (내용이 적어도 이만큼은 높이를 잡는다) */
+    background-color: var(--footer-bg); /* 이미지(under_logo.gif) 대체 */
+    color: #cccccc;   /* 글자색 */
+    padding: 20px;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+    overflow: hidden;   /* 내용이 넘칠 때 처리. hidden=자름, auto=스크롤 */
+}
+/* 밖여백 50px 0 0 0→0 높이 80px 배경이미지 → 배경색으로 대체 */
+
+footer hr {
+    width: 95%;   /* 가로 크기 */
+    margin: 0 auto 15px;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    border: none;   /* 테두리 (굵기 모양 색 순서) */
+    border-top: 1px solid rgba(255,255,255,0.2); /* 반투명 흰 구분선 */
+}
+/* 너비 900px→95% 밖여백 */
+
+footer #copy {
+    font-family: "seo", sans-serif;   /* 글꼴. 앞에서부터 찾아 쓰고 없으면 다음 것을 쓴다 */
+    max-width: 450px;   /* 가로 최대 크기 (이보다 커지지 않는다) */
+    width: auto;   /* 가로 크기 */
+    margin: 10px 0 0 10px;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    float: left;   /* 요소를 왼쪽/오른쪽으로 띄워 옆으로 글이 흐르게 한다 (옛 배치 방식) */
+    color: #aaaaaa;   /* 글자색 */
+    font-size: 0.75rem;   /* 글자 크기 */
+}
+/* 글자체 seo 너비 자동 밖여백 정렬 left */
+
+footer #social {
+    width: 130px;   /* 가로 크기 */
+    margin: 10px 10px 0 0;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    float: right;   /* 요소를 왼쪽/오른쪽으로 띄워 옆으로 글이 흐르게 한다 (옛 배치 방식) */
+}
+/* 너비 130px 밖여백 정렬 오른쪽 */
+
+footer #social img {
+    margin: 0 7px; /* SNS 아이콘 이미지 사용할 경우 여백 */
+}
+/* 밖여백 0 7px */
+
+
+/* =============================================
+   [반응형] 모바일 (768px 이하)
+   - 화면이 작아지면 세로 방향 레이아웃으로 전환
+   ============================================= */
+@media (max-width: 768px) {
+
+    /* 로고 크기 축소 */
+    #logo {
+        margin: 8px 0 5px 10px;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    }
+
+    #logo .logo-icon {
+        width: 36px;   /* 가로 크기 */
+        height: 36px;   /* 세로 크기 */
+        font-size: 0.9rem;   /* 글자 크기 */
+    }
+
+    #logo .logo-text {
+        font-size: 1.1rem;   /* 글자 크기 */
+    }
+
+    /* 로그인 영역 조정 */
+    #login {
+        font-size: 0.7rem;   /* 글자 크기 */
+        margin: 8px 8px 0 0;   /* 바깥 여백 (요소와 요소 사이 거리) */
+        word-spacing: 2px;   /* 단어 사이 간격 */
+    }
+
+    /* 헤더 높이 조정 */
+    header {
+        min-height: 60px;   /* 세로 최소 크기 (내용이 적어도 이만큼은 높이를 잡는다) */
+    }
+
+    /* 네비게이션 - 전체 너비 */
+    nav#top_menu {
+        float: none;   /* 요소를 왼쪽/오른쪽으로 띄워 옆으로 글이 흐르게 한다 (옛 배치 방식) */
+        max-width: 100%;   /* 가로 최대 크기 (이보다 커지지 않는다) */
+        margin: 0;   /* 바깥 여백 (요소와 요소 사이 거리) */
+        width: 100%;   /* 가로 크기 */
+    }
+
+    nav#top_menu ul {
+        justify-content: center;   /* 주축(가로) 방향 정렬 */
+    }
+
+    nav#top_menu li {
+        margin: 1px;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    }
+
+    nav#top_menu a {
+        font-size: 0.72rem;   /* 글자 크기 */
+        padding: 5px 7px;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+        height: auto;   /* 세로 크기 */
+    }
+
+    /* 푸터 세로 정렬 */
+    footer #copy {
+        float: none;   /* 요소를 왼쪽/오른쪽으로 띄워 옆으로 글이 흐르게 한다 (옛 배치 방식) */
+        display: block;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+        margin: 10px auto;   /* 바깥 여백 (요소와 요소 사이 거리) */
+        text-align: center;   /* 글자 가로 정렬. left/center/right */
+    }
+
+    footer #social {
+        float: none;   /* 요소를 왼쪽/오른쪽으로 띄워 옆으로 글이 흐르게 한다 (옛 배치 방식) */
+        display: block;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+        margin: 5px auto;   /* 바깥 여백 (요소와 요소 사이 거리) */
+        text-align: center;   /* 글자 가로 정렬. left/center/right */
+    }
+
+}
+/* 모바일 반응형 끝 */
+
+
+/* =============================================
+   [반응형] 태블릿 (769px ~ 992px)
+   ============================================= */
+@media (min-width: 769px) and (max-width: 992px) {
+
+    #logo .logo-text {   /* 모바일에서 회사명 글자 크기를 줄인다 */
+        font-size: 1.3rem;   /* 글자 크기 */
+    }
+
+    nav#top_menu a {
+        font-size: 0.76rem;   /* 글자 크기 */
+        padding: 7px 9px;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+    }
+
+}
+/* 태블릿 반응형 끝 */

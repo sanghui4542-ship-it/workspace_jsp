@@ -51,4 +51,5 @@
     <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
     <fullyQualifiedTypeName name="java.net.URLEncoder"/>
     <fullyQualifiedTypeName name="java.io.OutputStream"/>
+    <fullyQualifiedTypeName name="javax.websocket.server.ServerEndpoint"/>
 </qualifiedTypeNameHistroy>

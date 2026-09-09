@@ -60,7 +60,7 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL/TLS HTTP/1.1 Connector on port 8181
     -->
-    <Connector connectionTimeout="20000" port="8181" protocol="HTTP/1.1" redirectPort="8443"/>
+    <Connector connectionTimeout="20000" port="8081" protocol="HTTP/1.1" redirectPort="8443"/>
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"
@@ -156,7 +156,7 @@
 
       
       
-      <Context docBase="pro16_JSON" path="/pro16_JSON" reloadable="true" source="org.eclipse.jst.jee.server:pro16_JSON"/><Context docBase="pro16_Ajax" path="/pro16_Ajax" reloadable="true" source="org.eclipse.jst.jee.server:pro16_Ajax"/></Host>
+      </Host>
     </Engine>
   </Service>
 </Server>

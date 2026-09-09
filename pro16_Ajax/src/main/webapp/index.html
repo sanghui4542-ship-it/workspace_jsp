@@ -1,111 +1,140 @@
 <!--
 ================================================================================
  파일명 : index.html
- 역할   : 이 프로젝트의 예제 목록 화면 (시작 페이지)
+ 역할   : 키가 필요 없는 날씨 프로젝트의 시작 화면
 ================================================================================
-
- 참고. 이 파일이 시작 페이지가 되는 이유
-
-   WEB-INF/web.xml 파일 안의 <welcome-file-list> 에 index.html 이 적혀 있어서
-   아래 주소로 접속하면 톰캣이 자동으로 이 파일을 열어 줍니다.
-
-     http://localhost:8181/pro16_Ajax7/
-
- 참고. 권장 학습 순서
-
-   1) JQueryAjax/1.html   $.ajax 기본 구조 익히기
-   2) JQueryAjax/2.html   JSON 응답 다루기
-   3) JQueryAjax/3.html   배열 반복 출력
-   4) JQueryAjax/4.html   실전 아이디 중복체크
-   5) FetchAjax/1.html    같은 동작을 fetch 로 바꿔 보기
-   6) FetchAjax/2~5.html  실무 표준 기법 익히기
-
-   두 폴더의 예제는 동작이 거의 같습니다.
-   같은 번호끼리 나란히 열어 코드를 비교하면 차이가 한눈에 보입니다.
 -->
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Ajax 예제 목록</title>
+<title>키 없이 만드는 날씨 사이트</title>
 <style type="text/css">
-	body   { font-family:'Malgun Gothic'; padding:24px; background:#f7f9fc; }
-	h1     { color:#1d5fa8; font-size:22px; }
-	h3     { color:#1d5fa8; margin-top:24px; }
-	.box   { background:#fff; border:1px solid #cbd5e2; border-radius:8px;
-	         padding:20px; max-width:760px; }
+	body   { font-family:'Malgun Gothic'; padding:24px; background:#f4f7fb; }
+	h1     { color:#1d5fa8; font-size:23px; }
+	h3     { color:#1d5fa8; margin-top:26px; }
+	.box   { background:#fff; border:1px solid #d5e0ec; border-radius:10px; padding:22px; max-width:860px; }
 	table  { border-collapse:collapse; width:100%; margin-top:8px; }
-	th,td  { border:1px solid #cbd5e2; padding:9px; text-align:left; font-size:14px; }
+	th,td  { border:1px solid #d5e0ec; padding:10px; text-align:left; font-size:14px; }
 	th     { background:#e8f0fb; color:#1d5fa8; }
 	a      { color:#1d5fa8; font-weight:bold; text-decoration:none; }
 	a:hover{ text-decoration:underline; }
-	.tag   { display:inline-block; background:#e8f0fb; color:#1d5fa8; border-radius:10px;
-	         padding:2px 8px; font-size:12px; }
-	.tag.std { background:#173d2a; color:#8ff0b6; }
-	.note  { color:#6b7c93; font-size:13px; margin-top:14px; }
-	pre    { background:#0f1c2e; color:#e6edf7; padding:12px; border-radius:6px;
-	         font-size:12px; overflow-x:auto; line-height:1.5; }
+	pre    { background:#0f1c2e; color:#e6edf7; padding:13px; border-radius:7px;
+	         font-size:12px; overflow-x:auto; line-height:1.55; }
+	.good  { background:#eafaf0; border:1px solid #a8e0bf; border-radius:8px;
+	         padding:14px; margin-top:14px; font-size:13.5px; color:#12803a; }
+	.warn  { background:#fff5e8; border:1px solid #f0c187; border-radius:8px;
+	         padding:14px; margin-top:14px; font-size:13.5px; color:#a5670a; }
+	.guide { display:inline-block; background:#16a34a; color:#fff; border-radius:8px;
+	         padding:12px 22px; font-size:15px; margin-top:8px; }
+	.num   { display:inline-block; width:24px; height:24px; background:#1d5fa8; color:#fff;
+	         border-radius:50%; text-align:center; line-height:24px; font-size:13px;
+	         font-weight:bold; margin-right:6px; }
 </style>
 </head>
 <body>
 
-<h1>Ajax 비동기 통신 예제</h1>
+<h1>키 없이 만드는 날씨 사이트</h1>
 
 <div class="box">
 
-	<h3>jQuery Ajax <span class="tag">기존 JSP 프로젝트 유지보수용</span></h3>
+	<div class="good">
+		<b>이 프로젝트에는 준비물이 없습니다.</b><br>
+		회원가입, 인증키 발급, 활성화 대기(최대 2시간), 신용카드 등록이 전혀 필요 없습니다.
+		톰캣을 실행하고 아래 순서대로 클릭하면 바로 실제 날씨가 나옵니다.
+	</div>
+
+	<h3>혼자 실습하는 순서</h3>
+	<p style="font-size:14px;color:#5d7a99;margin-bottom:6px">
+	   아래 자습서를 열고 1장부터 순서대로 따라가면 3단계를 거쳐 완성본이 만들어집니다.</p>
+
+	<a class="guide" href="guide.html">📘 자습서 열기 (여기부터 시작하세요)</a>
+
+	<h3>단계별 예제</h3>
 	<table>
-		<tr><th width="8%">번호</th><th width="52%">내용</th><th width="40%">핵심 문법</th></tr>
-		<tr><td><a href="JQueryAjax/1.html">1</a></td><td>$.ajax 로 text 응답받기</td><td>dataType : "text"</td></tr>
-		<tr><td><a href="JQueryAjax/2.html">2</a></td><td>$.ajax 로 json 응답받기</td><td>dataType : "json"</td></tr>
-		<tr><td><a href="JQueryAjax/3.html">3</a></td><td>JSON 배열 반복 출력</td><td>$.getJSON + $.each</td></tr>
-		<tr><td><a href="JQueryAjax/4.html">4</a></td><td>아이디 중복체크 (실전)</td><td>$.ajax + 디바운스</td></tr>
+		<tr><th width="8%">단계</th><th width="30%">내용</th><th width="30%">새로 배우는 것</th><th width="32%">완성 모습</th></tr>
+		<tr><td><span class="num">1</span></td>
+		    <td><a href="step1.html">좌표를 고정해서 날씨 조회</a></td>
+		    <td>fetch 기본 구조, try catch finally</td>
+		    <td>서울의 현재 기온이 표시됩니다</td></tr>
+		<tr><td><span class="num">2</span></td>
+		    <td><a href="step2.html">도시 이름으로 날씨 조회</a></td>
+		    <td>요청 두 개를 순서대로 이어서 호출</td>
+		    <td>도시를 검색해 날씨를 봅니다</td></tr>
+		<tr><td><span class="num">3</span></td>
+		    <td><a href="step3.html">완성본 (날씨 + 미세먼지 + 주간예보)</a></td>
+		    <td>Promise.all 로 동시 호출</td>
+		    <td>포트폴리오에 넣을 수 있는 화면</td></tr>
 	</table>
 
-	<h3>fetch + async/await <span class="tag std">실무 표준</span></h3>
+	<h3>jQuery 버전 (같은 화면을 다른 문법으로)</h3>
+	<p style="font-size:14px;color:#5d7a99;margin-bottom:6px">
+	   위 3단계와 화면도 동작도 완전히 같고 문법만 jQuery 로 바꾼 것입니다.
+	   같은 번호끼리 나란히 열어 비교하면 두 방식의 차이가 한눈에 보입니다.</p>
 	<table>
-		<tr><th width="8%">번호</th><th width="52%">내용</th><th width="40%">핵심 문법</th></tr>
-		<tr><td><a href="FetchAjax/1.html">1</a></td><td>기본 문법 (text / json)</td><td>async · await · try~catch</td></tr>
-		<tr><td><a href="FetchAjax/2.html">2</a></td><td>아이디 중복체크 (실무 표준)</td><td>공통 함수 + 타임아웃 + 디바운스</td></tr>
-		<tr><td><a href="FetchAjax/3.html">3</a></td><td>POST로 데이터 보내기</td><td>JSON.stringify + 중복클릭 방지</td></tr>
-		<tr><td><a href="FetchAjax/4.html">4</a></td><td>여러 요청 동시에 보내기</td><td>Promise.all</td></tr>
-		<tr><td><a href="FetchAjax/5.html">5</a></td><td>JSON 배열 반복 출력</td><td>map + join + 백틱</td></tr>
+		<tr><th width="8%">단계</th><th width="30%">jQuery 버전</th><th width="30%">새로 배우는 것</th><th width="32%">짝 파일</th></tr>
+		<tr><td><span class="num">1</span></td>
+		    <td><a href="jq1.html">jq1.html</a></td>
+		    <td>$.ajax 기본 구조</td>
+		    <td>step1.html 과 비교</td></tr>
+		<tr><td><span class="num">2</span></td>
+		    <td><a href="jq2.html">jq2.html</a></td>
+		    <td><b>콜백 중첩(콜백 지옥)</b> 직접 확인</td>
+		    <td>step2.html 과 비교</td></tr>
+		<tr><td><span class="num">3</span></td>
+		    <td><a href="jq3.html">jq3.html</a></td>
+		    <td>$.when 동시 호출과 [0] 함정</td>
+		    <td>step3.html 과 비교</td></tr>
 	</table>
 
-	<h3>두 방식의 코드 비교</h3>
+	<p style="margin-top:12px">
+	   <a class="guide" style="background:#7c3aed" href="compare.html">📊 fetch 와 jQuery 문법 대조표 보기</a></p>
+
+	<h3>사용하는 API 세 가지</h3>
 <pre>
-[jQuery]                              [fetch + async/await]
+[1] 지오코딩 : 도시 이름을 위도와 경도로 바꿔 줍니다
+https://geocoding-api.open-meteo.com/v1/search?name=Busan&count=5&language=ko
 
-$.ajax({                              async function f(){
-    url : "calc.jsp",                     try {
-    type : "get",                             const res = await fetch("calc.jsp?v1=10");
-    data : { v1 : 10 },                       if(!res.ok) throw new Error(res.status);
-    dataType : "json",                        const data = await res.json();
-    success : function(response){             // 화면 갱신
-        // 화면 갱신                      } catch(err) {
-    },                                        // 오류 안내
-    error : function(xhttp){              } finally {
-        // 오류 안내                          // 뒷정리
-    },                                    }
-    complete : function(){            }
-        // 뒷정리
-    }
-});
+[2] 날씨 : 위도와 경도를 넣으면 현재 날씨와 주간 예보를 돌려줍니다
+https://api.open-meteo.com/v1/forecast?latitude=35.18&longitude=129.07&current=temperature_2m&timezone=Asia/Seoul
 
-차이점 정리
-  1. jQuery 는 404, 500 이 오면 자동으로 error 로 넘어간다.
-     fetch 는 res.ok 를 직접 검사해야 한다.
-  2. jQuery 는 dataType:"json" 이면 자동 변환된다.
-     fetch 는 await res.json() 을 직접 호출해야 한다.
-  3. jQuery 는 별도의 파일을 불러와야 동작한다.
-     fetch 는 브라우저에 기본으로 들어 있다.
+[3] 대기질 : 위도와 경도를 넣으면 미세먼지 농도를 돌려줍니다
+https://air-quality-api.open-meteo.com/v1/air-quality?latitude=35.18&longitude=129.07&current=pm10,pm2_5
+
+세 주소 모두 브라우저 주소창에 그대로 붙여넣으면 결과를 바로 볼 수 있습니다.
+인증키를 붙이지 않아도 됩니다.
 </pre>
 
-	<p class="note">모든 예제는 화면 전체를 새로 그리지 않고 특정 부분만 갱신합니다.
-	   F12를 눌러 개발자도구의 Network탭을 함께 보면 실제 요청과 응답을 확인할 수 있습니다.
-	   Network탭에서 요청 하나를 클릭하면 Headers(요청 정보), Payload(보낸 값),
-	   Response(서버가 보낸 답) 를 각각 눈으로 확인할 수 있습니다.</p>
+	<div class="warn">
+		<b>가장 많이 틀리는 부분을 미리 알려 드립니다.</b><br>
+		지오코딩은 도시 이름을 <b>영문으로</b> 검색해야 합니다.<br>
+		name=Seoul 로 검색하면 서울특별시가 나오지만,
+		name=서울 처럼 한글로 검색하면 결과가 하나도 나오지 않습니다.<br>
+		대신 language=ko 를 붙이면 <b>결과 이름은 한글로</b> 옵니다.
+	</div>
+
+	<h3>왜 OpenWeather 대신 이것을 쓰는가</h3>
+	<table>
+		<tr><th width="26%">항목</th><th width="37%">OpenWeather</th><th width="37%">Open-Meteo (이 프로젝트)</th></tr>
+		<tr><td>회원가입</td><td>필요</td><td style="color:#12803a"><b>불필요</b></td></tr>
+		<tr><td>인증키 발급</td><td>필요</td><td style="color:#12803a"><b>불필요</b></td></tr>
+		<tr><td>활성화 대기</td><td style="color:#c0392b">최대 2시간</td><td style="color:#12803a"><b>없음</b></td></tr>
+		<tr><td>신용카드</td><td>일부 상품은 필요</td><td style="color:#12803a"><b>불필요</b></td></tr>
+		<tr><td>미세먼지</td><td>별도 상품</td><td style="color:#12803a"><b>같은 방식으로 무료</b></td></tr>
+		<tr><td>수업 당일 실습</td><td style="color:#c0392b">위험</td><td style="color:#12803a"><b>즉시 가능</b></td></tr>
+	</table>
+
+	<h3>실행 방법</h3>
+<pre>
+1. 이클립스에서 File - Import - WAR file 로 이 프로젝트를 가져옵니다.
+2. 톰캣을 실행합니다.
+3. 아래 주소로 접속합니다.
+
+   http://localhost:8090/pro20_Weather_NoKey/
+
+4. 위의 자습서 버튼을 눌러 1장부터 따라갑니다.
+</pre>
+
 </div>
 
 </body>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>WebSocket</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.xhtml</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.xhtml</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 
+  		웹 소켓 채팅 을 위한  웹 소켓 서버페이지(ChatServer.java) 요청 주소 설정
+  	    - 전체 URL은  ws://웹애플리케이션서버 IP:포트번호/컨텍스트명   형식이 됩니다
+  	    - 이때  ws:// 는 일반 웹소켓 서버페이지 요청 연결 주소를 의미하고
+  	          wss:// 는 보안 웹 소켓(SSL/TLS가 적용된 경우)을 의미합니다. 
+  
+   -->
+  <context-param>
+  	<param-name>CHAT_ADDR</param-name>
+  	<param-value>ws://localhost:8181/WebSocket</param-value>
+  </context-param>
+  
+  
+</web-app>
+
+
+
+
+

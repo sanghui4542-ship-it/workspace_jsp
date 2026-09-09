@@ -1,0 +1,649 @@
+<!--
+================================================================================
+ 파일명   : step3.html
+ 단계     : 3단계 - 완성본 (날씨 + 미세먼지 + 주간예보)
+ 대상     : 비전공자
+================================================================================
+
+ 이 단계의 목표
+ ==========================================================================
+ 2단계에 미세먼지와 주간 예보를 추가해 포트폴리오에 넣을 수 있는 화면을 만듭니다.
+
+
+ 이 단계에서 배우는 것
+ ==========================================================================
+ 1. Promise.all 로 요청 두 개를 동시에 보내는 방법
+ 2. 구조 분해 할당 문법
+ 3. 숫자 코드를 사람이 읽는 글자로 바꾸는 방법
+ 4. 배열을 반복해 카드 여러 개를 만드는 방법 (map 과 join)
+ 5. 값에 따라 색과 문구를 바꾸는 방법
+
+
+ 참고. 이 화면의 동작 순서
+ ==========================================================================
+
+   [브라우저]  Busan 입력 후 조회
+       |
+       | (1) 지오코딩 요청 (좌표를 알아야 나머지를 부를 수 있음)
+       V
+   [지오코딩 서버]  부산광역시 / 35.10 / 129.03
+       |
+       V
+   [브라우저]
+       |
+       | (2) 날씨와 대기질을 동시에 요청 (Promise.all)
+       |
+       |     |==날씨====|
+       |     |==대기질===|
+       V
+   [날씨 서버 + 대기질 서버]
+       |
+       | (3) 두 응답이 모두 도착
+       V
+   [브라우저]
+       |
+       | (4) 현재 날씨 + 미세먼지 + 주간예보 7일을 한 번에 표시
+
+
+ 참고. 왜 앞은 순차, 뒤는 동시인가
+ ==========================================================================
+
+   지오코딩 -> 날씨      좌표가 있어야 부를 수 있으므로 순차
+   날씨 <-> 대기질       둘 다 좌표만 있으면 되고 서로 관계없으므로 동시
+
+   판단 기준은 단 하나입니다.
+     앞의 결과가 뒤 요청에 필요한가?
+       필요하다  ->  순차 호출 (await 를 연달아 사용)
+       필요없다  ->  동시 호출 (Promise.all)
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>3단계 - 완성본 날씨 사이트</title>
+
+	<style type="text/css">
+		body    { font-family:'Malgun Gothic'; padding:24px; background:#f4f7fb; }
+		h2      { color:#1d5fa8; }
+		.box    { background:#fff; border:1px solid #d5e0ec; border-radius:10px;
+		          padding:22px; max-width:780px; }
+		input   { padding:9px; border:1px solid #93a5bd; border-radius:5px; width:210px;
+		          font-size:15px; }
+		button  { background:#1d5fa8; color:#fff; border:none; padding:10px 20px;
+		          border-radius:7px; cursor:pointer; font-size:14px; margin-left:4px; }
+		button:disabled { background:#8fa2bb; cursor:not-allowed; }
+
+		.quick  { margin-top:10px; }
+		.quick span { display:inline-block; background:#e8f0fb; color:#1d5fa8;
+		              border-radius:12px; padding:4px 12px; margin:3px 3px 0 0;
+		              font-size:13px; cursor:pointer; }
+		.quick span:hover { background:#1d5fa8; color:#fff; }
+
+		/* 현재 날씨를 보여 주는 큰 카드 */
+		.now    { margin-top:18px; padding:22px; background:#e8f0fb; border-radius:10px; }
+		.city   { font-size:18px; color:#1d5fa8; font-weight:bold; }
+		.icon   { font-size:52px; line-height:1; }
+		.temp   { font-size:46px; font-weight:bold; color:#0f1c2e; }
+		.desc   { font-size:16px; color:#4a6280; }
+		.sub    { font-size:14px; color:#4a6280; margin-top:6px; }
+
+		/* 미세먼지 표시 영역 */
+		.air    { margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; }
+		.airbox { flex:1; min-width:150px; padding:12px 14px; border-radius:8px;
+		          background:#fff; border:1px solid #d5e0ec; }
+		.airval { font-size:22px; font-weight:bold; }
+		.airlab { font-size:12.5px; color:#6b7c93; }
+
+		/* 주간 예보 */
+		.week   { margin-top:18px; display:flex; gap:8px; flex-wrap:wrap; }
+		.day    { flex:1; min-width:92px; background:#fff; border:1px solid #d5e0ec;
+		          border-radius:8px; padding:12px 8px; text-align:center; }
+		.dayname{ font-size:13px; color:#1d5fa8; font-weight:bold; }
+		.dayico { font-size:26px; margin:4px 0; }
+		.daytmp { font-size:13.5px; color:#22303f; }
+		.daymax { color:#c0392b; font-weight:bold; }
+		.daymin { color:#1d5fa8; }
+		.dayrain{ font-size:12px; color:#6b7c93; }
+
+		.err    { color:#c0392b; font-weight:bold; }
+		.note   { color:#6b7c93; font-size:13px; margin-top:14px; }
+		.nav    { margin-top:16px; font-size:14px; }
+		.nav a  { color:#1d5fa8; font-weight:bold; text-decoration:none; margin-right:12px; }
+	</style>
+</head>
+<body>
+
+<h2>3단계 - 완성본 (날씨 + 미세먼지 + 주간예보)</h2>
+
+<div class="box">
+
+	도시 : <input type="text" id="city" value="Busan" placeholder="영문 도시명 (예: Seoul)">
+	<button id="btn">조회</button>
+
+	<div class="quick">
+		<span data-name="Seoul">서울</span>
+		<span data-name="Busan">부산</span>
+		<span data-name="Daegu">대구</span>
+		<span data-name="Incheon">인천</span>
+		<span data-name="Gwangju">광주</span>
+		<span data-name="Daejeon">대전</span>
+		<span data-name="Jeju">제주</span>
+		<span data-name="Tokyo">도쿄</span>
+	</div>
+
+	<!-- 결과가 이 div 안쪽에만 그려집니다. 페이지 전체는 새로 그려지지 않습니다. -->
+	<div id="result"></div>
+
+	<p class="note">F12 Network 탭을 열고 조회해 보세요.
+	   지오코딩 요청이 먼저 나가고, 그 다음 날씨와 대기질 요청이
+	   <b>거의 동시에</b> 나가는 것을 확인할 수 있습니다.</p>
+
+	<div class="nav">
+		<a href="index.html">처음으로</a>
+		<a href="step2.html">2단계</a>
+		<a href="guide.html">자습서</a>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	//===================================================================
+	//0. 날씨 코드를 사람이 읽는 글자와 그림으로 바꾸기 위한 목록
+	//===================================================================
+	/*
+		참고. weather_code 란 무엇인가
+
+			날씨 상태를 숫자로 표현한 국제 표준 코드입니다.
+			세계기상기구(WMO)가 정한 것으로 어느 나라 API 든 같은 의미입니다.
+
+			서버는 0, 61, 95 같은 숫자만 보내 줍니다.
+			화면에 61 이라고 쓰면 아무도 무슨 날씨인지 모르므로
+			이름을 미리 적어 두고 바꿔서 보여 줍니다.
+
+		참고. 객체 안에 객체를 넣은 구조입니다.
+
+			날씨코드[0]        ->  { 글 : "맑음", 그림 : "해 그림" }
+			날씨코드[0].글     ->  "맑음"
+			날씨코드[0].그림   ->  해 그림
+
+		주의. 키(왼쪽 숫자)에 따옴표를 붙이지 않아도 됩니다.
+		     자바스크립트가 자동으로 글자로 바꿔 처리합니다.
+	*/
+	const 날씨코드 = {
+		0  : { 글:"맑음",           그림:"\u2600\uFE0F" },
+		1  : { 글:"대체로 맑음",     그림:"\uD83C\uDF24\uFE0F" },
+		2  : { 글:"구름 조금",       그림:"\u26C5" },
+		3  : { 글:"흐림",           그림:"\u2601\uFE0F" },
+		45 : { 글:"안개",           그림:"\uD83C\uDF2B\uFE0F" },
+		48 : { 글:"짙은 안개",       그림:"\uD83C\uDF2B\uFE0F" },
+		51 : { 글:"약한 이슬비",     그림:"\uD83C\uDF26\uFE0F" },
+		53 : { 글:"이슬비",         그림:"\uD83C\uDF26\uFE0F" },
+		55 : { 글:"강한 이슬비",     그림:"\uD83C\uDF27\uFE0F" },
+		61 : { 글:"약한 비",        그림:"\uD83C\uDF26\uFE0F" },
+		63 : { 글:"비",            그림:"\uD83C\uDF27\uFE0F" },
+		65 : { 글:"강한 비",        그림:"\uD83C\uDF27\uFE0F" },
+		71 : { 글:"약한 눈",        그림:"\uD83C\uDF28\uFE0F" },
+		73 : { 글:"눈",            그림:"\u2744\uFE0F" },
+		75 : { 글:"강한 눈",        그림:"\u2744\uFE0F" },
+		77 : { 글:"싸락눈",         그림:"\u2744\uFE0F" },
+		80 : { 글:"소나기",         그림:"\uD83C\uDF26\uFE0F" },
+		81 : { 글:"소나기",         그림:"\uD83C\uDF27\uFE0F" },
+		82 : { 글:"강한 소나기",     그림:"\u26C8\uFE0F" },
+		85 : { 글:"소낙눈",         그림:"\uD83C\uDF28\uFE0F" },
+		86 : { 글:"강한 소낙눈",     그림:"\u2744\uFE0F" },
+		95 : { 글:"천둥번개",       그림:"\u26C8\uFE0F" },
+		96 : { 글:"천둥번개와 우박", 그림:"\u26C8\uFE0F" },
+		99 : { 글:"심한 뇌우",      그림:"\u26C8\uFE0F" }
+	};
+
+	//요일 이름을 숫자로 얻기 위한 목록입니다.
+	//new Date().getDay() 는 0(일요일)부터 6(토요일)까지의 숫자를 돌려줍니다.
+	const 요일 = ["일", "월", "화", "수", "목", "금", "토"];
+
+
+	//===================================================================
+	//1. 미세먼지 등급을 판정하는 함수
+	//===================================================================
+	/*
+		참고. 국내 미세먼지 기준 (환경부 기준)
+
+			PM10  (미세먼지)     0~30 좋음 / 31~80 보통 / 81~150 나쁨 / 151 이상 매우나쁨
+			PM2.5 (초미세먼지)   0~15 좋음 / 16~35 보통 / 36~75 나쁨 / 76 이상 매우나쁨
+
+			기준이 서로 다르므로 어느 항목인지 함께 넘겨받아 판단합니다.
+
+		참고. 매개변수 2개를 받는 함수입니다.
+
+			값     농도 숫자
+			종류   "pm10" 또는 "pm25"
+
+		참고. 객체를 return 하는 이유
+
+			등급 이름과 색깔 두 가지를 한꺼번에 돌려줘야 하기 때문입니다.
+			return 은 값을 하나만 돌려줄 수 있으므로
+			두 값을 객체 하나에 담아 돌려줍니다.
+	*/
+	function 미세먼지등급(값, 종류){
+
+		//기준값을 종류에 따라 다르게 정합니다.
+		//
+		//  삼항 연산자 문법 :  조건식 ? 참일때값 : 거짓일때값
+		//
+		//  종류가 pm10 이면 [30, 80, 150] 을,
+		//  아니면 [15, 35, 75] 를 사용합니다.
+		//
+		//  구조 분해 할당으로 배열의 값 3개를 변수 3개에 한 번에 담습니다.
+		const [좋음, 보통, 나쁨] = (종류 === "pm10") ? [30, 80, 150] : [15, 35, 75];
+
+		//위에서부터 순서대로 검사합니다.
+		//참인 것을 만나면 그 자리에서 값을 돌려주고 함수가 끝납니다.
+		if(값 <= 좋음)  return { 등급:"좋음",     색:"#1d5fa8" };
+		if(값 <= 보통)  return { 등급:"보통",     색:"#16a34a" };
+		if(값 <= 나쁨)  return { 등급:"나쁨",     색:"#e08c17" };
+
+		//위 조건에 하나도 걸리지 않으면 여기까지 옵니다.
+		return { 등급:"매우나쁨", 색:"#c0392b" };
+	}
+
+
+	//===================================================================
+	//2. 조회 함수 (이 파일의 핵심)
+	//===================================================================
+	async function 조회(){
+
+		//2.1 입력값과 태그를 준비합니다.
+		const 도시 = document.getElementById("city").value.trim();
+		const 결과영역 = document.getElementById("result");
+		const 버튼 = document.getElementById("btn");
+
+		//2.2 빈 값이면 서버를 부르지 않습니다.
+		if(도시 === ""){
+			결과영역.innerHTML = '<p class="err">도시 이름을 입력하세요.</p>';
+			return;
+		}
+
+		//2.3 조회 중임을 표시하고 버튼을 잠급니다.
+		버튼.disabled = true;
+		결과영역.innerHTML = '<p class="sub">날씨를 불러오는 중입니다...</p>';
+
+		try {
+			//===========================================================
+			//2.4 첫 번째 요청 - 도시 이름을 좌표로 (순차)
+			//===========================================================
+			//   이 결과가 있어야 다음 요청을 만들 수 있으므로
+			//   반드시 먼저 실행하고 기다립니다.
+			const 지오응답 = await fetch(
+				`https://geocoding-api.open-meteo.com/v1/search`
+				+ `?name=${encodeURIComponent(도시)}&count=1&language=ko&format=json`
+			);
+
+			if(!지오응답.ok){
+				throw new Error(`지오코딩 서버 오류 ${지오응답.status}`);
+			}
+
+			const 지오데이터 = await 지오응답.json();
+
+			//검색 결과가 없으면 results 키 자체가 오지 않습니다.
+			//물음표를 붙여 값이 없어도 오류가 나지 않게 합니다.
+			if(!지오데이터.results?.length){
+				throw new Error("도시를 찾을 수 없습니다");
+			}
+
+			//배열의 첫 번째 칸을 꺼냅니다. 배열의 첫 칸은 0번입니다.
+			const 장소 = 지오데이터.results[0];
+
+			//===========================================================
+			//2.5 두 번째와 세 번째 요청 - 동시에 보내기
+			//===========================================================
+			/*
+				===========================================================
+				 참고. Promise.all 이 하는 일 (이 단계에서 가장 중요)
+				===========================================================
+
+					배열에 담은 요청들을 모두 동시에 출발시키고,
+					전부 끝날 때까지 기다렸다가 결과를 배열로 돌려줍니다.
+
+				참고. 동시 실행이 가능한 원리
+
+					fetch(주소) 를 호출하는 순간 요청은 이미 출발합니다.
+					await 를 붙이지 않아도 출발합니다.
+
+					await 는 "출발시켜라" 가 아니라 "결과를 기다려라" 입니다.
+
+					따라서 둘을 먼저 다 출발시켜 놓고
+					마지막에 한꺼번에 기다리면 시간이 겹쳐 줄어듭니다.
+
+				시간 비교
+
+					[순차로 했다면]
+					  0초        1초        2초
+					  |==날씨====|==대기질===|      총 2초
+
+					[Promise.all 로 하면]
+					  0초        1초
+					  |==날씨====|
+					  |==대기질===|                 총 1초
+
+				참고. 구조 분해 할당 문법
+
+					const [a, b] = await Promise.all([...]);
+
+					결과 배열의 0번, 1번 값을 각각 a, b 변수에 한 번에 담습니다.
+
+					아래 코드와 완전히 같은 뜻입니다.
+					  const 결과 = await Promise.all([...]);
+					  const a = 결과[0];
+					  const b = 결과[1];
+
+					결과는 "먼저 끝난 순서" 가 아니라
+					"배열에 넣은 순서" 대로 담깁니다. 순서가 뒤바뀌지 않습니다.
+
+				주의. Promise.all 은 둘 중 하나라도 실패하면 전체가 실패합니다.
+				     성공한 것만이라도 받고 싶다면 Promise.allSettled 를 씁니다.
+			*/
+
+			//2.5.1 날씨 요청 주소를 만듭니다.
+			//
+			//   current 뒤에는 지금 시각의 날씨 중 원하는 항목을 나열합니다.
+			//   daily 뒤에는 하루 단위로 받고 싶은 항목을 나열합니다.
+			//   forecast_days 는 며칠치를 받을지 정합니다. 최대 16일까지 됩니다.
+			const 날씨주소 = `https://api.open-meteo.com/v1/forecast`
+			              + `?latitude=${장소.latitude}&longitude=${장소.longitude}`
+			              + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,`
+			              + `precipitation,weather_code,wind_speed_10m`
+			              + `&daily=weather_code,temperature_2m_max,temperature_2m_min,`
+			              + `precipitation_probability_max`
+			              + `&timezone=Asia%2FSeoul&forecast_days=7`;
+
+			//2.5.2 대기질 요청 주소를 만듭니다.
+			//
+			//   주소의 앞부분이 다릅니다.
+			//     날씨   : api.open-meteo.com
+			//     대기질 : air-quality-api.open-meteo.com
+			const 대기주소 = `https://air-quality-api.open-meteo.com/v1/air-quality`
+			              + `?latitude=${장소.latitude}&longitude=${장소.longitude}`
+			              + `&current=pm10,pm2_5&timezone=Asia%2FSeoul`;
+
+			//2.5.3 두 요청을 동시에 출발시키고 둘 다 끝날 때까지 기다립니다.
+			const [날씨응답, 대기응답] = await Promise.all([
+				fetch(날씨주소),
+				fetch(대기주소)
+			]);
+
+			//2.5.4 두 응답의 상태를 각각 검사합니다.
+			//
+			//   || 는 "또는" 이라는 뜻입니다.
+			//   둘 중 하나라도 실패하면 오류를 발생시킵니다.
+			if(!날씨응답.ok || !대기응답.ok){
+				throw new Error("날씨 정보를 가져오지 못했습니다");
+			}
+
+			//2.5.5 두 응답의 본문을 객체로 변환하는 작업도 동시에 처리합니다.
+			//
+			//   res.json() 도 시간이 걸리는 작업이므로 이것 역시 동시에 하면 빠릅니다.
+			const [날씨데이터, 대기데이터] = await Promise.all([
+				날씨응답.json(),
+				대기응답.json()
+			]);
+
+			//===========================================================
+			//2.6 현재 날씨 부분 만들기
+			//===========================================================
+
+			//현재 날씨 값들이 담긴 객체를 꺼냅니다.
+			const 현재 = 날씨데이터.current;
+
+			//날씨 코드를 글자와 그림으로 바꿉니다.
+			//
+			//  || 뒤의 값은 목록에 없는 코드가 왔을 때 대신 쓸 값입니다.
+			//  이 처리가 없으면 새 코드가 생겼을 때 화면에 undefined 가 찍힙니다.
+			const 상태 = 날씨코드[현재.weather_code] || { 글:"정보 없음", 그림:"" };
+
+			//---------------------------------------------------------------
+			//2.7 미세먼지 부분 만들기
+			//---------------------------------------------------------------
+			//   대기질 응답의 구조
+			//     { "current" : { "pm10" : 14.0, "pm2_5" : 8.8 } }
+			//
+			//   주의. 키 이름이 pm2_5 입니다. pm25 가 아닙니다.
+			//        가운데 밑줄을 빠뜨리면 undefined 가 나옵니다.
+			const 대기 = 대기데이터.current;
+
+			//위에서 만든 함수로 등급과 색깔을 얻습니다.
+			const pm10등급 = 미세먼지등급(대기.pm10, "pm10");
+			const pm25등급 = 미세먼지등급(대기.pm2_5, "pm25");
+
+			//===========================================================
+			//2.8 주간 예보 부분 만들기
+			//===========================================================
+			/*
+				참고. daily 데이터의 구조 (처음 보면 반드시 헷갈리는 부분)
+
+					날짜별로 객체가 나열된 것이 아닙니다.
+					항목별로 배열이 따로따로 들어 있습니다.
+
+					{
+					  "daily" : {
+					     "time"                          : ["2026-09-04", "2026-09-05", .....],
+					     "weather_code"                  : [0, 3, 61, .....],
+					     "temperature_2m_max"            : [28.1, 26.4, 24.0, .....],
+					     "temperature_2m_min"            : [21.3, 20.8, 19.5, .....],
+					     "precipitation_probability_max" : [0, 20, 80, .....]
+					  }
+					}
+
+					같은 위치의 칸끼리 짝을 이룹니다.
+
+					  0번 칸 :  2026-09-04  코드 0   최고 28.1  최저 21.3  강수 0%
+					  1번 칸 :  2026-09-05  코드 3   최고 26.4  최저 20.8  강수 20%
+
+					그래서 time 배열을 기준으로 반복하면서
+					같은 번호(i)로 다른 배열의 값을 꺼내면 됩니다.
+			*/
+			const 예보 = 날씨데이터.daily;
+
+			/*
+				참고. map 과 join 이 하는 일
+
+					map  : 배열의 각 칸을 함수에 넣고, 돌려준 값들을 모아 새 배열을 만듭니다.
+					       [1, 2, 3].map(n => n * 10)  ->  [10, 20, 30]
+
+					join : 배열의 각 칸을 하나의 문자열로 이어 붙입니다.
+					       괄호 안의 값이 각 칸 사이에 끼어들 구분자입니다.
+					       아무것도 끼우지 않아야 하므로 "" 를 넣었습니다.
+
+				참고. map 의 두 번째 매개변수
+
+					.map((날짜, i) => { ... })
+					        ----  -
+					        값    지금 몇 번째 칸인지 (0부터 시작)
+
+					i 를 이용해 다른 배열의 같은 위치 값을 꺼냅니다.
+			*/
+			const 예보html = 예보.time.map((날짜, i) => {
+
+				//2.8.1 날짜 글자를 날짜 객체로 바꿉니다.
+				//
+				//   "2026-09-04" 라는 글자만으로는 무슨 요일인지 알 수 없습니다.
+				//   new Date("글자") 로 날짜 객체를 만들면 요일을 계산할 수 있습니다.
+				const d = new Date(날짜);
+
+				//2.8.2 요일 이름을 얻습니다.
+				//
+				//   getDay() 는 0(일요일)부터 6(토요일)까지의 숫자를 돌려줍니다.
+				//   위에 만들어 둔 요일 배열에서 그 번호의 글자를 꺼냅니다.
+				//
+				//   i 가 0 이면 오늘이므로 요일 대신 "오늘" 이라고 표시합니다.
+				const 요일이름 = (i === 0) ? "오늘" : 요일[d.getDay()];
+
+				//2.8.3 날짜에서 월과 일만 잘라냅니다.
+				//
+				//   substring(시작, 끝)  글자의 일부를 잘라냅니다. 끝 위치는 포함하지 않습니다.
+				//     "2026-09-04".substring(5)  ->  "09-04"
+				//
+				//   괄호에 값을 하나만 주면 그 위치부터 끝까지 잘라냅니다.
+				const 월일 = 날짜.substring(5);
+
+				//2.8.4 그날의 날씨 코드를 글자와 그림으로 바꿉니다.
+				const 하루상태 = 날씨코드[예보.weather_code[i]] || { 글:"", 그림:"" };
+
+				//2.8.5 카드 하나를 HTML 글자로 만들어 돌려줍니다.
+				//
+				//   Math.round 는 소수점을 반올림해 정수로 만듭니다.
+				//     28.1 -> 28
+				//   예보는 소수점까지 정확할 수 없으므로 정수로만 표시합니다.
+				return `
+					<div class="day">
+						<div class="dayname">${요일이름}</div>
+						<div class="dayico" title="${하루상태.글}">${하루상태.그림}</div>
+						<div class="daytmp">
+							<span class="daymax">${Math.round(예보.temperature_2m_max[i])}&deg;</span>
+							/
+							<span class="daymin">${Math.round(예보.temperature_2m_min[i])}&deg;</span>
+						</div>
+						<div class="dayrain">비 ${예보.precipitation_probability_max[i]}%</div>
+						<div class="dayrain">${월일}</div>
+					</div>`;
+
+			}).join("");   //map 이 만든 배열을 하나의 긴 문자열로 합칩니다.
+
+			//===========================================================
+			//2.9 완성한 HTML 을 결과 영역에만 넣습니다.
+			//===========================================================
+			//   백틱으로 감싸면 여러 줄에 걸쳐 쓸 수 있고
+			//   ${변수} 로 값을 그대로 끼워 넣을 수 있습니다.
+			//
+			//   ${예보html} 처럼 위에서 만들어 둔 긴 글자도 그대로 끼워 넣을 수 있습니다.
+			결과영역.innerHTML = `
+				<div class="now">
+					<div class="city">${장소.name}</div>
+					<div class="icon">${상태.그림}</div>
+					<div class="temp">${현재.temperature_2m}&deg;C</div>
+					<div class="desc">${상태.글}</div>
+					<div class="sub">
+						체감 ${현재.apparent_temperature}&deg;C &nbsp;|&nbsp;
+						습도 ${현재.relative_humidity_2m}% &nbsp;|&nbsp;
+						바람 ${현재.wind_speed_10m}km/h &nbsp;|&nbsp;
+						강수 ${현재.precipitation}mm
+					</div>
+					<div class="sub">기준 시각 ${현재.time.replace("T", " ")}</div>
+				</div>
+
+				<div class="air">
+					<div class="airbox">
+						<div class="airlab">미세먼지 PM10</div>
+						<div class="airval" style="color:${pm10등급.색}">
+							${대기.pm10} <span style="font-size:14px">${pm10등급.등급}</span>
+						</div>
+					</div>
+					<div class="airbox">
+						<div class="airlab">초미세먼지 PM2.5</div>
+						<div class="airval" style="color:${pm25등급.색}">
+							${대기.pm2_5} <span style="font-size:14px">${pm25등급.등급}</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="week">${예보html}</div>`;
+
+		} catch (err) {
+			//===========================================================
+			//2.10 오류가 발생하면 실행되는 부분
+			//===========================================================
+			//   err.message 에는 throw new Error("...") 에 넣었던 문구가 들어 있습니다.
+			//   어느 단계에서 실패했는지 사용자에게 알려 줄 수 있습니다.
+			결과영역.innerHTML =
+				'<p class="err">' + err.message + '</p>'
+				+ '<p class="sub">도시명을 영문으로 입력했는지 확인하세요. 예 : Seoul, Busan</p>';
+
+			//개발자는 F12 Console 탭에서 진짜 원인을 확인합니다.
+			console.error(err);
+
+		} finally {
+			//성공하든 실패하든 반드시 버튼 잠금을 풉니다.
+			버튼.disabled = false;
+		}
+	}
+
+
+	//===================================================================
+	//3. 이벤트 등록
+	//===================================================================
+
+	//3.1 조회 버튼
+	document.getElementById("btn").addEventListener("click", 조회);
+
+	//3.2 엔터키로도 조회되게 합니다.
+	document.getElementById("city").addEventListener("keydown", (e) => {
+		if(e.key === "Enter"){
+			조회();
+		}
+	});
+
+	//3.3 자주 쓰는 도시 버튼
+	//
+	//   querySelectorAll 은 조건에 맞는 태그를 전부 찾아 목록으로 돌려줍니다.
+	//   forEach 는 그 목록의 각 칸에 같은 작업을 반복합니다.
+	document.querySelectorAll(".quick span").forEach(칩 => {
+		칩.addEventListener("click", () => {
+			//화면에는 한글이 보이지만 실제 검색어는 data-name 의 영문입니다.
+			document.getElementById("city").value = 칩.getAttribute("data-name");
+			조회();
+		});
+	});
+
+
+	//===================================================================
+	//4. 화면이 열리면 자동으로 한 번 조회합니다.
+	//===================================================================
+	/*
+		참고. DOMContentLoaded 이벤트
+
+			"HTML 문서를 브라우저가 다 읽고 나면" 발생하는 이벤트입니다.
+			jQuery 의 $(function(){ ... }) 과 같은 역할입니다.
+
+		참고. 왜 자동 조회를 넣는가
+
+			화면을 열었는데 아무것도 없으면 사용자는 무엇을 해야 할지 모릅니다.
+			기본 도시의 날씨를 미리 보여 주면 사용법을 바로 이해합니다.
+	*/
+	document.addEventListener("DOMContentLoaded", 조회);
+
+/*
+	=====================================================================
+	 참고. 3단계에서 배운 것 정리
+	=====================================================================
+
+		1. Promise.all 로 관계없는 요청을 동시에 보내면 시간이 절반으로 줄어듭니다.
+		2. 구조 분해 할당으로 결과 여러 개를 한 줄에 나눠 담을 수 있습니다.
+		3. 숫자 코드는 목록 객체를 만들어 사람이 읽는 글자로 바꿔 줍니다.
+		4. daily 데이터는 항목별 배열이므로 같은 번호(i)로 짝을 맞춰 꺼냅니다.
+		5. 값에 따라 색과 문구를 바꾸려면 판정 함수를 따로 만드는 것이 깔끔합니다.
+
+
+	=====================================================================
+	 참고. 스스로 더 해 볼 것 (과제)
+	=====================================================================
+
+		난이도 하
+		  1. 예보 일수를 7일에서 14일로 늘려 보세요. forecast_days 값을 바꿉니다.
+		  2. 자주 쓰는 도시 버튼에 본인이 사는 도시를 추가해 보세요.
+		  3. 기온에 따라 배경색이 바뀌게 해 보세요. (더우면 붉게, 추우면 푸르게)
+
+		난이도 중
+		  4. 30초마다 자동으로 다시 조회하도록 setInterval 을 넣어 보세요.
+		     화면을 떠날 때 clearInterval 로 멈추는 것도 잊지 마세요.
+		  5. 검색 결과를 여러 개 보여 주고 사용자가 고르게 해 보세요.
+		     count 값을 1에서 5로 바꾸고 목록을 만들면 됩니다.
+
+		난이도 상
+		  6. 조회한 도시를 즐겨찾기로 저장했다가 화면을 열 때 자동으로 보여 주세요.
+		  7. 시간별 예보(hourly)를 추가해 24시간 기온 그래프를 그려 보세요.
+		  8. 브라우저의 위치 기능으로 현재 위치의 날씨를 바로 보여 주세요.
+		     navigator.geolocation.getCurrentPosition 을 사용합니다.
+*/
+</script>
+
+</body>
+</html>

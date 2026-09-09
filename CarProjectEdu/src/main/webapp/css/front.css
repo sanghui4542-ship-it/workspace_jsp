@@ -1,0 +1,365 @@
+@CHARSET "UTF-8";   /* 이 파일의 글자 인코딩이 UTF-8 이라고 알린다 (한글이 깨지지 않게) */
+
+/* =============================================
+   [유틸리티] float 해제용
+   ============================================= */
+.clear { clear: both; }
+
+
+/* =============================================
+   [메인 히어로 배너]
+   - 기존: background-image: url("../images/img_back.png") 이미지 사용
+   - 변경: CSS 그라디언트 + 텍스트로 대체 (이미지 없음)
+   - 수정 방법: background 값으로 그라디언트 색상 변경
+   ============================================= */
+#main_img {
+    width: 100%;   /* 가로 크기 */
+    min-height: 280px;         /* 최소 높이 (수정: 값 변경으로 배너 높이 조절) */
+    /* 이미지(img_back.png) 대체: CSS 그라디언트 배경 */
+    background: linear-gradient(135deg, #1a1a2e 0%, #cc0000 50%, #ff6600 100%);   /* 배경 (색·이미지 등을 한 번에 지정) */
+    display: flex;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+    align-items: center;   /* 교차축(세로) 방향 정렬 */
+    justify-content: center;   /* 주축(가로) 방향 정렬 */
+    text-align: center;   /* 글자 가로 정렬. left/center/right */
+    position: relative;   /* 위치 기준. static(기본)/relative/absolute/fixed/sticky */
+    overflow: hidden;   /* 내용이 넘칠 때 처리. hidden=자름, auto=스크롤 */
+}
+/* 너비 100% 높이 auto 배경이미지 → CSS 그라디언트로 대체 */
+
+/* 배너 내부 장식 (CSS로만 구현) */
+#main_img::before {
+    content: '';   /* 가상 요소(::before/::after)에 넣을 내용 */
+    position: absolute;   /* 위치 기준. static(기본)/relative/absolute/fixed/sticky */
+    top: -50%;   /* 기준점에서 위쪽으로부터의 거리 */
+    left: -50%;   /* 기준점에서 왼쪽으로부터의 거리 */
+    width: 200%;   /* 가로 크기 */
+    height: 200%;   /* 세로 크기 */
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);   /* 배경 (색·이미지 등을 한 번에 지정) */
+    animation: shimmer 6s ease-in-out infinite;   /* 애니메이션 이름과 시간 */
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: translateX(-20%) translateY(-20%); }   /* 애니메이션 시작·끝 위치 — 왼쪽 위로 치우친 상태 */
+    50%       { transform: translateX(20%)  translateY(20%);  }   /* 중간 위치 — 오른쪽 아래로 치우친 상태. 두 위치를 오가며 천천히 움직인다 */
+}
+
+/* 배너 내부 콘텐츠 영역 */
+#main_img .hero-content {
+    position: relative;   /* 위치 기준. static(기본)/relative/absolute/fixed/sticky */
+    z-index: 1;   /* 겹칠 때 누가 위로 올라오는지. 숫자가 클수록 위 */
+    color: white;   /* 글자색 */
+    padding: 40px 20px;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+}
+
+/* 배너 메인 타이틀 (수정: 여기 텍스트 변경으로 문구 수정) */
+#main_img .hero-title {
+    font-size: 3rem;           /* 큰 제목 크기 */
+    font-weight: 900;   /* 글자 굵기. bold 또는 100~900 숫자 */
+    letter-spacing: 4px;   /* 글자 사이 간격 */
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);   /* 글자 그림자 */
+    margin-bottom: 10px;   /* 아래쪽 바깥 여백 */
+}
+
+/* 배너 부제목 */
+#main_img .hero-sub {
+    font-size: 1.1rem;   /* 글자 크기 */
+    opacity: 0.9;   /* 투명도. 1=불투명, 0=완전 투명 */
+    letter-spacing: 2px;   /* 글자 사이 간격 */
+    margin-bottom: 20px;   /* 아래쪽 바깥 여백 */
+}
+
+/* 배너 버튼 */
+#main_img .hero-btn {
+    display: inline-block;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+    padding: 12px 30px;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+    background-color: white;   /* 배경색 */
+    color: #cc0000;   /* 글자색 */
+    font-weight: bold;   /* 글자 굵기. bold 또는 100~900 숫자 */
+    font-size: 1rem;   /* 글자 크기 */
+    border-radius: 30px;   /* 모서리를 둥글게. 값이 클수록 더 동그래진다 */
+    text-decoration: none;   /* 밑줄 등 장식. none 이면 a 태그 밑줄을 없앤다 */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);   /* 그림자 (가로이동 세로이동 번짐 색). 마지막 숫자는 불투명도 */
+    transition: all 0.3s;   /* 값이 바뀔 때 부드럽게 변하는 시간 */
+}
+
+#main_img .hero-btn:hover {
+    background-color: #cc0000;   /* 배경색 */
+    color: white;   /* 글자색 */
+    transform: translateY(-2px);   /* 이동·회전·확대. translateY(-4px)=위로 4px 이동 */
+}
+
+#main_img img {
+    /* 이미지 사용 안함 - 이 속성은 유지만 함 */
+    display: none;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+}
+/* 밖여백 9px 0 0 0 → 이미지 사용 안하므로 숨김 */
+
+article#front {
+    margin: 5px 0px 5px 0px; /* 밖여백 위 오른쪽 아래 왼쪽 */
+}
+
+
+/* =============================================
+   [솔루션 섹션] 서비스 3가지 특징
+   - 이미지(icon1~3.png) 없이 CSS 아이콘으로 대체
+   - PC: 가로 3분할 / 모바일: 세로 배치
+   ============================================= */
+#solution {
+    border: none;   /* 테두리 (굵기 모양 색 순서) */
+    border-radius: 12px;   /* 모서리를 둥글게. 값이 클수록 더 동그래진다 */
+    width: 95%;   /* 가로 크기 */
+    max-width: 960px;   /* 가로 최대 크기 (이보다 커지지 않는다) */
+    min-height: 150px;   /* 세로 최소 크기 (내용이 적어도 이만큼은 높이를 잡는다) */
+    background-color: #f8f8f8;   /* 배경색 */
+    padding: 20px;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+    margin: 20px auto;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    display: flex;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+    flex-wrap: wrap;   /* 한 줄에 다 안 들어가면 줄바꿈할지 */
+    gap: 15px;   /* flex/grid 자식들 사이의 간격 */
+}
+/* 테두리→없음 배경색 #ebebeb→연한 회색 너비 95% 밖여백 가운데 */
+/* 기존: background-image icon 이미지들 → CSS 아이콘으로 대체 */
+
+/* 서비스 항목 각각 */
+#hosting, #security, #payment {
+    flex: 1;               /* 균등 분배 */
+    min-width: 200px;   /* 가로 최소 크기 (이보다 작아지지 않는다) */
+    padding: 20px 15px 20px 70px; /* 아이콘 공간 확보: 왼쪽 70px */
+    background-color: white;   /* 배경색 */
+    border-radius: 10px;   /* 모서리를 둥글게. 값이 클수록 더 동그래진다 */
+    border: 1px solid #eee;   /* 테두리 (굵기 모양 색 순서) */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);   /* 그림자 (가로이동 세로이동 번짐 색). 마지막 숫자는 불투명도 */
+    position: relative;    /* 아이콘 절대 위치 기준 */
+    transition: transform 0.2s, box-shadow 0.2s;   /* 값이 바뀔 때 부드럽게 변하는 시간 */
+}
+/* 너비 33%→flex 안여백 10px */
+
+#hosting:hover, #security:hover, #payment:hover {
+    transform: translateY(-3px);   /* 이동·회전·확대. translateY(-4px)=위로 4px 이동 */
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);   /* 그림자 (가로이동 세로이동 번짐 색). 마지막 숫자는 불투명도 */
+}
+
+/* 서비스 아이콘 (CSS 유니코드 문자 사용, 이미지 없음) */
+#hosting::before,
+#security::before,
+#payment::before {
+    position: absolute;   /* 위치 기준. static(기본)/relative/absolute/fixed/sticky */
+    left: 15px;   /* 기준점에서 왼쪽으로부터의 거리 */
+    top: 50%;   /* 기준점에서 위쪽으로부터의 거리 */
+    transform: translateY(-50%);   /* 이동·회전·확대. translateY(-4px)=위로 4px 이동 */
+    width: 44px;   /* 가로 크기 */
+    height: 44px;   /* 세로 크기 */
+    border-radius: 10px;   /* 모서리를 둥글게. 값이 클수록 더 동그래진다 */
+    display: flex;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+    align-items: center;   /* 교차축(세로) 방향 정렬 */
+    justify-content: center;   /* 주축(가로) 방향 정렬 */
+    font-size: 1.4rem;   /* 글자 크기 */
+    color: white;   /* 글자색 */
+}
+
+/* 차량 렌탈 아이콘 (이미지 icon1.png 대체) */
+#hosting::before {
+    content: '🚗';           /* 자동차 이모지 (수정: 여기서 아이콘 변경) */
+    background-color: #cc0000;   /* 배경색 */
+}
+/* 배경이미지 icon1.png → CSS 이모지 아이콘으로 대체 */
+
+/* 보안 아이콘 (이미지 icon2.png 대체) */
+#security::before {
+    content: '🛡️';          /* 방패 이모지 (수정: 여기서 아이콘 변경) */
+    background-color: #0055cc;   /* 배경색 */
+}
+/* 배경이미지 icon2.png → CSS 이모지 아이콘으로 대체 */
+
+/* 결제 아이콘 (이미지 icon3.png 대체) */
+#payment::before {
+    content: '💳';           /* 신용카드 이모지 (수정: 여기서 아이콘 변경) */
+    background-color: #009944;   /* 배경색 */
+}
+/* 배경이미지 icon3.png → CSS 이모지 아이콘으로 대체 */
+
+
+/* 커스텀 폰트 seo */
+@font-face {
+    font-family: "seo";   /* 글꼴. 앞에서부터 찾아 쓰고 없으면 다음 것을 쓴다 */
+    src: local("Segoe UI"), local("맑은 고딕");   /* 불러올 글꼴 파일 위치 */
+}
+
+/* 서비스 제목 */
+#hosting h3, #security h3, #payment h3 {
+    font-family: "seo", sans-serif;   /* 글꼴. 앞에서부터 찾아 쓰고 없으면 다음 것을 쓴다 */
+    font-size: 0.9rem;   /* 글자 크기 */
+    font-weight: 700;   /* 글자 굵기. bold 또는 100~900 숫자 */
+    color: #333;   /* 글자색 */
+    margin: 0 0 8px 0; /* 기존: margin 0 0 10px 80px → 아이콘 position으로 대체 */
+}
+/* 글자체 seo 글자크기 14px 굵기 600 글자색 #333 */
+
+/* 서비스 설명 */
+#hosting p, #security p, #payment p {
+    font-family: "seo", sans-serif;   /* 글꼴. 앞에서부터 찾아 쓰고 없으면 다음 것을 쓴다 */
+    font-size: 0.8rem;   /* 글자 크기 */
+    color: #666;   /* 글자색 */
+    margin: 0;               /* 기존: margin 0 0 0 80px → 삭제 */
+    line-height: 1.5;   /* 줄 간격 (줄과 줄 사이 높이) */
+}
+/* 글자체 seo 글자크기 12px 글자색 #333 */
+
+
+/* =============================================
+   [뉴스/공지사항 섹션]
+   - 이미지(h3_back.jpg, tr_back.gif) 없이 CSS로 대체
+   - PC: 가로 2분할 / 모바일: 세로 배치
+   ============================================= */
+#sec_news, #news_notice {
+    float: left;   /* 요소를 왼쪽/오른쪽으로 띄워 옆으로 글이 흐르게 한다 (옛 배치 방식) */
+    width: 46%;            /* 화면의 46% 사용 */
+    margin: 20px 0 0 2%;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    box-sizing: border-box;   /* 크기 계산 방식. border-box 면 테두리·안여백을 폭에 포함한다 */
+}
+/* 정렬 왼쪽 너비 46% 밖여백 */
+
+/* 뉴스/공지 제목 (이미지 h3_back.jpg 대체) */
+#sec_news h3, #news_notice h3 {
+    font-family: "seo", sans-serif;   /* 글꼴. 앞에서부터 찾아 쓰고 없으면 다음 것을 쓴다 */
+    font-size: 0.9rem;   /* 글자 크기 */
+    font-style: italic;   /* 글자 기울임 (italic 등) */
+    font-weight: 700;   /* 글자 굵기. bold 또는 100~900 숫자 */
+    width: 100%;   /* 가로 크기 */
+    padding: 8px 10px 8px 15px; /* 안여백 */
+    /* 이미지(h3_back.jpg) 대체: CSS 왼쪽 컬러 라인 + 배경 */
+    border-left: 4px solid #cc0000;  /* 왼쪽 빨간 강조선 */
+    background-color: #f5f5f5;   /* 배경색 */
+    margin-bottom: 8px;   /* 아래쪽 바깥 여백 */
+}
+/* 글자체 seo 크기 14px 스타일 italic 굵기 normal → CSS 스타일로 대체 */
+
+#sec_news .orange { color: #f26522; }
+/* 글자색 #f26522 */
+
+#news_notice .brown { color: #827b00; }
+/* 글자색 #827b00 */
+
+#sec_news dl { margin-left: 0; }
+/* 밖왼쪽여백 6px → 0 */
+
+#sec_news dt {
+    font-family: "Times New Roman", serif;   /* 글꼴. 앞에서부터 찾아 쓰고 없으면 다음 것을 쓴다 */
+    font-size: 1rem;   /* 글자 크기 */
+    margin: 8px 0 4px;   /* 바깥 여백 (요소와 요소 사이 거리) */
+    color: #cc0000;        /* 빨간색 날짜 */
+    font-weight: bold;   /* 글자 굵기. bold 또는 100~900 숫자 */
+}
+/* 글자체 Times New Roman 글자크기 16px 밖여백 5px 0 글자색 #F00 */
+
+#sec_news dd {
+    margin-left: 0;   /* 왼쪽 바깥 여백 */
+    color: #555;   /* 글자색 */
+    font-size: 0.8rem;   /* 글자 크기 */
+    padding-bottom: 6px;   /* 아래쪽 안쪽 여백 */
+    border-bottom: 1px dashed #ddd;   /* 아래쪽 테두리 */
+}
+/* 밖왼쪽 여백 0 글자색 #333 */
+
+/* 공지사항 테이블 */
+#news_notice table {
+    width: 100%;   /* 가로 크기 */
+    border-collapse: collapse;   /* 표의 이웃한 테두리를 하나로 합칠지 */
+    text-align: center;   /* 글자 가로 정렬. left/center/right */
+    font-size: 0.8rem;   /* 글자 크기 */
+}
+/* 너비 400px→100% 테이블 공간 없애기 글자정렬 가운데 */
+
+#news_notice td {
+    padding: 7px 5px;   /* 안쪽 여백 (테두리와 내용 사이 거리) */
+    /* 이미지(tr_back.gif) 대체: 아래 점선만 사용 */
+    border-bottom: 1px dotted #ccc;   /* 아래쪽 테두리 */
+}
+/* 안여백 6px 4px 테두리아래 1px dotted #999 */
+
+/* 공지 내용 셀 */
+#news_notice td.contxt {
+    /* 배경이미지 tr_back.gif 대체: 왼쪽 패딩으로 들여쓰기 효과 */
+    padding-left: 12px;   /* 왼쪽 안쪽 여백 */
+    text-align: left;   /* 글자 가로 정렬. left/center/right */
+    color: #333;   /* 글자색 */
+    position: relative;   /* 위치 기준. static(기본)/relative/absolute/fixed/sticky */
+}
+
+/* 공지 내용 앞 화살표 (이미지 tr_back.gif 대체) */
+#news_notice td.contxt::before {
+    content: '›';         /* 오른쪽 꺽쇠 문자 */
+    color: #cc0000;   /* 글자색 */
+    font-weight: bold;   /* 글자 굵기. bold 또는 100~900 숫자 */
+    margin-right: 5px;   /* 오른쪽 바깥 여백 */
+}
+/* 배경이미지 tr_back.gif → CSS ::before 로 대체 */
+
+#news_notice a {
+    color: #333;   /* 글자색 */
+    text-decoration: none;   /* 밑줄 등 장식. none 이면 a 태그 밑줄을 없앤다 */
+}
+/* 글자색 #333 밑줄 없음 */
+
+#news_notice a:hover {
+    color: #cc0000;   /* 글자색 */
+}
+/* 글자색 #F90→빨강 밑줄 none */
+
+
+/* =============================================
+   [반응형] 모바일 (768px 이하)
+   ============================================= */
+@media (max-width: 768px) {
+
+    /* 메인 배너 높이 조정 */
+    #main_img {
+        min-height: 180px;   /* 세로 최소 크기 (내용이 적어도 이만큼은 높이를 잡는다) */
+    }
+
+    #main_img .hero-title {
+        font-size: 2rem;   /* 글자 크기 */
+    }
+
+    #main_img .hero-sub {
+        font-size: 0.9rem;   /* 글자 크기 */
+    }
+
+    /* 솔루션 세로 배치 */
+    #hosting, #security, #payment {
+        min-width: 100%;   /* 가로 최소 크기 (이보다 작아지지 않는다) */
+        width: 100%;   /* 가로 크기 */
+    }
+
+    /* 뉴스/공지사항 세로 배치 */
+    #sec_news, #news_notice {
+        float: none;   /* 요소를 왼쪽/오른쪽으로 띄워 옆으로 글이 흐르게 한다 (옛 배치 방식) */
+        width: 96%;   /* 가로 크기 */
+        margin: 10px auto;   /* 바깥 여백 (요소와 요소 사이 거리) */
+        display: block;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+    }
+
+}
+/* 모바일 반응형 끝 */
+
+
+/* =============================================
+   [반응형] 태블릿 (769px ~ 992px)
+   ============================================= */
+@media (min-width: 769px) and (max-width: 992px) {
+
+    /* 솔루션 세로 배치 */
+    #hosting, #security, #payment {
+        min-width: 100%;   /* 가로 최소 크기 (이보다 작아지지 않는다) */
+    }
+
+    /* 뉴스/공지사항 세로 배치 */
+    #sec_news, #news_notice {
+        float: none;   /* 요소를 왼쪽/오른쪽으로 띄워 옆으로 글이 흐르게 한다 (옛 배치 방식) */
+        width: 96%;   /* 가로 크기 */
+        margin: 10px auto;   /* 바깥 여백 (요소와 요소 사이 거리) */
+        display: block;   /* 요소를 어떻게 배치할지. block/flex/grid/none 등 */
+    }
+
+}
+/* 태블릿 반응형 끝 */

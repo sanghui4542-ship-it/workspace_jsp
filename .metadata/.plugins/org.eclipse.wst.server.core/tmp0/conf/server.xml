@@ -60,7 +60,7 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL/TLS HTTP/1.1 Connector on port 8181
     -->
-    <Connector connectionTimeout="20000" port="8181" protocol="HTTP/1.1" redirectPort="8443"/>
+    <Connector connectionTimeout="20000" port="8081" protocol="HTTP/1.1" redirectPort="8443"/>
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"
@@ -156,7 +156,7 @@
 
       
       
-      <Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\pro16_JSON\src\main\webapp" path="/pro16_JSON" reloadable="true" source="org.eclipse.jst.jee.server:pro16_JSON"><Resources><PreResources base="C:\Users\KHBS_D_016\Desktop\workspace_jsp\pro16_JSON\build\classes" classLoaderOnly="false" className="org.apache.catalina.webresources.DirResourceSet" internalPath="/" webAppMount="/WEB-INF/classes"/></Resources></Context><Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\pro16_Ajax\src\main\webapp" path="/pro16_Ajax" reloadable="true" source="org.eclipse.jst.jee.server:pro16_Ajax"><Resources><PreResources base="C:\Users\KHBS_D_016\Desktop\workspace_jsp\pro16_Ajax\build\classes" classLoaderOnly="false" className="org.apache.catalina.webresources.DirResourceSet" internalPath="/" webAppMount="/WEB-INF/classes"/></Resources></Context></Host>
+      <Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\src\main\webapp" path="/CarProjectEdu" reloadable="true" source="org.eclipse.jst.jee.server:CarProjectEdu"><Resources><PreResources base="C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\build\classes" classLoaderOnly="false" className="org.apache.catalina.webresources.DirResourceSet" internalPath="/" webAppMount="/WEB-INF/classes"/></Resources></Context></Host>
     </Engine>
   </Service>
 </Server>

@@ -1,0 +1,2184 @@
+@charset "UTF-8";
+/* ==============================================================================
+   app.css  -  CarProject 통합 디자인 시스템  (순수 CSS / 프레임워크 무의존)
+
+   ------------------------------------------------------------------------------
+   [이 파일을 만든 이유]
+
+     기존 상태
+       - Bootstrap 4.6.2 + jQuery + popper 를 CDN에서 불러왔다
+         -> 사내망이나 오프라인 강의실에서는 레이아웃이 전부 깨진다
+         -> jquery.slim 은 $.ajax 를 지원하지 않는데 게시판이 $.ajax 를 써서
+            같은 화면에서 jQuery 를 두 번 로드하고 있었다
+       - CSS 파일이 default.css / front.css / subpage.css / bootstrap*.css 로 흩어져 있었다
+         (그중 로컬 bootstrap*.css 4개는 링크조차 되지 않은 사문 272KB)
+       - 각 JSP 가 <head><style> 로 자기만의 스타일을 따로 갖고 있어
+         버튼 하나 색을 바꾸려면 여러 파일을 고쳐야 했다
+
+     바뀐 방향
+       - 외부 요청 0건. 이 파일 하나 + 로컬 폰트만 사용한다
+       - 색·간격·모서리 값을 CSS 변수(토큰)로 한 곳에 모은다
+       - 모바일 우선(mobile-first). 기본 스타일은 320px 기준이고
+         화면이 넓어질 때 min-width 미디어쿼리로 확장한다
+
+   ------------------------------------------------------------------------------
+   [구성]
+     1. 토큰(변수)      : 색 / 간격 / 글자 / 모서리 / 그림자 / z-index
+     2. 리셋            : 브라우저 기본 스타일 초기화
+     3. 레이아웃        : 컨테이너 / 헤더 / 본문 / 푸터
+     4. 컴포넌트        : 버튼 / 폼 / 카드 / 표 / 페이지네이션 / 배지 / 알림
+     5. 게시판·차량 전용
+     6. 유틸리티
+     7. 반응형 브레이크포인트
+     8. 다크모드 / 접근성 / 인쇄
+
+   [브레이크포인트]
+     기본(~479px) 모바일  /  480px  /  768px 태블릿  /  1024px  /  1280px 이상 와이드
+   ============================================================================== */
+
+
+/* ==============================================================================
+   0. 웹폰트  (로컬 파일만 사용 - 외부 폰트 서버를 호출하지 않는다)
+   ============================================================================== */
+@font-face {
+    font-family: "NanumGothic";
+    src: url("../fonts/NanumGothic.woff") format("woff");
+    font-weight: 400;
+    font-display: swap; /* 폰트 로딩 중에도 글자가 보이게 (빈 화면 방지) */
+}
+@font-face {
+    font-family: "NanumBarunGothic";
+    src: url("../fonts/NanumBarunGothic.woff") format("woff");
+    font-weight: 400;
+    font-display: swap;
+}
+
+
+/* ==============================================================================
+   1. 토큰 (CSS 변수)
+
+   [왜 변수로 두는가]
+     브랜드 색을 바꾸려면 아래 --brand 한 줄만 고치면 된다.
+     기존에는 #cc0000 이 30개 파일에 흩어져 있어 일부만 바뀌는 일이 잦았다.
+   ============================================================================== */
+:root {
+    /* ---- 브랜드 색 ---- */
+    --brand:            #cc0000;   /* 기존 프로젝트의 빨강을 그대로 유지 */
+    --brand-dark:       #aa0000;
+    --brand-light:      #ff3333;
+    --brand-tint:       #fdf2f2;   /* 아주 연한 배경용 */
+
+    /* ---- 보조 색 ---- */
+    --accent:           #0055cc;   /* 링크·정보 */
+    --success:          #1a7f37;
+    --warning:          #b26a00;
+    --danger:           #c72c2c;
+
+    /* ---- 중립 색 (글자·배경·선) ---- */
+    --text:             #212529;
+    --text-muted:       #6b7280;
+    --text-faint:       #9ca3af;
+    --bg:               #ffffff;
+    --bg-soft:          #f7f7f8;
+    --bg-mute:          #eef0f2;
+    --border:           #dcdfe3;
+    --border-strong:    #b9bec4;
+
+    /* ---- 간격 (4px 단위 스케일) ---- */
+    --sp-1: 4px;
+    --sp-2: 8px;
+    --sp-3: 12px;
+    --sp-4: 16px;
+    --sp-5: 20px;
+    --sp-6: 24px;
+    --sp-8: 32px;
+    --sp-10: 40px;
+    --sp-12: 48px;
+    --sp-16: 64px;
+
+    /* ---- 모서리 ---- */
+    --r-sm: 4px;
+    --r-md: 8px;
+    --r-lg: 12px;
+    --r-xl: 16px;
+    --r-full: 999px;
+
+    /* ---- 그림자 ---- */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.06);
+    --shadow-md: 0 2px 8px rgba(0,0,0,.08);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,.12);
+
+    /* ---- 글자 크기 (clamp = 화면 크기에 따라 유동적으로) ----
+       clamp(최소, 기준, 최대)
+       화면이 좁으면 최소값, 넓으면 최대값, 그 사이에서는 비례해서 커진다.
+       미디어쿼리를 여러 개 쓰지 않아도 되고 중간 크기 화면에서도 자연스럽다. */
+    --fs-xs:  12px;
+    --fs-sm:  13px;
+    --fs-base: 16px;                        /* 본문 최소 16px : iOS에서 입력 시 자동 확대 방지 */
+    --fs-lg:  clamp(17px, 1.4vw, 19px);
+    --fs-xl:  clamp(20px, 2vw,   24px);
+    --fs-2xl: clamp(24px, 3vw,   32px);
+    --fs-3xl: clamp(28px, 4vw,   40px);
+
+    /* ---- 레이아웃 ---- */
+    --container: 1200px;   /* 본문 최대 너비 (와이드 모니터에서도 이 폭을 유지) */
+    --header-h: 64px;
+    --touch: 44px;         /* 터치 최소 크기 : 손가락으로 정확히 누를 수 있는 하한 */
+
+    /* ---- z-index (겹침 순서를 한 곳에서 관리) ---- */
+    --z-header: 100;
+    --z-drawer: 200;
+    --z-overlay: 300;
+    --z-modal: 400;
+    --z-chat: 500;
+    --z-toast: 600;
+
+    /* ---- 전환 효과 ---- */
+    --t-fast: .15s ease;
+    --t-base: .25s ease;
+}
+
+
+/* ==============================================================================
+   2. 리셋 / 기본값
+   ============================================================================== */
+
+*, *::before, *::after {
+    /* padding/border 를 너비에 포함시켜 레이아웃 계산을 단순하게 만든다 */
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%; /* 모바일에서 글자 크기가 임의로 커지는 것 방지 */
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: "NanumGothic", "맑은 고딕", "Malgun Gothic", -apple-system, sans-serif;
+    font-size: var(--fs-base);
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+    /* 한글은 단어 중간에서 끊기면 읽기 어렵다 */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
+    margin: 0;
+}
+
+ul, ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* 이미지가 부모 너비를 넘지 않게 한다 (반응형의 기본) */
+img, svg, video {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+button, input, select, textarea {
+    font: inherit;
+    color: inherit;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: var(--sp-4) 0;
+}
+
+/*
+ [접근성] 키보드로 이동할 때만 초점 테두리를 보여준다.
+   :focus 로 지정하면 마우스 클릭에도 테두리가 생겨 디자인을 해치고,
+   테두리를 아예 없애면 키보드 사용자가 지금 어디에 있는지 알 수 없다.
+   :focus-visible 은 그 사이의 정답이다.
+*/
+:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* 스크린리더 전용 텍스트 (화면에는 안 보이지만 읽어준다) */
+.sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* 키보드 사용자가 메뉴를 건너뛰고 본문으로 바로 갈 수 있는 링크 */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: var(--z-toast);
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--brand);
+    color: #fff;
+    border-radius: var(--r-md);
+}
+.skip-link:focus {
+    left: var(--sp-4);
+    top: var(--sp-4);
+}
+
+
+/* ==============================================================================
+   3. 레이아웃
+   ============================================================================== */
+
+/* 본문 가운데 정렬 + 최대 너비 제한
+   와이드 모니터(1920px)에서도 글이 화면 전체로 퍼지지 않게 한다 */
+.container {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--sp-4);
+}
+
+/* Model2 레이아웃 : 헤더 / 중앙화면 / 푸터 */
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 내용이 적어도 푸터가 화면 아래에 붙는다 */
+}
+.app-main {
+    flex: 1 0 auto;
+    width: 100%;
+    padding-block: var(--sp-5);
+}
+.app-footer {
+    flex-shrink: 0;
+}
+
+/* 섹션 제목 */
+.section-title {
+    font-size: var(--fs-xl);
+    font-weight: 700;
+    margin-bottom: var(--sp-4);
+    padding-left: var(--sp-3);
+    border-left: 4px solid var(--brand);
+}
+
+/*
+ 자동 반응형 그리드
+   repeat(auto-fill, minmax(260px, 1fr))
+   = "260px 이상 들어가는 만큼 열을 만들어라"
+   미디어쿼리 없이 1열↔4열이 자동으로 바뀐다.
+*/
+.grid {
+    display: grid;
+    gap: var(--sp-4);
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+.grid-2 { grid-template-columns: 1fr; gap: var(--sp-4); display: grid; }
+
+@media (min-width: 768px) {
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+}
+
+
+/* ==============================================================================
+   4. 컴포넌트
+   ============================================================================== */
+
+/* ---------- 4-1. 버튼 ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-2);
+
+    /* 터치 타깃 최소 44px 확보
+       기존 게시판 버튼은 padding:5px 12px 여서 모바일에서 누르기 어려웠다 */
+    min-height: var(--touch);
+    padding: var(--sp-3) var(--sp-5);
+
+    border: 1px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg-mute);
+    color: var(--text);
+    font-size: var(--fs-base);
+    font-weight: 700;
+    line-height: 1.2;
+    cursor: pointer;
+    text-align: center;
+    transition: background var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+}
+.btn:hover { text-decoration: none; }
+.btn:active { transform: translateY(1px); }
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.btn-primary { background: var(--brand); color: #fff; }
+.btn-primary:hover { background: var(--brand-dark); }
+
+.btn-secondary { background: var(--bg-mute); color: var(--text); border-color: var(--border); }
+.btn-secondary:hover { background: var(--border); }
+
+.btn-outline { background: transparent; color: var(--brand); border-color: var(--brand); }
+.btn-outline:hover { background: var(--brand-tint); }
+
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { filter: brightness(.92); }
+
+.btn-ghost { background: transparent; color: var(--text-muted); }
+.btn-ghost:hover { background: var(--bg-soft); }
+
+.btn-sm { min-height: 36px; padding: var(--sp-2) var(--sp-3); font-size: var(--fs-sm); }
+.btn-lg { min-height: 52px; padding: var(--sp-4) var(--sp-6); font-size: var(--fs-lg); }
+
+/*
+  [작은 버튼도 터치 규격은 지킨다]
+
+    .btn-sm 은 "작게 보이는 버튼"이라는 뜻이지 "누르기 어려워도 된다"는 뜻이 아니다.
+    min-height 를 36px 로 낮춰뒀더니 좁은 화면에서 규격(44px)에 미달했다.
+
+    글자 크기와 좌우 여백은 작게 유지하고 높이만 44px 로 올린다.
+    보이는 크기는 거의 그대로인데 누르는 영역은 확보된다.
+*/
+@media (hover: none), (pointer: coarse), (max-width: 767px) {
+    .btn-sm { min-height: var(--touch); }
+}
+.btn-block { width: 100%; }
+
+
+/* ---------- 4-2. 폼 ---------- */
+.form-group { margin-bottom: var(--sp-4); }
+
+.form-label {
+    display: block;
+    margin-bottom: var(--sp-2);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--text);
+}
+.form-label .required { color: var(--brand); margin-left: 2px; }
+
+.form-control {
+    display: block;
+    width: 100%;
+    min-height: var(--touch);
+    padding: var(--sp-3);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background: var(--bg);
+
+    /* 16px 미만이면 iOS Safari 가 입력 시 화면을 확대해버린다 */
+    font-size: var(--fs-base);
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,85,204,.15);
+}
+.form-control:disabled { background: var(--bg-mute); color: var(--text-muted); }
+
+textarea.form-control { min-height: 160px; resize: vertical; }
+
+select.form-control {
+    /* 기본 화살표를 유지하되 여백만 확보 */
+    padding-right: var(--sp-8);
+}
+
+.form-hint  { margin-top: var(--sp-2); font-size: var(--fs-xs); color: var(--text-muted); }
+.form-error { margin-top: var(--sp-2); font-size: var(--fs-xs); color: var(--danger); font-weight: 700; }
+
+/* 라디오 / 체크박스 묶음 */
+.check-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+}
+.check-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-height: var(--touch);
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    cursor: pointer;
+}
+.check-item input { width: 18px; height: 18px; accent-color: var(--brand); }
+
+/* 라벨-값 정의 목록 (상세보기 화면용)
+   기존의 <table> 레이아웃을 대체한다. 모바일에서 1열, 넓으면 2열. */
+.detail-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border-top: 2px solid var(--text);
+}
+.detail-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-bottom: 1px solid var(--border);
+}
+.detail-row > dt {
+    padding: var(--sp-3);
+    background: var(--bg-soft);
+    font-weight: 700;
+    font-size: var(--fs-sm);
+}
+.detail-row > dd {
+    padding: var(--sp-3);
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .detail-row { grid-template-columns: 160px 1fr; }
+    .detail-row > dt { border-right: 1px solid var(--border); }
+}
+
+
+/* ---------- 4-3. 카드 ---------- */
+.card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    transition: box-shadow var(--t-base), transform var(--t-base);
+}
+.card-link:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+.card-media {
+    position: relative;
+    aspect-ratio: 4 / 3;   /* 이미지 로딩 전에도 자리를 잡아 화면이 덜컹거리지 않게 한다 */
+    background: var(--bg-mute);
+    overflow: hidden;
+}
+.card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;     /* 비율이 달라도 잘리게만 하고 찌그러지지 않게 */
+}
+.card-body { padding: var(--sp-4); }
+.card-title { font-size: var(--fs-lg); font-weight: 700; margin-bottom: var(--sp-2); }
+.card-meta  { font-size: var(--fs-sm); color: var(--text-muted); }
+.card-price { font-size: var(--fs-lg); font-weight: 700; color: var(--brand); }
+
+
+/* ---------- 4-4. 배지 ---------- */
+.badge {
+    display: inline-block;
+    padding: 2px var(--sp-2);
+    border-radius: var(--r-full);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    background: var(--bg-mute);
+    color: var(--text-muted);
+}
+.badge-brand   { background: var(--brand-tint); color: var(--brand); }
+.badge-success { background: #e8f5ec; color: var(--success); }
+.badge-warning { background: #fff4e0; color: var(--warning); }
+
+
+/* ---------- 4-5. 알림 ---------- */
+.alert {
+    padding: var(--sp-3) var(--sp-4);
+    border-radius: var(--r-md);
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    font-size: var(--fs-sm);
+    margin-bottom: var(--sp-4);
+}
+.alert-success { background: #e8f5ec; border-color: #b7dfc4; color: var(--success); }
+.alert-error   { background: #fdecec; border-color: #f3c2c2; color: var(--danger); }
+.alert-info    { background: #eaf1fd; border-color: #c2d6f5; color: var(--accent); }
+
+
+/* ---------- 4-6. 표 (데이터 테이블) ---------- */
+/* 넓은 화면에서는 표 그대로, 좁은 화면에서는 카드형으로 바꾼다 (6단계에서 적용) */
+.table-wrap {
+    /* 표가 넘칠 때 페이지 전체가 아니라 표만 가로 스크롤되게 한다 */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.table {
+    width: 100%;
+    font-size: var(--fs-sm);
+}
+.table th, .table td {
+    padding: var(--sp-3);
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+.table thead th {
+    background: var(--bg-soft);
+    border-top: 2px solid var(--text);
+    border-bottom: 1px solid var(--border-strong);
+    font-weight: 700;
+    white-space: nowrap;
+}
+.table tbody tr:hover { background: var(--bg-soft); }
+.table .empty {
+    padding: var(--sp-12) var(--sp-4);
+    text-align: center;
+    color: var(--text-muted);
+}
+
+
+/* ---------- 4-6-1. 반응형 데이터 표 (모바일에서 카드로 변신) ----------
+
+   [문제]
+     게시판 목록처럼 열이 5~6개인 표는 모바일(375px)에서 어떻게 해도 좁다.
+     흔한 해결책은 "가로 스크롤"이지만, 스마트폰에서 옆으로 밀어 보는 것은
+     사용자가 가장 싫어하는 경험 중 하나다.
+
+   [해결 - data-label 기법]
+     좁은 화면에서는 표의 구조를 버리고 "한 행 = 한 카드"로 바꾼다.
+     각 칸(td) 앞에 원래 열 제목을 붙여 보여주면 표 없이도 뜻이 통한다.
+
+         (넓은 화면)  번호 | 제목      | 이름  | 날짜  | 조회
+         (좁은 화면)  ┌────────────────────┐
+                      │ 8월 성수기 예약 안내  │  <- 제목은 크게
+                      │ 이름  관리자         │
+                      │ 날짜  2026-07-27    │
+                      │ 조회  8             │
+                      └────────────────────┘
+
+     열 제목은 HTML 에 data-label 속성으로 적어둔다.
+         <td data-label="이름">관리자</td>
+     그리고 CSS 의 content: attr(data-label) 로 화면에 꺼내 쓴다.
+     자바스크립트가 필요 없고, 넓은 화면에서는 원래 표로 돌아간다.
+   ------------------------------------------------------------------- */
+
+/* 기본(모바일) : 표를 카드 목록으로 바꾼다 */
+.table-cards thead {
+    /* 열 제목 줄은 숨긴다 (각 칸이 자기 제목을 갖고 있으므로) */
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+}
+.table-cards,
+.table-cards tbody,
+.table-cards tr,
+.table-cards td {
+    display: block;   /* 표 구조를 해제 */
+    width: auto;
+}
+.table-cards tr {
+    margin-bottom: var(--sp-3);
+    padding: var(--sp-3);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--bg);
+}
+.table-cards td {
+    display: flex;
+    gap: var(--sp-3);
+    padding: var(--sp-1) 0;
+    border: 0;
+}
+/* 각 칸 앞에 원래 열 제목을 붙인다 */
+.table-cards td::before {
+    content: attr(data-label);
+    flex: 0 0 72px;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    color: var(--text-muted);
+}
+/* 제목 칸은 카드의 머리글처럼 크게 (data-label 을 붙이지 않는다) */
+.table-cards td.cell-title {
+    display: block;
+    margin-bottom: var(--sp-2);
+    padding-bottom: var(--sp-2);
+    border-bottom: 1px dashed var(--border);
+    font-size: var(--fs-lg);
+    font-weight: 700;
+}
+.table-cards td.cell-title::before { content: none; }
+
+/* 카드 상태에서 "글 없음" 안내는 가운데 정렬 유지 */
+.table-cards td.empty { display: block; text-align: center; }
+.table-cards td.empty::before { content: none; }
+
+/* 768px 이상 : 원래 표로 되돌린다 */
+@media (min-width: 768px) {
+    .table-cards thead {
+        position: static;
+        width: auto; height: auto;
+        clip: auto;
+    }
+    .table-cards        { display: table; width: 100%; }
+    .table-cards thead  { display: table-header-group; }
+    .table-cards tbody  { display: table-row-group; }
+    .table-cards tr     {
+        display: table-row;
+        margin: 0; padding: 0;
+        border: 0; border-radius: 0;
+        background: transparent;
+    }
+    .table-cards td {
+        display: table-cell;
+        padding: var(--sp-3);
+        border-bottom: 1px solid var(--border);
+        vertical-align: middle;
+    }
+    .table-cards td::before { content: none; }
+    .table-cards td.cell-title {
+        display: table-cell;
+        margin: 0;
+        border-bottom: 1px solid var(--border);
+        font-size: var(--fs-sm);
+        font-weight: 400;
+    }
+    .table-cards tbody tr:hover { background: var(--bg-soft); }
+}
+
+/* 답글 들여쓰기 표시 */
+.reply-indent {
+    display: inline-block;
+    color: var(--brand);
+    font-weight: 700;
+    margin-right: var(--sp-1);
+}
+
+
+/* ---------- 4-7. 페이지네이션 ---------- */
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-2);
+    margin-top: var(--sp-6);
+}
+.pagination a,
+.pagination strong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--touch);
+    min-height: var(--touch);
+    padding: 0 var(--sp-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    font-size: var(--fs-sm);
+    text-decoration: none;
+}
+.pagination a:hover { background: var(--bg-soft); text-decoration: none; }
+.pagination .page-current {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+    font-weight: 700;
+}
+.page-summary {
+    width: 100%;
+    text-align: center;
+    margin-top: var(--sp-3);
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+}
+
+
+/* ---------- 4-8. 헤더 / 내비게이션 ---------- */
+.site-header {
+    position: sticky;    /* 스크롤해도 상단에 붙어 있게 */
+    top: 0;
+    z-index: var(--z-header);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+}
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    min-height: var(--header-h);
+}
+.brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: var(--fs-xl);
+    font-weight: 700;
+    color: var(--brand);
+}
+
+/* 모바일 햄버거 버튼 (넓은 화면에서는 숨김) */
+.nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch);
+    height: var(--touch);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background: var(--bg);
+    cursor: pointer;
+}
+
+/* 주 메뉴 : 모바일은 서랍(drawer), 데스크톱은 가로 배치 */
+.main-nav {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(84vw, 320px);
+    z-index: var(--z-drawer);
+    background: var(--bg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--sp-6) var(--sp-4);
+    overflow-y: auto;
+
+    /* 기본은 화면 밖에 숨겨둔다 */
+    transform: translateX(100%);
+    transition: transform var(--t-base);
+}
+.main-nav.is-open { transform: translateX(0); }
+
+.main-nav a {
+    display: flex;
+    align-items: center;
+    min-height: var(--touch);
+    padding: var(--sp-3);
+    border-radius: var(--r-md);
+    font-weight: 700;
+}
+.main-nav a:hover { background: var(--bg-soft); text-decoration: none; }
+
+/* 서랍이 열렸을 때 뒤를 덮는 반투명 막 */
+.nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-overlay);
+    background: rgba(0,0,0,.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--t-base), visibility var(--t-base);
+}
+.nav-overlay.is-open { opacity: 1; visibility: visible; }
+
+
+/* ---------- 4-9. 푸터 ---------- */
+.site-footer {
+    background: var(--bg-soft);
+    border-top: 1px solid var(--border);
+    padding-block: var(--sp-8);
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+}
+
+
+/* ---------- 4-10. 모바일 하단 고정 액션바 ----------
+   예약 결제처럼 "총액 + 결제 버튼"을 항상 보이게 해야 하는 화면에서 사용한다.
+   모바일에서 스크롤을 내려도 버튼이 사라지지 않아 웹앱처럼 느껴진다. */
+.action-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: var(--z-header);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 12px rgba(0,0,0,.08);
+
+    /* 아이폰 홈바 영역을 피한다 */
+    padding-bottom: calc(var(--sp-3) + env(safe-area-inset-bottom, 0px));
+}
+.action-bar .action-total { flex: 1; }
+.action-bar .action-total .label { font-size: var(--fs-xs); color: var(--text-muted); }
+.action-bar .action-total .price { font-size: var(--fs-lg); font-weight: 700; color: var(--brand); }
+.action-bar .btn { flex: 0 0 auto; }
+
+/* 고정 바에 내용이 가리지 않도록 본문 아래 여백 확보 */
+.has-action-bar { padding-bottom: 96px; }
+
+@media (min-width: 768px) {
+    /* 넓은 화면에서는 고정하지 않고 문서 흐름에 배치 */
+    .action-bar {
+        position: static;
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        box-shadow: none;
+        padding-bottom: var(--sp-3);
+    }
+    .has-action-bar { padding-bottom: 0; }
+}
+
+
+/* ==============================================================================
+   5. 반응형 : 넓은 화면에서 달라지는 부분
+   ============================================================================== */
+
+/* ---- 480px 이상 ---- */
+@media (min-width: 480px) {
+    .container { padding-inline: var(--sp-5); }
+}
+
+/* ---- 768px 이상 (태블릿) ---- */
+@media (min-width: 768px) {
+    .app-main { padding-block: var(--sp-8); }
+}
+
+/* ---- 1024px 이상 (데스크톱) : 서랍 메뉴를 가로 메뉴로 되돌린다 ---- */
+@media (min-width: 1024px) {
+    .nav-toggle { display: none; }   /* 햄버거 숨김 */
+    .nav-overlay { display: none; }
+
+    .main-nav {
+        position: static;
+        width: auto;
+        display: flex;
+        align-items: center;
+        gap: var(--sp-2);
+        padding: 0;
+        box-shadow: none;
+        transform: none;
+        overflow: visible;
+    }
+    .main-nav a { padding-inline: var(--sp-4); }
+}
+
+/* ---- 1280px 이상 (와이드) ---- */
+@media (min-width: 1280px) {
+    :root { --container: 1200px; }
+}
+
+
+/* ==============================================================================
+   6. 유틸리티 (최소한만 둔다 - 남용하면 클래스 이름이 스타일 코드가 되어버린다)
+   ============================================================================== */
+.text-center { text-align: center; }
+.text-left   { text-align: left; }
+.text-right  { text-align: right; }
+.text-muted  { color: var(--text-muted); }
+.text-brand  { color: var(--brand); }
+.text-danger { color: var(--danger); }
+.text-success{ color: var(--success); }
+
+.fw-bold { font-weight: 700; }
+.fs-sm   { font-size: var(--fs-sm); }
+.fs-lg   { font-size: var(--fs-lg); }
+
+.mt-0 { margin-top: 0; }      .mt-2 { margin-top: var(--sp-2); }
+.mt-4 { margin-top: var(--sp-4); } .mt-6 { margin-top: var(--sp-6); }
+.mt-8 { margin-top: var(--sp-8); } .mt-12 { margin-top: var(--sp-12); }
+.mb-0 { margin-bottom: 0; }   .mb-2 { margin-bottom: var(--sp-2); }
+.mb-4 { margin-bottom: var(--sp-4); } .mb-6 { margin-bottom: var(--sp-6); }
+.mb-8 { margin-bottom: var(--sp-8); }
+
+.flex        { display: flex; }
+.flex-col    { flex-direction: column; }
+.flex-fill   { flex: 1 1 auto; }   /* 형제끼리 남는 폭을 똑같이 나눠 갖는다 (내비 메뉴에 사용) */
+.items-center{ align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center  { justify-content: center; }
+.gap-2 { gap: var(--sp-2); } .gap-4 { gap: var(--sp-4); }
+.flex-wrap { flex-wrap: wrap; }
+
+/* float 를 쓰는 옛 구조의 부모 높이 붕괴 방지 (Top.jsp 헤더가 사용) */
+.clearfix::after { content: ""; display: table; clear: both; }
+
+.hidden { display: none !important; }
+
+/* 특정 화면 크기에서만 보이기 */
+.only-mobile  { display: block; }
+.only-desktop { display: none; }
+@media (min-width: 1024px) {
+    .only-mobile  { display: none; }
+    .only-desktop { display: block; }
+}
+
+
+/* ==============================================================================
+   5-1. 페이지 구성 컴포넌트  (클라이언트가 한눈에 파악하도록)
+
+   [설계 의도]
+     기존 메인 화면에는 그라디언트 배너 하나와 버튼 하나만 있었다.
+     처음 방문한 사람은 "여기서 무엇을 할 수 있는지, 얼마인지"를 알 수 없다.
+
+     그래서 아래 순서로 정보를 쌓는 컴포넌트를 만들었다.
+       1) 히어로      : 무슨 서비스인지 + 가장 중요한 행동(예약) 한 개
+       2) 등급 바로가기 : 소형/중형/대형 중 고르게 (선택 부담을 줄임)
+       3) 인기 차량    : 실제 사진과 가격을 바로 보여줌
+       4) 이용 절차    : 4단계로 "어렵지 않다"를 시각화
+       5) 요금 안내    : 옵션 가격을 숨기지 않고 먼저 공개
+   ============================================================================== */
+
+/* ---------- 5-1-1. 히어로 ---------- */
+.hero {
+    position: relative;
+    overflow: hidden;
+    /* 어두운 남색 -> 브랜드 빨강 : 신뢰(남색) + 활동성(빨강) */
+    background: linear-gradient(135deg, #14141f 0%, #3a0d12 45%, var(--brand) 100%);
+    color: #fff;
+    border-radius: var(--r-xl);
+    margin-bottom: var(--sp-8);
+}
+.hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: var(--sp-12) var(--sp-5);
+    text-align: center;
+}
+/* 배경에 은은한 빛 (이미지 없이 CSS만으로 깊이감) */
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.10) 0%, transparent 55%);
+}
+.hero-eyebrow {
+    display: inline-block;
+    padding: 4px var(--sp-3);
+    margin-bottom: var(--sp-4);
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: var(--r-full);
+    font-size: var(--fs-xs);
+    letter-spacing: 2px;
+}
+.hero-title {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: var(--sp-4);
+    /* 한글은 자간을 좁히면 더 단정해 보인다 */
+    letter-spacing: -0.5px;
+}
+.hero-title .accent { color: #ffd9d9; }
+.hero-desc {
+    font-size: var(--fs-lg);
+    opacity: .92;
+    margin-bottom: var(--sp-8);
+    line-height: 1.7;
+}
+.hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    align-items: center;
+}
+/* 히어로 안의 흰 버튼 */
+.btn-hero {
+    background: #fff;
+    color: var(--brand);
+    border-color: #fff;
+    min-width: 200px;
+    box-shadow: var(--shadow-lg);
+}
+.btn-hero:hover { background: #fff; color: var(--brand-dark); transform: translateY(-2px); }
+.btn-hero-ghost {
+    background: transparent;
+    color: #fff;
+    border-color: rgba(255,255,255,.6);
+    min-width: 200px;
+}
+.btn-hero-ghost:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+/* 히어로 하단 신뢰 지표 (보유차량 26대 / 연중무휴 등) */
+.hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sp-6);
+    margin-top: var(--sp-8);
+    padding-top: var(--sp-6);
+    border-top: 1px solid rgba(255,255,255,.18);
+}
+.hero-stat { text-align: center; }
+.hero-stat .num { display: block; font-size: var(--fs-xl); font-weight: 800; }
+.hero-stat .label { font-size: var(--fs-xs); opacity: .8; }
+
+@media (min-width: 768px) {
+    .hero-inner { padding: var(--sp-16) var(--sp-8); }
+    .hero-actions { flex-direction: row; justify-content: center; }
+}
+
+/* ---------- 5-1-2. 섹션 ---------- */
+.section { margin-bottom: var(--sp-12); }
+
+/* 섹션 머리말 : 작은 라벨 + 큰 제목 + 설명 */
+.section-head {
+    margin-bottom: var(--sp-6);
+    text-align: center;
+}
+.section-eyebrow {
+    display: block;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--brand);
+    margin-bottom: var(--sp-2);
+}
+.section-heading {
+    font-size: var(--fs-2xl);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: var(--sp-2);
+}
+.section-desc {
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+}
+
+/* 옅은 배경으로 구획을 나누는 섹션 */
+.section-soft {
+    background: var(--bg-soft);
+    border-radius: var(--r-xl);
+    padding: var(--sp-8) var(--sp-5);
+}
+
+/* ---------- 5-1-3. 등급 바로가기 카드 ---------- */
+.pick-grid {
+    display: grid;
+    gap: var(--sp-4);
+    grid-template-columns: 1fr;
+}
+.pick-card {
+    display: block;
+    padding: var(--sp-6) var(--sp-5);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    text-align: center;
+    transition: box-shadow var(--t-base), transform var(--t-base), border-color var(--t-base);
+}
+.pick-card:hover {
+    text-decoration: none;
+    transform: translateY(-3px);
+    border-color: var(--brand);
+    box-shadow: var(--shadow-lg);
+}
+.pick-icon { font-size: 2rem; display: block; margin-bottom: var(--sp-3); }
+.pick-name { font-size: var(--fs-lg); font-weight: 800; margin-bottom: var(--sp-1); }
+.pick-meta { font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: var(--sp-3); }
+.pick-price { font-size: var(--fs-sm); font-weight: 700; color: var(--brand); }
+
+@media (min-width: 768px) {
+    .pick-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ---------- 5-1-4. 차량 카드 (실제 사진 사용) ---------- */
+.car-grid {
+    display: grid;
+    gap: var(--sp-5);
+    /* 260px 이상 들어가는 만큼 열을 만든다 : 1열 ~ 4열 자동 */
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.car-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    transition: box-shadow var(--t-base), transform var(--t-base);
+}
+.car-card:hover {
+    text-decoration: none;
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* 사진 영역 : 비율을 고정해 로딩 중에도 화면이 덜컹거리지 않게 한다 */
+.car-photo {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: var(--bg-mute);
+    overflow: hidden;
+}
+.car-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;              /* 비율이 달라도 찌그러지지 않게 */
+    transition: transform .4s ease;
+}
+.car-card:hover .car-photo img { transform: scale(1.05); }
+
+/* 사진 위 등급 배지 */
+.car-badge {
+    position: absolute;
+    top: var(--sp-3);
+    left: var(--sp-3);
+    padding: 3px var(--sp-3);
+    border-radius: var(--r-full);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,.6);
+    backdrop-filter: blur(4px);
+}
+.car-badge-small { background: rgba(26,115,232,.9); }
+.car-badge-mid   { background: rgba(26,127,55,.9); }
+.car-badge-big   { background: rgba(204,0,0,.9); }
+
+.car-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    padding: var(--sp-4);
+    flex: 1;
+}
+.car-name {
+    font-size: var(--fs-lg);
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+.car-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+}
+.car-meta span {
+    padding: 2px var(--sp-2);
+    background: var(--bg-soft);
+    border-radius: var(--r-sm);
+}
+.car-desc {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    line-height: 1.6;
+    /* 설명은 2줄까지만 보여 카드 높이를 일정하게 유지 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+/* 가격 : 카드에서 시선이 가장 먼저 닿아야 하는 정보 */
+.car-price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    margin-top: auto;              /* 카드 아래쪽에 붙인다 */
+    padding-top: var(--sp-3);
+    border-top: 1px dashed var(--border);
+}
+.car-price {
+    font-size: var(--fs-xl);
+    font-weight: 800;
+    color: var(--brand);
+    letter-spacing: -0.5px;
+}
+.car-price .unit { font-size: var(--fs-xs); font-weight: 400; color: var(--text-muted); }
+.car-cta { font-size: var(--fs-xs); font-weight: 700; color: var(--accent); }
+
+/* ---------- 5-1-5. 이용 절차 ---------- */
+.steps {
+    display: grid;
+    gap: var(--sp-4);
+    grid-template-columns: 1fr;
+    counter-reset: step;
+}
+.step {
+    position: relative;
+    padding: var(--sp-5) var(--sp-4) var(--sp-5) var(--sp-12);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+}
+/* 번호를 CSS 카운터로 자동 생성 (HTML 에 1,2,3 을 적지 않아도 된다) */
+.step::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: var(--sp-4);
+    top: var(--sp-5);
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: var(--brand);
+    color: #fff;
+    font-size: var(--fs-sm);
+    font-weight: 800;
+}
+.step-title { font-weight: 800; margin-bottom: var(--sp-1); }
+.step-desc { font-size: var(--fs-sm); color: var(--text-muted); line-height: 1.6; }
+
+@media (min-width: 768px) {
+    .steps { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ---------- 5-1-6. 요금 안내 ---------- */
+.price-list {
+    display: grid;
+    gap: var(--sp-3);
+    grid-template-columns: 1fr;
+}
+.price-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    padding: var(--sp-4);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+}
+.price-item .name { font-weight: 700; }
+.price-item .amount { font-weight: 800; color: var(--brand); white-space: nowrap; }
+
+@media (min-width: 480px) {
+    .price-list { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ---------- 5-1-7. 문의 안내(CTA 밴드) ---------- */
+.cta-band {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-4);
+    padding: var(--sp-8) var(--sp-5);
+    background: linear-gradient(135deg, #1f1f2e 0%, #2c2c3e 100%);
+    color: #fff;
+    border-radius: var(--r-xl);
+    text-align: center;
+}
+.cta-band .tel {
+    font-size: var(--fs-2xl);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+@media (min-width: 768px) {
+    .cta-band { flex-direction: row; justify-content: space-between; text-align: left; }
+}
+
+
+/* ==============================================================================
+   6-1. Bootstrap 호환 레이어
+
+   [왜 필요한가]
+     기존 화면 중 Top.jsp(상단 메뉴)와 members/join.jsp(회원가입)는
+     Bootstrap 4 의 클래스명을 그대로 쓰고 있었다.
+         navbar / navbar-expand-md / navbar-toggler / nav-link / row / col-6 ...
+
+     그런데 프로젝트 안에 들어 있는 로컬 bootstrap.min.css 는 버전이 2.3.0 이라
+     위 클래스들이 아예 존재하지 않는다. (v2 와 v4 는 클래스 체계가 완전히 다르다)
+     즉 "로컬 파일로 바꿔 쓰기"가 불가능했다.
+
+   [선택]
+     103KB 짜리 프레임워크를 다시 끌어오는 대신,
+     실제로 사용 중인 클래스 25종만 아래에 직접 구현했다.
+     - 외부 요청 0건
+     - 파일 크기 100배 절감
+     - 우리가 만든 코드라 동작을 완전히 이해하고 수정할 수 있다
+
+     HTML 을 고치지 않고 CSS 만 제공하므로 화면 모양이 유지된다.
+     (6단계에서 각 화면을 app.css 기준으로 다시 만들면 이 레이어도 줄어든다)
+   ============================================================================== */
+
+/* ---------- 접기/펼치기 (js/app.js 의 initCollapse 와 함께 동작) ---------- */
+.collapse:not(.show) { display: none; }
+
+/* ---------- 상단 내비게이션 ---------- */
+.navbar {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--sp-2) var(--sp-4);
+}
+.navbar-custom { background: var(--bg); }
+
+/* 모바일 햄버거 버튼 */
+.navbar-toggler {
+    padding: var(--sp-2) var(--sp-3);
+    min-height: var(--touch);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    cursor: pointer;
+    line-height: 1;
+}
+/* 햄버거 3줄 아이콘 : 외부 이미지 없이 SVG 를 CSS 안에 직접 넣는다(data URI) */
+.navbar-toggler-icon {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(33,37,41,0.75)' stroke-width='2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* 펼쳐지는 메뉴 영역 */
+.navbar-collapse {
+    flex-basis: 100%;
+    flex-grow: 1;
+    align-items: center;
+}
+.navbar-nav {
+    display: flex;
+    flex-direction: column;   /* 모바일 : 세로로 쌓기 */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.nav-item { display: block; }
+.nav-link {
+    display: flex;
+    align-items: center;
+    min-height: var(--touch);  /* 터치 타깃 확보 */
+    padding: var(--sp-2) var(--sp-4);
+    text-decoration: none;
+}
+.nav-link:hover { background: var(--bg-soft); text-decoration: none; }
+
+/*
+ navbar-expand-md : 768px 이상에서 메뉴를 가로로 펼친다.
+   - 햄버거 버튼을 숨기고
+   - .collapse 의 display:none 을 무력화해 항상 보이게 한다
+     (그래서 !important 가 필요하다. Bootstrap 도 같은 방식을 쓴다)
+*/
+@media (min-width: 768px) {
+    .navbar-expand-md { flex-wrap: nowrap; justify-content: flex-start; }
+    .navbar-expand-md .navbar-toggler { display: none; }
+    .navbar-expand-md .navbar-collapse {
+        display: flex !important;
+        flex-basis: auto;
+    }
+    .navbar-expand-md .navbar-nav { flex-direction: row; }
+}
+
+/* ---------- 최소 그리드 (join.jsp 가 사용) ---------- */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-inline: calc(var(--sp-2) * -1);
+}
+.row > [class*="col"] { padding-inline: var(--sp-2); }
+
+.col   { flex: 1 0 0%; }
+.col-4 { flex: 0 0 33.3333%; max-width: 33.3333%; }
+.col-6 { flex: 0 0 50%;     max-width: 50%; }
+
+.justify-content-center { justify-content: center; }
+.justify-content-left,
+.justify-content-lefts  { justify-content: flex-start; } /* 원본 오타(lefts)까지 함께 지원 */
+
+.w-100 { width: 100%; }
+
+/* ---------- 카드 헤더/바디 (join.jsp) ---------- */
+.card-header {
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+}
+
+/* ---------- 버튼 변형 (join.jsp) ---------- */
+.btn-link {
+    background: transparent;
+    border: 0;
+    color: var(--accent);
+    text-decoration: underline;
+    padding: var(--sp-2);
+    min-height: auto;   /* 글자처럼 보이게 하려고 .btn 의 기본 높이를 해제한다 */
+}
+.btn-link:hover { color: var(--brand); }
+
+/*
+  [터치 타깃 - 링크형 버튼]
+
+    .btn-link 는 회원가입 화면의 약관 펼치기 버튼에 쓰인다.
+    글자처럼 보이게 하려고 min-height: auto 로 .btn 의 기본 높이를 해제했는데,
+    그 결과 좁은 화면에서 높이가 35px 밖에 안 됐다.
+
+    모양(글자처럼 보이기)과 규격(44px)은 같이 지킬 수 있다.
+    보이는 배경·테두리는 그대로 두고 누르는 영역만 넓히면 된다.
+*/
+@media (hover: none), (pointer: coarse), (max-width: 767px) {
+    .btn-link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+}
+
+
+/* ==============================================================================
+   6-9. 블로그 검색 결과 카드 (SearchResult.jsp)
+
+   기존에는 5칸 표(제목/요약/블로거명/날짜/링크)였다.
+   요약 내용이 길어 좁은 화면에서는 글자가 한 줄에 한 자씩 쌓였다.
+   검색 결과 1건 = 카드 1개로 바꾸고, 폭에 따라 열 수가 자동으로 늘어나게 했다.
+   ============================================================================== */
+.search-grid {
+    display: grid;
+    gap: var(--sp-5);
+    /* 300px 이상 들어가는 만큼 열을 만든다 : 1열(모바일) ~ 3열(와이드) 자동 */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.search-card {
+    display: flex;
+    flex-direction: column;
+    /* .card 자체에는 안쪽 여백이 없다(사진 카드는 사진이 테두리에 붙어야 하므로).
+       글만 들어가는 이 카드는 여백을 직접 준다. */
+    padding: var(--sp-5);
+}
+.search-card:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.search-title {
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: var(--sp-3);
+}
+.search-title a { color: var(--text); }
+.search-title a:hover { color: var(--brand); }
+
+/* 네이버가 검색어를 <b> 로 감싸 보내준다. 그 부분만 브랜드색으로 강조한다. */
+.search-title .kw,
+.search-desc  .kw {
+    color: var(--brand);
+    font-weight: 700;
+}
+
+.search-desc {
+    flex: 1;                 /* 남는 높이를 요약이 차지해 카드 아래쪽이 정렬된다 */
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    line-height: 1.7;
+
+    /* 요약이 아무리 길어도 4줄까지만 보여준다 (카드 높이가 들쭉날쭉해지는 것을 막는다) */
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.search-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    margin-top: var(--sp-4);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--border);
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
+}
+.search-blogger {
+    font-weight: 600;
+    color: var(--text-muted);
+    /* 블로거명이 길면 말줄임 처리 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 65%;
+}
+/* 날짜는 줄바꿈되지 않게 고정 (블로거명이 길어도 날짜가 잘리지 않는다) */
+.search-date {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+
+/* ==============================================================================
+   6-10. AI 추천 서비스 (AIService.jsp)
+
+   [왜 옮겨왔는가]
+     기존에는 AIService.jsp 안에 <style> 425줄이 들어 있었다.
+     그 파일은 CarMain.jsp 가 include 하는 "조각"이라서,
+     조각이 각자 스타일을 들고 있으면
+       - 같은 버튼이 화면마다 다르게 보인다
+       - 색 하나 바꾸려면 어느 파일을 고쳐야 하는지 알 수 없다
+       - 다크모드를 켜면 그 화면만 흰 배경으로 남는다
+     색·간격·글자크기를 전부 토큰(var(--...))으로 바꿨으므로 다크모드가 함께 따라온다.
+   ============================================================================== */
+.ai-wrap {
+    max-width: 1000px;   /* 폼 위주 화면이라 본문보다 좁게 잡아 읽기 편하게 한다 */
+}
+
+/* ---------- 히어로 배너 ---------- */
+.ai-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--r-lg);
+    padding: clamp(28px, 5vw, 44px) var(--sp-5);
+    text-align: center;
+    color: #fff;
+    background: linear-gradient(135deg, #1a1a2e 0%, var(--brand) 55%, #ff6600 100%);
+}
+
+/* 은은하게 움직이는 빛. 화면이 심심해 보이지 않게 하는 장식이다. */
+.ai-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 60%);
+    animation: aiShimmer 6s ease-in-out infinite;
+}
+@keyframes aiShimmer {
+    0%, 100% { transform: translate(-20%, -20%); }
+    50%      { transform: translate(20%, 20%); }
+}
+
+/* 움직임을 불편해하는 사용자는 운영체제에서 끌 수 있다. 그 설정을 존중한다. */
+@media (prefers-reduced-motion: reduce) {
+    .ai-hero::before { animation: none; }
+}
+
+.ai-hero-content { position: relative; z-index: 1; }
+.ai-hero-icon    { font-size: clamp(2.2rem, 6vw, 3rem); line-height: 1; margin-bottom: var(--sp-2); }
+.ai-hero-title   { font-size: clamp(1.3rem, 4vw, 1.9rem); font-weight: 900; letter-spacing: 1px; margin-bottom: var(--sp-2); }
+.ai-hero-sub     { font-size: var(--fs-sm); opacity: .92; }
+
+/* ---------- 탭 ---------- */
+.ai-tabs {
+    display: flex;
+    border-bottom: 3px solid var(--brand);
+    /* 좁은 화면에서 탭 글자가 눌리지 않게 최소 너비를 두고 가로 스크롤을 허용한다.
+       (레이아웃 전체가 넘치는 것보다 탭 줄만 밀리는 편이 낫다) */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ai-tab {
+    flex: 1 0 auto;
+    min-width: 104px;
+    min-height: 56px;              /* 터치 타깃 44px 이상 */
+    padding: var(--sp-3) var(--sp-2);
+    border: none;
+    border-top: 3px solid transparent;
+    background: var(--bg-soft);
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--t-base), color var(--t-base);
+}
+.ai-tab:hover {
+    background: var(--brand-tint);
+    color: var(--brand);
+}
+.ai-tab.is-active {
+    background: var(--brand);
+    color: #fff;
+    border-top-color: var(--brand-dark);
+}
+.ai-tab-icon { display: block; font-size: 1.4rem; line-height: 1.2; margin-bottom: 2px; }
+.ai-tab-text { display: block; }
+
+/* ---------- 패널 ---------- */
+.ai-panel { display: none; }
+.ai-panel.is-active { display: block; }
+
+.ai-form-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-top: none;              /* 탭 아래에 붙으므로 위 테두리는 없앤다 */
+    border-radius: 0 0 var(--r-lg) var(--r-lg);
+    padding: var(--sp-6);
+}
+.ai-form-title {
+    font-size: var(--fs-lg);
+    font-weight: 800;
+    margin-bottom: var(--sp-2);
+}
+.ai-form-desc {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--sp-6);
+}
+
+/* 표를 대신하는 폼 그리드 : 기본 1열, 640px 이상에서 2열 */
+.ai-form-grid {
+    display: grid;
+    gap: var(--sp-4);
+    grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+    .ai-form-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ---------- 옵션 체크박스 ---------- */
+.ai-option-set {
+    border: none;
+    padding: 0;
+    margin: var(--sp-6) 0 0;
+}
+.ai-option-set > legend {
+    padding: 0;
+    margin-bottom: var(--sp-3);
+}
+
+.ai-check-grid {
+    display: grid;
+    gap: var(--sp-3);
+    grid-template-columns: 1fr;
+}
+@media (min-width: 560px) {
+    .ai-check-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* 라벨 전체가 클릭 영역이다. 체크박스만 작게 두면 모바일에서 누르기 어렵다. */
+.ai-check {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    min-height: 48px;
+    padding: var(--sp-3) var(--sp-4);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background: var(--bg-soft);
+    cursor: pointer;
+    transition: border-color var(--t-base), background var(--t-base);
+}
+.ai-check:hover { border-color: var(--brand); }
+.ai-check input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    accent-color: var(--brand);
+    cursor: pointer;
+}
+.ai-check-name  { font-weight: 700; font-size: var(--fs-sm); }
+.ai-check-price { margin-left: auto; font-size: var(--fs-xs); color: var(--text-muted); white-space: nowrap; }
+
+/* ---------- 로딩 ---------- */
+.ai-loading {
+    display: none;                 /* 자바스크립트가 block 으로 바꾼다 */
+    text-align: center;
+    padding: var(--sp-8) var(--sp-4);
+}
+.ai-loading-dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-4);
+}
+.ai-loading-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--brand);
+    animation: aiBounce 1.4s ease-in-out infinite both;
+}
+.ai-loading-dot:nth-child(1) { animation-delay: -0.32s; }
+.ai-loading-dot:nth-child(2) { animation-delay: -0.16s; }
+@keyframes aiBounce {
+    0%, 80%, 100% { transform: scale(.6); opacity: .5; }
+    40%           { transform: scale(1);  opacity: 1;  }
+}
+.ai-loading-text { font-size: var(--fs-sm); color: var(--text-muted); }
+
+@media (prefers-reduced-motion: reduce) {
+    .ai-loading-dot { animation: none; opacity: .8; }
+}
+
+/* ---------- 결과 ---------- */
+.ai-result { display: none; margin-top: var(--sp-5); }
+
+.ai-result-card {
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--brand);
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    padding: var(--sp-5);
+    box-shadow: var(--shadow-md);
+}
+.ai-result-header {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding-bottom: var(--sp-3);
+    margin-bottom: var(--sp-4);
+    border-bottom: 1px solid var(--border);
+}
+.ai-result-icon  { font-size: 1.6rem; line-height: 1; }
+.ai-result-label { font-weight: 800; color: var(--brand); }
+
+.ai-result-body {
+    font-size: var(--fs-base);
+    line-height: 1.85;
+    /* AI 응답에 아주 긴 낱말(URL 등)이 와도 가로로 넘치지 않게 한다 */
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+.ai-result-body b { color: var(--brand-dark); }
+
+/* ---------- 말로 예약 : 추천 차량 카드 ---------- */
+.reserve-car-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    margin-top: var(--sp-4);
+}
+.reserve-car {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    padding: var(--sp-3) var(--sp-4);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background: var(--bg-soft);
+}
+.reserve-car-img {
+    width: 96px;
+    height: 64px;
+    object-fit: cover;         /* 비율이 달라도 칸을 꽉 채운다 */
+    border-radius: var(--r-sm);
+    background: #fff;          /* 차량 사진이 흰 배경 JPG 라 다크모드에서도 흰 판을 유지 */
+    flex: 0 0 auto;
+}
+.reserve-car-info  { flex: 1; min-width: 0; }
+.reserve-car-name  { font-weight: 800; }
+.reserve-car-meta  { font-size: var(--fs-xs); color: var(--text-muted); margin-top: 2px; }
+.reserve-car-total { font-size: var(--fs-sm); font-weight: 700; color: var(--brand); margin-top: 4px; }
+
+/* 좁은 화면 : 사진-정보-버튼을 세로로 쌓는다 */
+@media (max-width: 520px) {
+    .reserve-car { flex-wrap: wrap; }
+    .reserve-car > .btn { width: 100%; }
+}
+
+
+/* ==============================================================================
+   6-11. 게시판 목록 공용 (board/list.jsp , board/fileboardlist.jsp)
+
+   [왜 옮겨왔는가]
+     이 규칙들은 원래 list.jsp 안의 <style> 에 있었다.
+     그런데 파일게시판(fileboardlist.jsp)도 같은 구조·같은 클래스를 쓰므로,
+     한 파일 안에 두면 다른 게시판에는 스타일이 적용되지 않는다.
+     두 게시판이 공유하는 스타일은 공용 CSS 에 있어야 한다.
+     색은 전부 토큰으로 바꿔 다크모드도 함께 따라온다.
+   ============================================================================== */
+.board-container {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--sp-3);
+}
+
+/* 게시판 제목 (이미지 board02.gif 대체) */
+.board-header { padding: var(--sp-2) var(--sp-3); margin-bottom: var(--sp-2); }
+.board-title-text {
+    display: inline-block;
+    font-size: var(--fs-base);
+    font-weight: 700;
+    color: var(--text);
+    padding: 6px 16px;
+    border-left: 4px solid var(--brand);
+    background: var(--bg-soft);
+    letter-spacing: 1px;
+}
+
+/* 상단 구분선 (이미지 line_870.gif 대체) */
+.board-divider { margin: var(--sp-2) 0; }
+.board-divider hr {
+    border: none;
+    border-top: 3px solid var(--brand);
+    margin: 0;
+}
+
+/* 안내 배너 (이미지 ink.gif 대체) */
+.board-banner {
+    margin-bottom: var(--sp-2);
+    padding: var(--sp-4);
+    background: linear-gradient(135deg, #1a1a2e 0%, var(--brand) 100%);
+    border-radius: var(--r-md);
+    color: #fff;
+    text-align: center;
+}
+.board-banner-text { font-size: var(--fs-sm); font-weight: 700; letter-spacing: 1px; }
+
+/* 검색 + 글쓰기 버튼 행 : 좁은 화면에서는 세로로 쌓인다 */
+.board-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    align-items: center;
+    justify-content: space-between;
+    margin: var(--sp-3) 0;
+    padding: var(--sp-2) 0;
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    align-items: center;
+}
+.search-form select,
+.search-form input[type="text"] {
+    min-height: 44px;                 /* 터치 타깃 */
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-size: var(--fs-sm);
+    font-family: inherit;
+}
+.search-form input[type="text"] { width: 160px; }
+.search-form input[type="submit"] {
+    min-height: 44px;
+    padding: var(--sp-2) var(--sp-4);
+    background: var(--text-muted);
+    color: #fff;
+    border: none;
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    font-size: var(--fs-sm);
+    font-family: inherit;
+}
+.search-form input[type="submit"]:hover { background: var(--text); }
+
+/* 글쓰기 버튼 (이미지 write.gif 대체) */
+.write-btn-area { text-align: right; }
+.btn-write {
+    min-height: 44px;
+    padding: var(--sp-2) var(--sp-4);
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    font-family: inherit;
+}
+.btn-write:hover { background: var(--brand-dark); }
+
+/* 페이지 번호 (1 2 3) */
+.page-control {
+    text-align: center;
+    margin: var(--sp-4) 0;
+    padding: var(--sp-3) 0;
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+}
+.page-control a {
+    display: inline-block;
+    min-width: 32px;
+    padding: var(--sp-2);
+    color: var(--text);
+    border-radius: var(--r-sm);
+    font-size: var(--fs-sm);
+}
+.page-control a:hover { color: var(--brand); font-weight: 700; }
+.page-control a.block-link { font-weight: 700; color: var(--text-muted); }
+
+/*
+  [터치 타깃 - 페이지 번호]
+
+    페이지 번호는 1, 2, 3 처럼 글자가 한 자뿐이라 누르는 영역이 특히 좁다.
+    min-width: 32px / padding 만으로는 높이가 37px 이어서 규격(44px)에 못 미친다.
+    번호끼리 바짝 붙어 있으니 잘못 누르면 엉뚱한 페이지로 넘어간다.
+
+    좁은 화면에서 44x44 정사각형 영역을 보장한다.
+*/
+@media (hover: none), (pointer: coarse), (max-width: 767px) {
+    .page-control a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
+
+/*
+  첨부파일 다운로드 링크 (board/fileboardread.jsp)
+
+  [터치 타깃] 파일명은 글자 한 줄이라 기본 높이가 19px 밖에 안 된다.
+    첨부가 여러 개면 링크가 세로로 붙어 있어 옆 파일을 잘못 누르기 쉽다.
+    좁은 화면에서 44px 를 보장한다.
+*/
+.attach-link { color: var(--accent); word-break: break-all; }
+.attach-link:hover { color: var(--brand); text-decoration: underline; }
+
+@media (hover: none), (pointer: coarse), (max-width: 767px) {
+    .attach-link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+}
+
+/* 글 제목 링크 */
+.title-link { color: var(--text); }
+.title-link:hover { color: var(--brand); text-decoration: underline; }
+
+/*
+  [터치 타깃 - 글 제목 링크]
+
+    글 제목은 게시판에서 가장 많이 누르는 대상이다.
+    그런데 <a> 는 기본이 inline 이라 높이가 글자 높이(19px)밖에 안 된다.
+    데스크톱에서는 마우스로 정확히 누를 수 있지만
+    스마트폰에서는 옆 줄 제목을 잘못 누르게 된다.
+
+    inline-flex + min-height 로 누르는 영역을 44px 로 넓힌다.
+    글자 크기는 그대로 두므로 보이는 모습은 거의 변하지 않는다.
+    (좁은 화면에서만 적용해 데스크톱 표 간격은 유지한다)
+*/
+@media (hover: none), (pointer: coarse), (max-width: 767px) {
+    .title-link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 576px) {
+    .board-tools { flex-direction: column; align-items: flex-start; }
+    .search-form input[type="text"] { width: 120px; }
+    .write-btn-area { width: 100%; text-align: left; }
+}
+
+
+/* ==============================================================================
+   6-12. 댓글 (board/read.jsp) - 무한 대댓글 + 추천
+
+   [들여쓰기를 어떻게 하는가]
+     댓글 깊이는 저장 구조상 제한이 없지만, 화면에서 무한히 밀면 글자가 한 줄에
+     한 자씩 쌓인다. 그래서 data-depth 속성으로 5단까지만 들여쓰고 그 이상은 같은 폭을 쓴다.
+     (깊이 값 자체는 CommentService.MAX_VISUAL_DEPTH 에서 잘라서 내려온다)
+
+     들여쓰기를 style="margin-left:40px" 처럼 자바스크립트가 조립하지 않고
+     CSS 선택자로 처리한다. 화면 규칙은 CSS 에 두는 것이 원칙이다.
+   ============================================================================== */
+.comment-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--sp-3);
+    margin: var(--sp-8) 0 var(--sp-4);
+    border-bottom: 2px solid var(--border-strong);
+}
+.comment-title { font-size: var(--fs-lg); font-weight: 800; }
+.comment-count { color: var(--brand); }
+
+/* ---------- 입력칸 ---------- */
+.comment-form {
+    margin-bottom: var(--sp-5);
+}
+.comment-form-foot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--sp-3);
+    margin-top: var(--sp-2);
+}
+.comment-len { font-size: var(--fs-xs); color: var(--text-faint); margin-right: auto; }
+
+/* 답글·수정용 작은 입력칸 */
+.comment-form-sm { margin: var(--sp-3) 0 0; }
+
+/* ---------- 목록 ---------- */
+.comment-list { display: flex; flex-direction: column; }
+
+.comment-item {
+    display: flex;
+    gap: var(--sp-2);
+    padding: var(--sp-4) 0;
+    border-bottom: 1px solid var(--border);
+}
+.comment-item:last-child { border-bottom: none; }
+
+/* 깊이별 들여쓰기 (5단까지) */
+.comment-item[data-depth="1"] { padding-left: 24px; }
+.comment-item[data-depth="2"] { padding-left: 48px; }
+.comment-item[data-depth="3"] { padding-left: 72px; }
+.comment-item[data-depth="4"] { padding-left: 96px; }
+.comment-item[data-depth="5"] { padding-left: 120px; }
+
+/* 좁은 화면에서는 들여쓰기를 절반으로 줄인다 (320px 에서도 글자가 읽혀야 한다) */
+@media (max-width: 560px) {
+    .comment-item[data-depth="1"] { padding-left: 12px; }
+    .comment-item[data-depth="2"] { padding-left: 24px; }
+    .comment-item[data-depth="3"] { padding-left: 36px; }
+    .comment-item[data-depth="4"] { padding-left: 44px; }
+    .comment-item[data-depth="5"] { padding-left: 52px; }
+}
+
+/* 답글 표시 화살표 */
+.comment-arrow {
+    flex: 0 0 auto;
+    color: var(--brand);
+    font-weight: 700;
+    line-height: 1.6;
+}
+
+.comment-body { flex: 1; min-width: 0; }
+
+.comment-meta {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin-bottom: 4px;
+}
+.comment-name   { font-size: var(--fs-sm); }
+.comment-date   { font-size: var(--fs-xs); color: var(--text-faint); }
+.comment-edited { font-size: var(--fs-xs); color: var(--text-faint); }
+
+.comment-content {
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+    /* 아주 긴 낱말(URL 등)이 와도 가로로 넘치지 않게 한다 */
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* 삭제된 댓글 뼈대 (답글이 있어 자리를 남긴 경우) */
+.comment-deleted {
+    font-size: var(--fs-sm);
+    color: var(--text-faint);
+    font-style: italic;
+}
+
+/* ---------- 버튼줄 ---------- */
+.comment-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
+    margin-top: var(--sp-2);
+}
+
+.comment-btn {
+    min-height: 32px;
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text-muted);
+    font-size: var(--fs-xs);
+    font-family: inherit;
+    cursor: pointer;
+}
+.comment-btn:hover { border-color: var(--brand); color: var(--brand); }
+.comment-btn-danger:hover { border-color: var(--danger); color: var(--danger); }
+
+/* 추천 버튼. 이미 추천했으면 채워진 모양으로 바뀐다 (is-liked) */
+.comment-like {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 32px;
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-size: var(--fs-xs);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background var(--t-base), color var(--t-base), border-color var(--t-base);
+}
+.comment-like:hover { border-color: var(--brand); color: var(--brand); }
+.comment-like.is-liked {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+    font-weight: 700;
+}
+/* 내 댓글은 추천할 수 없어 버튼이 아니라 숫자만 보여준다 */
+.comment-like.is-static { cursor: default; opacity: .6; }
+.comment-like.is-static:hover { border-color: var(--border); color: var(--text-muted); }
+
+/* 답글·수정 입력칸이 열리는 자리.
+   평소에는 비어 있고, [답글]/[수정] 을 누르면 자바스크립트가 폼을 넣는다.
+   비어 있을 때 여백이 생기지 않도록 내용이 있을 때만 위 간격을 준다. */
+.comment-slot:not(:empty) { margin-top: var(--sp-2); }
+
+.comment-empty {
+    padding: var(--sp-8) 0;
+    text-align: center;
+    color: var(--text-faint);
+    font-size: var(--fs-sm);
+}
+
+
+/* ==============================================================================
+   7. 다크모드
+
+   [prefers-color-scheme]
+     사용자가 운영체제에서 어두운 테마를 쓰고 있으면 자동으로 적용된다.
+     색을 토큰으로 모아둔 덕분에 변수 값만 바꾸면 전체가 함께 바뀐다.
+   ============================================================================== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text:          #e8eaed;
+        --text-muted:    #a8adb5;
+        --text-faint:    #7d838c;
+        --bg:            #16181c;
+        --bg-soft:       #1e2126;
+        --bg-mute:       #282c33;
+        --border:        #363b43;
+        --border-strong: #4a505a;
+
+        --brand:      #ff4d4d;   /* 어두운 배경에서는 조금 밝게 (명도 대비 확보) */
+        --brand-dark: #e63939;
+        --brand-tint: #2a1a1a;
+        --accent:     #7aa7ff;
+    }
+
+    .card, .site-header, .action-bar, .main-nav { background: var(--bg-soft); }
+    .alert-success { background: #14301d; border-color: #2c5c3b; }
+    .alert-error   { background: #35191b; border-color: #6b2f33; }
+    .alert-info    { background: #17233a; border-color: #2f4a72; }
+}
+
+
+/* ==============================================================================
+   8. 접근성 / 인쇄
+   ============================================================================== */
+
+/* 움직임에 민감한 사용자를 위해 애니메이션을 끈다 (멀미·어지럼 방지) */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@media print {
+    .site-header, .site-footer, .action-bar, .pagination,
+    .nav-toggle, .main-nav, .nav-overlay, #chatbot-btn, #chatbot-window {
+        display: none !important;
+    }
+    body { color: #000; background: #fff; }
+    .container { max-width: none; }
+}

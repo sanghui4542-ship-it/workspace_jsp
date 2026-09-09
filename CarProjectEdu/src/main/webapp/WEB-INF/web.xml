@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  
+<!-- display-name 값을 CarProjectEdu 로 정한다 -->
+  <display-name>CarProjectEdu</display-name>
+  
+  <!-- 금액 쉼표(30,000원)가 어느 브라우저에서나 똑같이 나오게 로케일 고정 -->
+  <context-param>
+    <!-- param-name 값을 javax.servlet.jsp.jstl.fmt.locale 로 정한다 -->
+    <param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
+    <!-- param-value 값을 ko 로 정한다 -->
+    <param-value>ko</param-value>
+  </context-param>
+  
+  <!-- 주소 끝에 파일명이 없을 때 기본으로 열 파일 -->
+  <welcome-file-list>
+    <!-- welcome-file 값을 index.jsp 로 정한다 -->
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+</web-app>
