@@ -431,3 +431,72 @@ This warning can be switched off on the Team > Git > Confirmations and Warnings 
 
 !ENTRY com.genuitec.copilot4eclipse.chat 1 0 2026-09-10 07:08:07.122
 !MESSAGE [C4E] Workspace labels: java,javascript,sql
+
+!ENTRY org.eclipse.egit.ui 4 0 2026-09-10 08:37:32.540
+!MESSAGE Failed to initialize Git team provider.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Invalid project description for project 'CarProjectEdu' at 'file:/C:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/CarProjectEdu' 
+	at org.eclipse.core.internal.resources.Project.checkDescription(Project.java:219)
+	at org.eclipse.core.internal.resources.Project.move(Project.java:1071)
+	at org.eclipse.ui.ide.undo.MoveProjectOperation.moveProject(MoveProjectOperation.java:145)
+	at org.eclipse.ui.ide.undo.MoveProjectOperation.doExecute(MoveProjectOperation.java:120)
+	at org.eclipse.ui.ide.undo.AbstractWorkspaceOperation.lambda$0(AbstractWorkspaceOperation.java:199)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ui.ide.undo.AbstractWorkspaceOperation.execute(AbstractWorkspaceOperation.java:199)
+	at org.eclipse.egit.ui.internal.sharing.SharingWizard$1.run(SharingWizard.java:118)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Contains: OK
+Contains: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\CarProjectEdu overlaps the location of another project: 'CarProjectEdu'
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2026-09-10 08:37:32.541
+!MESSAGE Invalid project description for project 'CarProjectEdu' at 'file:/C:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/CarProjectEdu' 
+!SUBENTRY 2 unknown 0 0 2026-09-10 08:37:32.541
+!MESSAGE OK
+!SUBENTRY 2 org.eclipse.core.resources 4 77 2026-09-10 08:37:32.541
+!MESSAGE C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\CarProjectEdu overlaps the location of another project: 'CarProjectEdu'
+
+!ENTRY org.eclipse.egit.ui 4 0 2026-09-10 08:37:41.128
+!MESSAGE Failed to initialize Git team provider.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Invalid project description for project 'CarProjectEdu' at 'file:/C:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/CarProjectEdu' 
+	at org.eclipse.core.internal.resources.Project.checkDescription(Project.java:219)
+	at org.eclipse.core.internal.resources.Project.move(Project.java:1071)
+	at org.eclipse.ui.ide.undo.MoveProjectOperation.moveProject(MoveProjectOperation.java:145)
+	at org.eclipse.ui.ide.undo.MoveProjectOperation.doExecute(MoveProjectOperation.java:120)
+	at org.eclipse.ui.ide.undo.AbstractWorkspaceOperation.lambda$0(AbstractWorkspaceOperation.java:199)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ui.ide.undo.AbstractWorkspaceOperation.execute(AbstractWorkspaceOperation.java:199)
+	at org.eclipse.egit.ui.internal.sharing.SharingWizard$1.run(SharingWizard.java:118)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Contains: OK
+Contains: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\CarProjectEdu overlaps the location of another project: 'CarProjectEdu'
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2026-09-10 08:37:41.128
+!MESSAGE Invalid project description for project 'CarProjectEdu' at 'file:/C:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/CarProjectEdu' 
+!SUBENTRY 2 unknown 0 0 2026-09-10 08:37:41.128
+!MESSAGE OK
+!SUBENTRY 2 org.eclipse.core.resources 4 77 2026-09-10 08:37:41.128
+!MESSAGE C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\CarProjectEdu overlaps the location of another project: 'CarProjectEdu'
+
+!ENTRY org.eclipse.egit.ui 4 0 2026-09-10 08:38:25.686
+!MESSAGE Failed to initialize Git team provider.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Invalid project description for project 'CarProjectEdu' at 'file:/C:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/CarProjectEdu' 
+	at org.eclipse.core.internal.resources.Project.checkDescription(Project.java:219)
+	at org.eclipse.core.internal.resources.Project.move(Project.java:1071)
+	at org.eclipse.ui.ide.undo.MoveProjectOperation.moveProject(MoveProjectOperation.java:145)
+	at org.eclipse.ui.ide.undo.MoveProjectOperation.doExecute(MoveProjectOperation.java:120)
+	at org.eclipse.ui.ide.undo.AbstractWorkspaceOperation.lambda$0(AbstractWorkspaceOperation.java:199)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ui.ide.undo.AbstractWorkspaceOperation.execute(AbstractWorkspaceOperation.java:199)
+	at org.eclipse.egit.ui.internal.sharing.SharingWizard$1.run(SharingWizard.java:118)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Contains: OK
+Contains: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\CarProjectEdu overlaps the location of another project: 'CarProjectEdu'
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2026-09-10 08:38:25.686
+!MESSAGE Invalid project description for project 'CarProjectEdu' at 'file:/C:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/CarProjectEdu' 
+!SUBENTRY 2 unknown 0 0 2026-09-10 08:38:25.686
+!MESSAGE OK
+!SUBENTRY 2 org.eclipse.core.resources 4 77 2026-09-10 08:38:25.686
+!MESSAGE C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\CarProjectEdu overlaps the location of another project: 'CarProjectEdu'
