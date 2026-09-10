@@ -591,9 +591,9 @@ header.site-header {
         <ul class="navbar-nav w-100">
             <!-- 예약하기 메뉴 -->
             <li class="nav-item flex-fill text-center">
-                <%-- 다른 화면으로 넘어가는 링크 --%>
-                <a class="nav-link"
-                   href="<%=contextPath %>/Car/bb?center=CarReservation.jsp">
+            
+                <%-- 예약하기 클릭하면 CarController 서블릿으로 예약을 할 수 있는 VIEW(CarReservation.jsp) 중앙화면 요청 --%>
+                <a class="nav-link" href="<%=contextPath %>/Car/bb?center=CarReservation.jsp">
                     <%-- 화면에 그대로 보이는 글자: "예약하기" --%>
                     예약하기
                 </a>
