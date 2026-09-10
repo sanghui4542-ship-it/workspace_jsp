@@ -156,7 +156,7 @@
 
       
       
-      </Host>
+      <Context docBase="CarProjectEdu" path="/CarProjectEdu" reloadable="true" source="org.eclipse.jst.jee.server:CarProjectEdu"/></Host>
     </Engine>
   </Service>
 </Server>

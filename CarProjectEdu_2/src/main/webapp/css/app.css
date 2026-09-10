@@ -2160,6 +2160,145 @@ select.form-control {
 }
 
 
+/* ---------- 예약 확인 (CarOrder.jsp) ---------- */
+.checkout-steps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sp-2) var(--sp-4);
+    list-style: none;
+    margin: 0 0 var(--sp-6);
+    padding: 0;
+}
+.checkout-step {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    color: var(--text-faint);
+}
+.checkout-step .num {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-full);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-mute);
+    font-size: var(--fs-xs);
+}
+.checkout-step.is-done { color: var(--success); }
+.checkout-step.is-done .num { background: #e8f5ec; color: var(--success); }
+.checkout-step.is-current { color: var(--brand); }
+.checkout-step.is-current .num { background: var(--brand); color: #fff; }
+
+.checkout-grid {
+    display: grid;
+    gap: var(--sp-5);
+}
+@media (min-width: 768px) {
+    .checkout-grid { grid-template-columns: 1.05fr .95fr; align-items: start; }
+}
+
+.checkout-facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-3);
+    padding: 0 var(--sp-4) var(--sp-4);
+}
+.checkout-fact {
+    background: var(--bg-soft);
+    border-radius: var(--r-md);
+    padding: var(--sp-3);
+}
+.checkout-fact .k {
+    display: block;
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+.checkout-fact .v {
+    font-weight: 800;
+    letter-spacing: -0.2px;
+}
+
+.checkout-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    padding: 0 var(--sp-4) var(--sp-4);
+}
+
+.checkout-receipt {
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: var(--bg);
+    box-shadow: var(--shadow-sm);
+}
+.checkout-receipt .head {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: #fff;
+    padding: var(--sp-5) var(--sp-4);
+}
+.checkout-receipt .head .label {
+    font-size: var(--fs-xs);
+    letter-spacing: 1px;
+    opacity: .85;
+    margin-bottom: var(--sp-1);
+}
+.checkout-receipt .head .amount {
+    font-size: var(--fs-2xl);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+.checkout-receipt .head .meta {
+    font-size: var(--fs-xs);
+    opacity: .8;
+    margin-top: var(--sp-1);
+}
+.checkout-payline {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    border-bottom: 1px dashed var(--border);
+    font-size: var(--fs-sm);
+}
+.checkout-payline .k { color: var(--text-muted); }
+.checkout-payline .v { font-weight: 700; }
+.checkout-payline.is-total {
+    border-bottom: none;
+    background: var(--brand-tint);
+    font-weight: 800;
+}
+.checkout-payline.is-total .v { color: var(--brand); font-size: var(--fs-lg); }
+
+.checkout-form-card {
+    margin-top: var(--sp-4);
+    padding: var(--sp-5);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--bg);
+}
+.checkout-form-card h3 {
+    font-size: var(--fs-lg);
+    font-weight: 800;
+    margin-bottom: var(--sp-1);
+}
+.checkout-note {
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    background: var(--bg-soft);
+    border-radius: var(--r-md);
+    padding: var(--sp-3);
+    margin-top: var(--sp-3);
+    line-height: 1.6;
+}
+
+
 /* ==============================================================================
    8. 접근성 / 인쇄
    ============================================================================== */

@@ -32,6 +32,14 @@ import util.ParamUtil;   // 여러 곳에서 함께 쓰는 도우미 클래스
 //            /Car/CarInfo.do?carno=${vo.carno}
 
 //            /Car/CarOption.do
+
+//           /Car/CarOptionResult.do
+
+// 			 /Car/CarOrder.do
+	
+//          /Car/CarList.do
+
+//            /Car/cc
 @WebServlet("/Car/*")
 public class CarController extends BaseController {
 
@@ -59,21 +67,22 @@ public class CarController extends BaseController {
 		response.setCharacterEncoding("UTF-8");   // 응답 글자를 UTF-8 로 내보낸다 (안 하면 한글이 깨진다)
 		PrintWriter out = response.getWriter();   // 응답에 글자를 쓸 수 있는 붓을 얻는다
 		 		
-		//1. 클라이언트가 요청한 전체 URL  중에서 2단계 주소 얻기 
-		String action = request.getPathInfo();
-		      
+		//1. 클라이언트가 요청한 전체 URL  중에서 2단계 주소  얻기 
+		String action = request.getPathInfo();    
+		
+		// "/CarReserveConfirm.do" <- 비회원 예약 내역 조회 2단계 요청 주소 얻기 
+		
+		// "/cc"  <- 예약 확인 하기 위해 예약당시 입력 했던 비회원 핸드폰번호, 비밀번호를 입력하여 예약확인 요청하는 디자인 VIEW 2단계 요청주소얻기
 		// "/Main"<- CarMain.jsp(VIEW) 메인화면 2단계 요청 주소 얻기
 		// "/CarList.do" <- 전체 차량 검색  2단계 요청 주소 얻기 
 		// "/carcategory.do" <- 차량 유형별 선택 후 검색 2단계 요청 주소 얻기
 		// "/CarInfo.do"     <- 차량 한대 정보 검색 2단계 요청 주소 얻기
 		// "/CarOption.do"   <- 차량 렌트 예약을 위해  옵션을 추가로 선택할수 있는 화면 2단계 요청 주소 얻기
-		// "/CarOptionResult.do" <- 차량 렌트 예약을 위해 추가한 옵션금액 + 기본 금액 계산 2단계 요청 주소 얻기 	
-		
-		
-		// "/bb" <- 예약하기 메뉴를 클릭 했을때  전체 검색 또는 카테고리별 검색 VIEW 화면 2단계 요청주소 얻기	
-		
+		// "/CarOptionResult.do" <- 차량 렌트 예약을 위해 추가한 옵션금액 + 기본 금액 계산 2단계 요청 주소 얻기 
 		// "/CarOrder.do" <-  비회원 결제후 예약 요청 2단계 주소 얻기 
-		// "/cc"          <- 예약 확인 하기 위해 예약당시 입력 했던 비회원 핸드폰번호, 비밀번호를 입력하여 예약확인 요청하는 디자인 VIEW 2단계 요청주소얻기
+		
+		
+		// "/bb" <- 예약하기 메뉴를 클릭 했을때  전체 검색 또는 카테고리별 검색 VIEW 화면 2단계 요청주소 얻기		
 		// "/delete.do"   <- 예약 취소를 위해 비밀번호를 입력해서 예위취소 요청하는 VIEW 중앙 화면 Delete.jsp보여줘~ 2단계 요청 주소 얻기
 		// "/deletePro.do" <- 예약 취소 요청하는 2단계 요청 주소 얻기 
 											
@@ -209,6 +218,7 @@ public class CarController extends BaseController {
 			int carno = Integer.parseInt(request.getParameter("carno")); //차번호
 			String carbegindate = request.getParameter("carbegindate");  //차 대여일
 			int carqty = Integer.parseInt(request.getParameter("carqty")); //렌트할 차 수량
+						
 			/* [정리] carprice 파라미터를 더 이상 읽지 않는다.
 			   금액은 아래에서 DB 요금으로 다시 계산하므로 화면이 보낸 가격은 쓸 일이 없다.
 			   쓰지도 않을 값을 Integer.parseInt 하면, 값이 빠졌을 때 이유 없이 500 에러만 난다. */
@@ -224,13 +234,6 @@ public class CarController extends BaseController {
 			
 			//2.2.1. 차량 기본 금액 계산 = 대여수량 * 차 한대당 렌트 가격 * 대여기간
 			/*
-			 [보안 수정] 금액을 화면이 보낸 값으로 계산하지 않는다.
-
-			   기존 : carprice 를 hidden 파라미터로 받아 그대로 곱했다.
-			          <input type="hidden" name="carprice" value="150000">
-			          -> 개발자도구로 value 를 1 로 바꿔 보내면
-			             제네시스를 1일 1원에 예약할 수 있었다.
-
 			   지금 : 차량번호로 DB에서 1일 요금을 다시 조회해 계산한다.
 			          "돈과 관련된 값은 절대 화면에서 받지 않는다"가 원칙이다.
 			*/
@@ -245,23 +248,10 @@ public class CarController extends BaseController {
 			calcVo.setCarnave(carnave);   // 네비게이션 선택 여부
 			calcVo.setCarbabyseat(carbabyseat);   // 베이비시트 선택 여부
 
-			//차량 기본 금액 = 1일 요금 x 대여수량 x 대여기간
+			//차량 기본 금액
 			int totalreserve = carService.getBasePrice(priceCar.getCarprice(), calcVo);
 			
 			//추가한 옵션 금액 계산
-			/*
-			 [버그 수정] 옵션 금액 계산
-
-			   기존 : (carins + carwifi + carbabyseat) * carreserveday * 10000 * carqty
-
-			     버그1. carnave(네비게이션)가 빠져 있다 -> 선택해도 요금이 0원이었다
-			     버그2. 옵션 단가를 모두 10,000원으로 계산했다
-			            AI 챗봇 안내는 보험 10,000 / WiFi 5,000 / 네비 3,000 / 시트 10,000 이라
-			            안내 금액과 실제 결제 금액이 달랐다 (WiFi는 5,000원 과다 청구)
-
-			   지금 : CarService 의 옵션 단가 상수를 사용한다.
-			          챗봇 프롬프트도 같은 상수를 참조하므로 안내와 결제가 항상 일치한다.
-			*/
 			int totalOption = carService.getOptionPrice(calcVo);
 			
 			//2.2.3. 응답할 VIEW(CarOrder.jsp) 중앙 화면에 보여주기 위해 CarOrderVO객체를 생성해서 각 인스턴스변수에 저장 시킴
@@ -297,8 +287,7 @@ public class CarController extends BaseController {
 			 }
 		//5.  메인화면(CarMain.jsp)를 포워딩 하기 위해 경로 저장
 			 nextPage = "/CarMain.jsp";
-			
-			 
+					 
 		}else if(action.equals("/CarOrder.do")) {//결제 후 예약 요청을 받았을때....
 			
 			//2.1. 렌트 예약을 위해 선택했던 예약  정보 10개 중 8개 모두 얻어 저장
@@ -364,14 +353,6 @@ public class CarController extends BaseController {
 			//3.1. 예약시 선택했던 정보를  데이터베이스의 non_carorder테이블에 추가 하기 위해  CarDAO객체의 insertCarOrder메소드 호출해서 명령!
 			//참고. insertCarOrder메소드 호출시! 매개변수로  CarOderVo객체 전달, 매개변수로 HttpSession객체 전달
 			/*
-			 [변경] 예약 등록을 부장(CarService)에게 시킨다.
-
-			   기존 : cardao.insertCarOrder(carordervo, session);
-			     - 반환형이 void 라서 예약 실패를 알 수 없었다
-			       -> INSERT가 실패해도 화면에는 "예약되었습니다"가 떴다
-			     - session 을 넘겨받지만 DAO 안에서 쓰지 않았다
-			     - 결제 금액을 저장하지 않았다
-
 			   지금 : Service가 차량 요금을 DB에서 조회해 총액을 계산하고 함께 저장하며,
 			          성공 여부를 돌려준다.
 			*/
@@ -382,7 +363,7 @@ public class CarController extends BaseController {
 				out.print(" window.alert('예약 처리에 실패했습니다. 다시 시도해주세요.');");   // 실패를 알린다
 				out.print(" history.back();");   // 이전 화면으로 되돌린다 (입력한 값이 살아 있다)
 				out.print("</script>");   // 스크립트를 닫는다
-				return;   // 여기서 끝낸다
+				return;   // doHandle메소드 종료 (여기서 끝낸다)
 			}
 			
 			//4. 예약에 성공 했으면? 클라이언트의 브라우저로 예약 성공! 출력! 
@@ -396,6 +377,7 @@ public class CarController extends BaseController {
 		
 		
 		}else if(action.equals("/cc")) {// 예약 확인을 요청하는 디자인 중앙 VIEW 요청을 받았을떄..
+			
 			//URL ->  /Car/cc?center=CarReserveConfirm.jsp
 
 			//2.1. 요청한 중앙 VIEW 경로 얻기
@@ -403,8 +385,6 @@ public class CarController extends BaseController {
 			//     center = "CarReserveConfirm.jsp";
 
 			//2.2. request내장객체 메모리에 요청한 중앙 VIEW "CarReserveConfirm.jsp" 경로 바인딩
-			//[보안] CenterView 허용 목록에 등록된 화면만 통과시킨다.
-			//       (기존에는 ?center=WEB-INF/web.xml 로 서버 파일 내용이 화면에 노출됐다)
 			request.setAttribute("center", center);
 
 			//3. 메인 화면 포워딩 할 주소 저장
@@ -574,12 +554,12 @@ public class CarController extends BaseController {
 			
 			//2.2. 입력한 핸드폰번호와 비밀번호를 이용해 예약한 정보들을 조회 하기 위해 CarDAO객체의 getAllCarOrder메소드 호출해 명령!
 			//참고.  getAllCarOrder메소드를 호출할때 매개변수로 각각 입력한 핸드폰번호와 비밀번호 전달 !
-			//참고2. getAllCarOrder메소드 내부에서  조회된 예약 정보들을 Vector배열에 담아 Vector배열 자체를 반환 해줍니다!
-			List<CarConfirmVo> vector = carService.findOrders(memberphone, memberpass);
+			//참고2. getAllCarOrder메소드 내부에서  조회된 예약 정보들을 ArrayList배열에 담아 ArrayList배열 자체를 반환 해줍니다!
+			List<CarConfirmVo> arrayList = carService.findOrders(memberphone, memberpass);
 			
 			//2.2.3. 조회된 예약정보들을 중앙 VIEW(CarReserveResult.jsp)에 보여주기 위해
-			//       먼저~  request 내장객체 메모리에  Vector배열 자체를 바인딩
-			request.setAttribute("v", vector);
+			//       먼저~  request 내장객체 메모리에  ArrayList<CarConfirmVo>배열 자체를 바인딩
+			request.setAttribute("v", arrayList);
 			
 			//2.2.4. 조회된 예약정보들을 중앙 VIEW(CarReserveResult.jsp)에 보여주기 위해 
 			//       request 내장객체 멤보리에 VIEW주소 바인딩
@@ -587,10 +567,7 @@ public class CarController extends BaseController {
 			
 			//2.2.5. 중앙 VIEW페이지에 보여질 예약 수정 <a>, 예약삭제 <a>에 설정을 위해 입력한 휴대폰 번호와 비밀번호 함께 request내장객체 메모리에 바인딩
 			request.setAttribute("memberphone", memberphone);
-			/* [보안] 입력받은 예약 비밀번호를 request 에 담지 않는다.
-			   기존에는 화면(CarReserveResult.jsp)이 이 값을 hidden 필드에 심어
-			   "페이지 소스 보기"로 평문 비밀번호가 보였다.
-			   수정/취소 화면에서 사용자가 직접 다시 입력하므로 넘길 필요가 없다. */		
+			
 			//3. 메인 화면 포워딩 할 주소 저장
 			nextPage = "/CarMain.jsp";
 				

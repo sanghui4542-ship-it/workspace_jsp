@@ -73,7 +73,7 @@
    캐시를 버리고 새로 받아온다. css/js 를 크게 고칠 때마다 숫자를 1 올린다.
    (실무에서는 빌드 도구가 파일 내용의 해시를 자동으로 붙여준다)
 --%>
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/app.css?v=13">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/app.css?v=14">
 <%--
  공용 스크립트 (jQuery 대체)
    defer : HTML 을 다 읽은 뒤에 실행한다.
@@ -111,9 +111,9 @@
 	모델 2 개발방식
 	- 센터 중앙화면 공간은 상위 메뉴 (Top.jsp)를 클릭할때 마다 계속 변화되어 나타나기 때문에
 	  request내장객체 영역으로 부터 중앙화면 공간의 VIEW 주소를 얻어와 변수에 저장
- --%>
+ --%>						
  <c:set var="center" value="${requestScope.center}" />
- 			
+ 
  
  <%-- 처음으로 CarMain.jsp메인 화면을 요청 했을때 중앙화면은 Center.jsp로 보이게 설정 --%>
  <c:if test="${center == null}">

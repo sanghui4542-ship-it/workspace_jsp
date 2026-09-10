@@ -2993,3 +2993,1701 @@ Contains: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\CarProjectEdu 
 
 !ENTRY org.eclipse.lsp4e 1 0 2026-09-10 12:07:48.468
 !MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 12:30:25.354
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 03a27737-4668-40e9-91dc-fc7897132735 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 455.4994999989867ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 12:30:25.355
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 12:30:25.656
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 12:30:25.657
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 12:30:55.801
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 56e4260b-9212-4cf1-bc0a-965903ee42ee at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 233.37999999895692ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 12:30:55.808
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 12:30:55.865
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 12:30:55.866
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:03:19.574
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:03:19.579
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:03:19.582
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:03:19.598
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:03:19.860
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.ui 4 0 2026-09-10 14:03:19.944
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.LSPEclipseUtils.findResourceFor(LSPEclipseUtils.java:487)
+	at org.eclipse.lsp4e.LSPEclipseUtils.openEditor(LSPEclipseUtils.java:876)
+	at org.eclipse.lsp4e.LSPEclipseUtils.openFileLocationInEditor(LSPEclipseUtils.java:848)
+	at org.eclipse.lsp4e.LSPEclipseUtils.open(LSPEclipseUtils.java:765)
+	at org.eclipse.lsp4e.LSPEclipseUtils.open(LSPEclipseUtils.java:751)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.open(DocumentLinkDetector.java:68)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.mouseUp(HyperlinkManager.java:440)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:262)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:91)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4363)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1217)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4161)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3749)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1160)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1051)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:684)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:583)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:193)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:219)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:149)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:115)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:467)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:298)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:615)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:563)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1415)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath%>/Car/CarOrder.do
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 32 more
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:14.452
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 81e464ab-65ae-4d77-8e17-0a3031322dd4 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 443.3273000009358ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:14.530
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:14.530
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:14.531
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:14.985
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 28aaf685-5ca7-48ab-abf9-7272ab658461 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 421.73369999974966ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:15.059
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:15.059
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:15.059
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:17.099
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 58a6055f-dad8-4bae-8846-0ee66d27727b at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 251.71169999986887ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:17.553
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:17.553
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:04:17.554
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:06:51.954
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 2faf2375-3d57-48fc-b282-ae6df7002243 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 465.85410000011325ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:06:52.146
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:06:53.008
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:06:53.008
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:13:37.167
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[default] Context provider relatedFilesShim exceeded time budget of 150ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:17:15.144
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request e60ec777-d4a2-473f-bab5-d9a8af5d4983 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 402.7135999985039ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:17:15.216
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:17:15.218
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:17:15.219
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:28:52.992
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request b9ce1835-f4a4-40f7-ae58-0ed7c6374758 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 405.03270000219345ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:28:53.013
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:28:53.094
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:28:53.094
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:25.890
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:25.907
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:25.910
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:25.920
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:25.925
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:25.941
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:25.949
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:25.957
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:26.137
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:26.143
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:26.149
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:26.167
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 4 0 2026-09-10 14:29:26.203
+!MESSAGE Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+!STACK 0
+java.lang.IllegalArgumentException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI.create(URI.java:932)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.toLabel(DocumentLinkDetector.java:77)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector$DocumentHyperlink.<init>(DocumentLinkDetector.java:47)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.toHyperlink(DocumentLinkDetector.java:134)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$6(DocumentLinkDetector.java:106)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at org.eclipse.lsp4e.operations.documentLink.DocumentLinkDetector.lambda$2(DocumentLinkDetector.java:107)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:614)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:653)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:483)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.net.URISyntaxException: Illegal character in path at index 80: file:///c:/Users/KHBS_D_016/Desktop/workspace_jsp/CarProjectEdu/src/main/webapp/<%=contextPath %>/Car/cc%3Fcenter=CarReserveConfirm.jsp
+	at java.base/java.net.URI$Parser.fail(URI.java:2995)
+	at java.base/java.net.URI$Parser.checkChars(URI.java:3166)
+	at java.base/java.net.URI$Parser.parseHierarchical(URI.java:3248)
+	at java.base/java.net.URI$Parser.parse(URI.java:3196)
+	at java.base/java.net.URI.<init>(URI.java:645)
+	at java.base/java.net.URI.create(URI.java:930)
+	... 27 more
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:18.412
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request dbc8ae33-daf4-470b-8480-e0ded18412f4 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 211.7065000012517ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:18.412
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:18.413
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:18.414
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:20.307
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 11c6a53c-0f11-4c0c-ab95-2327856c9e27 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 880.9589000009ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:20.321
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:20.321
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:20.323
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:20.729
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request e2915552-f488-4b41-ad76-d4f01a462bb2 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 342.84180000051856ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:20.737
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:20.858
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:20.859
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:35.645
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 169d3ec2-5617-42c0-8b29-7fc552b1deec at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 258.2297999970615ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:35.660
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:35.661
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:35.726
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:37.138
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request c24b7176-1a59-4be4-b20d-94756aca8447 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 430.5912999995053ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:39.621
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:39.952
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:40.154
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:40.456
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 5c282d37-12d1-42a6-aedf-1ccf52a26a7c at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 272.52730000019073ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:40.462
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:40.463
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:40.466
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:44.136
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 0e973710-4727-44c4-ba0d-84bc4b08facf at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 267.4232000000775ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:44.148
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:44.148
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:44.152
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:44.496
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request ff3e57f5-f464-4a99-bc24-9a040f38f202 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 222.46169999986887ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:44.506
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:44.507
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:44.511
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:44.874
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request b322e270-f274-4803-9b96-dc9be33bafde at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 269.2705999985337ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:45.457
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request bff0152f-1f65-49fb-b759-cf14c9d75821 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 242.59170000255108ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:45.469
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:45.469
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:45.470
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:46.033
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 3c5a2dee-62fc-4a84-a2f6-cfdd1e7a88f0 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 241.38479999825358ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:46.320
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:46.321
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:46.322
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:46.730
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request c9c7cb3d-a466-4bac-81c1-181b51ea7b6c at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 233.5410000011325ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:47.227
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:47.228
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:47.370
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:51.366
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 8c6d4ef1-2903-42af-966a-8443717f9eb3 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 238.47189999744296ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:51.480
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:51.481
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:30:51.481
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:01.191
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 0ae88fa6-e827-4384-be25-2745d0a01932 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 323.875300001353ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:01.285
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:01.285
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:01.286
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:02.716
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 5e4df5fa-508d-4f37-a18f-cc55c4b576b8 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 417.9544999971986ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:02.722
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:02.723
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:02.723
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:04.126
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:04.126
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:04.127
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:04.127
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request be9e2c76-a62f-4025-96a0-f3f8573da6b5 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 287.92119999974966ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:05.435
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 5c0c9c06-3982-4c3a-87de-6540bf3d8c34 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 336.207800000906ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:05.450
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:05.574
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:31:05.575
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:32:39.974
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 06ea4e3e-10b7-4cb1-82dc-250f762d6d40 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 316.9620000012219ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:32:39.978
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:32:39.978
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:32:40.159
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:35:59.568
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 7f1b0571-2a8c-4cd1-95e6-a1cd9a3b0016 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 396.21509999781847ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:35:59.585
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:35:59.597
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:35:59.663
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:07.613
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 9267a4ca-8f04-4c1f-90a7-e664a99749f5 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 211.40399999916553ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:07.614
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:07.615
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:07.618
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:08.388
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request d94ce318-47cd-441f-9798-e5b5226b839f at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 197.56550000235438ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:08.392
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:08.393
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:08.393
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:09.448
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 1664bd44-62c4-4bc1-b86b-5bc274f67983 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 728.8277999982238ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:09.471
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:09.497
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:37:10.521
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:38:00.817
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 34d583bb-c3da-4e91-aaaf-628997bb24bb at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 456.7027000002563ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:38:00.954
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:38:00.954
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:38:00.955
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:30.897
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 047354fa-ef17-4ab0-bf8e-3170ff1c425a at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 393.83000000193715ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:31.211
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 24f3260f-2ebd-42cd-8e5c-180e5ec107e7 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 229.68759999796748ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:31.577
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:31.578
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:31.578
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:32.913
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request aeb442cd-5a25-496e-9a95-0b12c62e0a8d at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 258.88020000234246ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:33.030
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:33.030
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:33.030
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:34.650
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request d6cf7a24-3d56-471a-964b-1ee67a79d167 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 325.7947000004351ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:34.939
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:34.948
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:41:35.282
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:42:16.246
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request e44f4a28-d886-452c-9516-058fc8661a5f at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 224.28610000014305ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:42:16.759
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:42:16.759
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:42:16.760
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:42:25.541
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request aaf0a0b9-0128-4c97-a083-834854119e06 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 301.7127999998629ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:42:25.743
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:42:25.821
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:42:25.821
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:48:38.760
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request a993d616-29cb-44a0-82d1-e9a3dacbe3f8 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 416.0300000011921ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:48:40.356
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request a4a9aa64-79be-49e0-8685-f3aeb46b4952 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 333.56309999898076ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:48:40.439
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:48:40.440
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 14:48:40.441
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:15:21.668
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 9026d0c8-d951-4818-8291-198d35a80f92 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 405.9906000010669ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:15:21.671
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:15:21.672
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:15:21.673
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:31:53.916
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 6727801a-9aee-4a0d-aac8-ea8231a502b0 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 391.14249999821186ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:31:54.398
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:31:54.398
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:31:54.476
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:32:18.411
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 34146494-0e46-470a-8834-7b5e4f14c864 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 250.87739999964833ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:32:18.412
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:32:18.412
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:32:18.413
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:32:58.748
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 1a2c411e-9f7e-4910-8a0c-6877b415d1db at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 221.10459999740124ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:32:58.752
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:32:58.755
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:32:59.293
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:02.711
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 6c9c0478-d14c-411a-94b7-6d23460c8a7b at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 333.8647999987006ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:02.791
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:02.791
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:02.792
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:06.055
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 76b3c3e0-d35a-473f-84bc-e4959d2bc455 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 308.0408999994397ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:06.248
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:08.116
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:08.116
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:21.571
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request d864387e-69ae-4c7f-bf4f-8bc5ec205e94 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 781.2752000018954ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:21.847
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:21.848
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:33:21.848
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:35:20.604
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 350117b5-7bba-4b13-9575-eab2dfe8982e at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 259.7558000013232ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:35:20.716
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:35:20.717
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:35:20.717
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:35:21.534
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[fetchCompletions] Request 77e394eb-cf6d-46c2-ba1d-7204c547d002 at <https://proxy.individual.githubcopilot.com/v1/engines/gpt-41-copilot/completions> finished with 200 status after 364.05429999902844ms
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:35:22.130
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 2 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:35:22.138
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 0 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.lsp4e 1 0 2026-09-10 15:35:22.138
+!MESSAGE [LS:Copilot4Eclipse Language Server][Info]	[streamChoices] solution 1 returned. finish reason: [stop]
+
+!ENTRY org.eclipse.ltk.ui.refactoring 4 10000 2026-09-10 15:40:39.173
+!MESSAGE Internal Error
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Problems encountered while deleting resources.
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:839)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Contains: Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+org.eclipse.core.runtime.CoreException: Could not delete: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu.
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:205)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteProject(ResourceTree.java:460)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteProject(ResourceTree.java:873)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1922)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:826)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Caused by: java.nio.file.FileSystemException: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu: 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:273)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+	at java.base/java.nio.file.Files.deleteIfExists(Files.java:1192)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.internalDelete(LocalFile.java:312)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:203)
+	... 18 more
+Contains: Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+!SUBENTRY 1 org.eclipse.core.resources 4 273 2026-09-10 15:40:39.173
+!MESSAGE Problems encountered while deleting resources.
+!SUBENTRY 2 org.eclipse.core.resources 4 273 2026-09-10 15:40:39.173
+!MESSAGE Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+!STACK 1
+org.eclipse.core.runtime.CoreException: Could not delete: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu.
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:205)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteProject(ResourceTree.java:460)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteProject(ResourceTree.java:873)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1922)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:826)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Caused by: java.nio.file.FileSystemException: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu: 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:273)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+	at java.base/java.nio.file.Files.deleteIfExists(Files.java:1192)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.internalDelete(LocalFile.java:312)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:203)
+	... 18 more
+!SUBENTRY 3 org.eclipse.core.filesystem 4 273 2026-09-10 15:40:39.173
+!MESSAGE Could not delete: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu.
+!STACK 0
+java.nio.file.FileSystemException: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu: 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:273)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+	at java.base/java.nio.file.Files.deleteIfExists(Files.java:1192)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.internalDelete(LocalFile.java:312)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:203)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteProject(ResourceTree.java:460)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteProject(ResourceTree.java:873)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1922)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:826)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+!SUBENTRY 2 org.eclipse.core.resources 4 273 2026-09-10 15:40:39.173
+!MESSAGE Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+
+!ENTRY org.eclipse.ltk.ui.refactoring 4 10000 2026-09-10 15:40:47.220
+!MESSAGE Internal Error
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Problems encountered while deleting resources.
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:839)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Contains: Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+org.eclipse.core.runtime.CoreException: Could not delete: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu.
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:205)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteProject(ResourceTree.java:460)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteProject(ResourceTree.java:873)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1922)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:826)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Caused by: java.nio.file.FileSystemException: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu: 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:273)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+	at java.base/java.nio.file.Files.deleteIfExists(Files.java:1192)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.internalDelete(LocalFile.java:312)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:203)
+	... 18 more
+Contains: Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+!SUBENTRY 1 org.eclipse.core.resources 4 273 2026-09-10 15:40:47.220
+!MESSAGE Problems encountered while deleting resources.
+!SUBENTRY 2 org.eclipse.core.resources 4 273 2026-09-10 15:40:47.220
+!MESSAGE Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+!STACK 1
+org.eclipse.core.runtime.CoreException: Could not delete: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu.
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:205)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteProject(ResourceTree.java:460)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteProject(ResourceTree.java:873)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1922)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:826)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Caused by: java.nio.file.FileSystemException: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu: 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:273)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+	at java.base/java.nio.file.Files.deleteIfExists(Files.java:1192)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.internalDelete(LocalFile.java:312)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:203)
+	... 18 more
+!SUBENTRY 3 org.eclipse.core.filesystem 4 273 2026-09-10 15:40:47.220
+!MESSAGE Could not delete: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu.
+!STACK 0
+java.nio.file.FileSystemException: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu: 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:273)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+	at java.base/java.nio.file.Files.deleteIfExists(Files.java:1192)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.internalDelete(LocalFile.java:312)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:203)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteProject(ResourceTree.java:460)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteProject(ResourceTree.java:873)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1922)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:826)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+!SUBENTRY 2 org.eclipse.core.resources 4 273 2026-09-10 15:40:47.221
+!MESSAGE Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+
+!ENTRY org.eclipse.core.resources 2 2 2026-09-10 15:40:55.792
+!MESSAGE Save operation warnings.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2026-09-10 15:40:55.792
+!MESSAGE The project description file (.project) for 'CarProjectEdu' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.
+
+!ENTRY org.eclipse.ltk.ui.refactoring 4 10000 2026-09-10 15:42:25.246
+!MESSAGE Internal Error
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Problems encountered while deleting resources.
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:839)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Contains: Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+org.eclipse.core.runtime.CoreException: Could not delete: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu.
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:205)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteProject(ResourceTree.java:460)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteProject(ResourceTree.java:873)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1922)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:826)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Caused by: java.nio.file.FileSystemException: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu: 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:273)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+	at java.base/java.nio.file.Files.deleteIfExists(Files.java:1192)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.internalDelete(LocalFile.java:312)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:203)
+	... 18 more
+Contains: Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+!SUBENTRY 1 org.eclipse.core.resources 4 273 2026-09-10 15:42:25.246
+!MESSAGE Problems encountered while deleting resources.
+!SUBENTRY 2 org.eclipse.core.resources 4 273 2026-09-10 15:42:25.246
+!MESSAGE Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.
+!STACK 1
+org.eclipse.core.runtime.CoreException: Could not delete: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu.
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:205)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteProject(ResourceTree.java:460)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteProject(ResourceTree.java:873)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1922)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:826)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+Caused by: java.nio.file.FileSystemException: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu: 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:273)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+	at java.base/java.nio.file.Files.deleteIfExists(Files.java:1192)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.internalDelete(LocalFile.java:312)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:203)
+	... 18 more
+!SUBENTRY 3 org.eclipse.core.filesystem 4 273 2026-09-10 15:42:25.246
+!MESSAGE Could not delete: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu.
+!STACK 0
+java.nio.file.FileSystemException: C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu: 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:273)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+	at java.base/java.nio.file.Files.deleteIfExists(Files.java:1192)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.internalDelete(LocalFile.java:312)
+	at org.eclipse.core.internal.filesystem.local.LocalFile.delete(LocalFile.java:203)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteProject(ResourceTree.java:460)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteProject(ResourceTree.java:873)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1922)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:826)
+	at org.eclipse.core.internal.resources.Project.delete(Project.java:372)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:151)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:279)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.lambda$0(PerformChangeOperation.java:250)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:289)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:94)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:211)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2505)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2533)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:90)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:123)
+!SUBENTRY 2 org.eclipse.core.resources 4 273 2026-09-10 15:42:25.246
+!MESSAGE Could not delete 'C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu'.

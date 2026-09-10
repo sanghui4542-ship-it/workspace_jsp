@@ -141,11 +141,13 @@ public class CarService {
 
 	/** 차량 기본 요금 합계 = 1일 요금 x 대여수량 x 대여일수 */
 	public int getBasePrice(int carPricePerDay, CarOrderVO vo) {
+		
 		return carPricePerDay * vo.getCarqty() * vo.getCarreserveday();   // 예) 9만원 × 2대 × 3일 = 54만원
 	}
 
 	/** 옵션 요금 합계 = 옵션 1일 합계 x 대여수량 x 대여일수 */
 	public int getOptionPrice(CarOrderVO vo) {
+		
 		return getOptionPricePerDay(vo) * vo.getCarqty() * vo.getCarreserveday();   // 옵션도 대수와 일수만큼 곱한다
 	}
 
@@ -204,30 +206,7 @@ public class CarService {
 	//===========================================================
 	// 4. 예약 조회 (연락처 + 예약 비밀번호)
 	//===========================================================
-	/*
-	 ============================================================================
-	   [변경] 비밀번호 비교를 SQL 에서 자바로 옮겼다.
-
-	   (기존)
-	       DAO 가  where memberphone=? and memberpass=?  로 한 번에 걸렀다.
-	       비밀번호가 평문이었기 때문에 = 비교가 가능했다.
-
-	   (지금)
-	       1) DAO 가 연락처로 예약 목록을 가져온다
-	       2) 여기서 java.util.Objects.equals() 로 비밀번호가 맞는 것만 남긴다
-
-	   해시는 같은 비밀번호라도 salt 때문에 저장값이 매번 달라서
-	   SQL 의 = 비교로는 찾을 수 없다.
-
-	   [평문 -> 해시 자동 이관]
-	     기존 예약들은 비밀번호가 평문으로 저장되어 있다.
-	     원래 비밀번호를 알 수 없으니 일괄 변환은 불가능하다.
-
-	     그래서 사용자가 비밀번호를 입력해 맞춘 이 순간
-	     (= 원래 비밀번호를 알 수 있는 유일한 시점) 해시로 바꿔 저장한다.
-	     사용자는 아무것도 하지 않아도 조회를 한 번 할 때마다 조용히 이관된다.
-	 ============================================================================
-	*/
+	
 	public List<CarConfirmVo> findOrders(String memberphone, String memberpass) {
 
 		if (memberphone == null || memberpass == null) {   // 연락처나 비밀번호가 아예 없으면 조회할 수 없다
@@ -257,7 +236,7 @@ public class CarService {
 				matched.add(order);   // 비밀번호가 맞았고 위험한 값도 지웠으니 결과 목록에 담는다
 			}
 
-			return matched;   // 본인 확인을 통과한 예약만 돌려준다
+			return matched;   // 본인 확인을 통과한 예약만 CarController로 돌려준다
 		});
 	}
 

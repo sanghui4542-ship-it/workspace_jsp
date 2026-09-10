@@ -600,14 +600,11 @@ header.site-header {
                 <%--예약하기 --%>
             </li>
             <!-- 예약확인 메뉴 -->
-            <li class="nav-item flex-fill text-center">
-                <%-- 다른 화면으로 넘어가는 링크 --%>
+            <li class="nav-item flex-fill text-center">           
                 <a class="nav-link"
-                   href="<%=contextPath %>/Car/cc?center=CarReserveConfirm.jsp">
-                    <%-- 화면에 그대로 보이는 글자: "예약확인" --%>
+                   href="<%=contextPath %>/Car/cc?center=CarReserveConfirm.jsp">       
                     예약확인
-                </a>
-                <%--예약확인 --%>
+                </a> 
             </li>
             <!-- 자유게시판 메뉴 -->
             <li class="nav-item flex-fill text-center">

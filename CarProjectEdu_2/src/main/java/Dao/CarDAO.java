@@ -200,23 +200,6 @@ public class CarDAO {
 	// 4. 예약 등록
 	//    반환 : 추가된 행 수 (성공 1)
 	//===========================================================
-	/*
-	   [기존 코드에서 고친 점 2가지]
-
-	   (1) 쓰지 않는 매개변수 제거
-	         public void insertCarOrder(CarOrderVO vo, HttpSession session)
-	         -> session 을 받아놓고 메소드 안에서 한 번도 쓰지 않았다.
-	            "왜 필요한지" 알 수 없는 매개변수는 읽는 사람을 혼란스럽게 한다.
-
-	   (2) 성공 여부를 반환한다
-	         반환형이 void 여서 예약 실패를 알 방법이 없었다.
-	         그래서 INSERT가 실패해도 화면에는 "예약되었습니다"가 떴다.
-
-	   member_id / total_price 컬럼도 함께 저장한다.
-	     기존에는 컨트롤러가 vo.setId(회원아이디) 를 호출했는데
-	     INSERT문에 컬럼이 없어 회원 예약인지 알 수 없었고,
-	     결제 금액도 저장하지 않아 나중에 얼마를 받았는지 확인할 수 없었다.
-	*/
 	public int insertOrder(Connection con, CarOrderVO vo, int totalPrice) throws SQLException {
 
 		// insert into 테이블(컬럼들) values(?,?,...) 이 기본 형태다.
@@ -242,6 +225,7 @@ public class CarDAO {
 
 			//회원 예약이면 아이디, 비회원이면 null
 			if (vo.getId() == null || vo.getId().trim().isEmpty()) {
+				
 				// setNull = "이 칸은 값이 없다" 를 DB 에 정확히 알린다.
 				// 빈 문자열("")을 넣으면 "값이 없음" 이 아니라 "빈 글자" 가 저장되어 뜻이 달라진다.
 				pstmt.setNull(11, java.sql.Types.VARCHAR);
@@ -253,7 +237,7 @@ public class CarDAO {
 			// 12번 ? : 최종 결제 금액. 나중에 얼마를 받았는지 확인할 수 있게 저장해 둔다.
 			pstmt.setInt(12, totalPrice);
 
-			// 실행하고 "저장된 행 수" 를 돌려준다. 정상이면 1 이다.
+			// 전체 insert 문장 실행하고 "저장된 행 수" 를 돌려준다. 정상이면 1 이다.
 			return pstmt.executeUpdate();
 		}
 	}
@@ -262,72 +246,36 @@ public class CarDAO {
 	// 5. 예약 조회 (연락처 + 예약 비밀번호)
 	//    아직 시작하지 않은(대여 시작일이 오늘 이후인) 예약만 조회한다
 	//===========================================================
-	/*
-	 ============================================================================
-	   [변경] 비밀번호 조건을 SQL 에서 제거했다.
 
-	   (기존)
-	       where o.memberphone = ? and o.memberpass = ?
-
-	     예약 비밀번호를 평문으로 저장했기 때문에 SQL 에서 = 비교가 가능했다.
-
-	   왜 바꿨나
-	     예약 비밀번호를 PBKDF2 해시로 저장하면 = 비교를 할 수 없다.
-	     같은 비밀번호라도 salt 가 달라 저장값이 매번 다르기 때문이다.
-
-	         입력 "1234"  ->  pbkdf2$120000$AAAA$xxxx
-	         입력 "1234"  ->  pbkdf2$120000$BBBB$yyyy   (같은 값인데 문자열이 다름)
-
-	   그래서 역할을 나눴다.
-	     DAO     : 연락처로 예약 목록을 가져온다 (여기)
-	     Service : java.util.Objects.equals() 로 비밀번호가 맞는 것만 걸러낸다
-
-	   MemberDAO.findPasswordById / BoardDAO.findPasswordByIdx 와 같은 구조다.
-	 ============================================================================
-	*/
 	public List<CarConfirmVo> selectOrdersByPhone(Connection con, String memberphone)
 			throws SQLException {
 
 		// 결과를 담을 빈 목록
 		List<CarConfirmVo> list = new ArrayList<CarConfirmVo>();
 
-		/*
-		 [변경] NATURAL JOIN -> 명시적 JOIN
-
-		   조인 조건(o.carno = c.carno)이 코드에 드러나므로
-		   나중에 컬럼이 추가돼도 조회 결과가 바뀌지 않는다.
-
-		 [변경] str_to_date(carbegindate, '%Y-%m-%d') -> carbegindate 직접 비교
-		   carbegindate 컬럼을 DATE 타입으로 만들었으므로 변환 함수가 필요 없다.
-		   컬럼에 함수를 씌우면 인덱스를 사용할 수 없어 데이터가 늘수록 느려진다.
-		*/
 		// o 와 c 는 테이블에 붙인 별명(alias)이다. o=non_carorder, c=carlist.
 		// 별명을 쓰면 어느 테이블의 컬럼인지 한눈에 보인다.
 		String sql = "select o.non_orderid, o.carno, o.carqty, o.carreserveday, o.carbegindate,"
 				   + "       o.carins, o.carwifi, o.carnave, o.carbabyseat,"
 				   + "       o.memberphone, o.memberpass, o.total_price,"
-				   // 예약 테이블에는 차 이름이 없으므로 carlist 에서 함께 가져온다
 				   + "       c.carname, c.carimg, c.carprice"
-				   + "  from non_carorder o"
-				   // join = 두 테이블을 이어 붙인다. on 뒤가 "무엇을 기준으로 잇는가" 이다.
-				   + "  join carlist c on o.carno = c.carno"
-				   // current_date() = 오늘 날짜. 오늘보다 나중에 시작하는 예약만 보여 준다.
+				   + "  from non_carorder o  join carlist c "
+				   + " on o.carno = c.carno"
 				   + " where o.carbegindate > current_date()"
 				   + "   and o.memberphone = ?"
-				   // 시작일이 빠른 예약부터 위에 보이게 정렬
 				   + " order by o.carbegindate asc";
 
 		// 실행 도구 준비
 		try (PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-			// 첫 번째(그리고 유일한) ? 에 연락처를 끼운다
+			// 첫 번째(그리고 유일한) ? 에 예약 확인을 위해 입력한 비밀번호로 설정 
 			pstmt.setString(1, memberphone);
 
 			// 실행하고 결과표를 받는다
 			try (ResultSet rs = pstmt.executeQuery()) {
-				// 예약이 여러 건일 수 있으므로 while 로 전부 읽는다
+			
 				while (rs.next()) {
-					// true = 차량 정보(carname/carimg/carprice)도 함께 조회했다는 표시
+					
 					list.add(mapOrder(rs, true));
 				}
 			}
