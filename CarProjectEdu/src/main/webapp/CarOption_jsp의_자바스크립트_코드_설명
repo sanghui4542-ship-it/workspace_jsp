@@ -1,0 +1,214 @@
+   <script>
+   /* ============================================================================
+      [이 자바스크립트가 하는 일]
+
+      사용자가 옵션이나 대여 기간을 고를 때마다
+      화면 아래 "예상 결제금액"을 즉시 다시 계산해서 보여 준다.
+
+      계산식은 서버(CarService)와 완전히 동일하다.
+          총액 = (차량 1일요금 + 옵션 1일 합계) x 대여일수 x 대여수량
+
+      [중요] 이 계산은 화면에 미리 보여 주기 위한 것이다.
+             실제 결제금액은 서버가 DB의 차량 요금을 다시 조회해 계산한다.
+             hidden 값은 사용자가 바꿀 수 있으므로 화면 계산은 기준이 될 수 없다.
+
+
+      [동작 흐름]
+
+      사용자가 옵션 select 또는 기간 select 를 변경
+           |
+           v
+      change 이벤트 발생
+           |
+           v
+      refresh() 실행
+           |
+           +----> optionPerDay() 호출 : 선택된 옵션들의 1일 요금 합계를 구함
+           |
+           v
+      base   = carPrice      x carQty x days
+      option = optionPerDay() x carQty x days
+           |
+           v
+      화면 3곳의 글자를 교체
+           sumBase   : 차량 요금
+           sumOption : 옵션 요금
+           sumTotal  : 최종 합계
+      ============================================================================ */
+
+   /* 참고. (function () { ... })();  즉시실행함수(IIFE)
+      함수를 만들자마자 바로 실행하는 문법이다.
+      이 안에서 만든 변수(carPrice, dayEl 등)는 이 블록 밖에서 보이지 않는다.
+      즉 다른 스크립트의 변수와 이름이 겹쳐도 서로 충돌하지 않는다.
+      맨 아래 })(); 의 마지막 () 가 "지금 실행하라" 는 의미다.                     */
+   (function () {
+
+   	//1. 앞 화면(CarInfo.jsp)이 hidden 으로 넘겨준 차량 1일 요금을 숫자로 가져온다
+   	var carPrice = parseInt("${empty param.carprice ? 0 : param.carprice}", 10) || 0;
+
+   	//2. 앞 화면에서 고른 대여 수량을 숫자로 가져온다. 값이 없으면 1대로 본다
+   	var carQty   = parseInt("${empty param.carqty   ? 1 : param.carqty}",   10) || 1;
+
+   	/* 참고. parseInt(문자열, 10) 과 || 0 의 역할
+   	   1) JSP 의 ${...} 는 HTML 로 찍히므로 자바스크립트 입장에서는 글자다.
+   	      "45000" 은 글자이므로 그대로 더하면 "45000" + "1" = "450001" 이 된다.
+   	      parseInt 로 숫자 45000 으로 바꿔야 덧셈이 정상 동작한다.
+   	   2) 두 번째 인자 10 은 10진수로 해석하라는 뜻이다. 생략하면 안 된다.
+   	   3) 숫자로 바꿀 수 없는 값이면 parseInt 는 NaN 을 돌려준다.
+   	      NaN 은 거짓으로 취급되므로 || 0 이 대신 0 을 넣어 준다.
+   	      이 처리가 없으면 화면에 "NaN원" 이 표시된다.                          */
+
+   	//3. 대여 일수를 고르는 select 요소를 id 로 찾아 둔다
+   	var dayEl     = document.getElementById("carreserveday");
+
+   	//4. 옵션 select 4개(자차보험 / WiFi / 네비 / 베이비시트)를 한 번에 찾아 둔다
+   	var optionEls = document.querySelectorAll(".option-select");
+
+   	//5. 대여 시작일 input(type="date") 을 찾아 둔다
+   	var dateEl    = document.getElementById("carbegindate");
+
+   	/* 참고. getElementById 와 querySelectorAll 의 차이
+   	   getElementById("아이디")   : id 가 일치하는 요소 1개를 돌려준다. 없으면 null.
+   	   querySelectorAll(".클래스") : 클래스가 일치하는 요소 전부를 NodeList 로 돌려준다.
+   	                                하나도 없으면 빈 목록을 돌려준다(null 이 아니다).
+   	   요소를 매번 다시 찾으면 느리므로 위처럼 변수에 한 번만 담아 두고 재사용한다. */
+
+   	//6. 시작일 칸이 화면에 있을 때만 아래 처리를 한다 (없는데 접근하면 오류가 난다)
+   	if (dateEl) {
+
+   		//7. 오늘 날짜 정보를 담은 Date 객체를 만든다
+   		var today = new Date();
+
+   		//8. 월을 두 자리 문자열로 만든다 (getMonth 는 0부터 시작하므로 +1 을 한다)
+   		var m = String(today.getMonth() + 1).padStart(2, "0");
+
+   		//9. 일도 두 자리 문자열로 만든다
+   		var d = String(today.getDate()).padStart(2, "0");
+
+   		//10. min 속성에 오늘 날짜를 넣어 지난 날짜를 고르지 못하게 막는다
+   		dateEl.min = today.getFullYear() + "-" + m + "-" + d;
+   	}
+
+   	/* 참고. padStart(2, "0") 이 필요한 이유
+   	   input type="date" 의 min 값은 반드시 YYYY-MM-DD 형식이어야 한다.
+   	   getMonth()+1 이 8 이면 그대로 쓸 때 "2026-8-3" 이 되어 형식이 맞지 않는다.
+   	   padStart(2, "0") 은 글자 길이가 2가 될 때까지 앞을 "0" 으로 채운다.
+   	       "8" -> "08"      "3"  -> "03"
+   	       "12" -> "12" (이미 2자리이므로 그대로)
+
+   	   [주의] 이 min 속성은 화면에서 막아 줄 뿐이다.
+   	          개발자도구로 지울 수 있으므로 서버(ParamUtil.getRequiredDate)가
+   	          날짜 형식을 다시 검사한다.                                        */
+
+   	/**
+   	 * 숫자에 천단위 쉼표와 "원" 을 붙여 돌려준다
+   	 * 45000  ->  "45,000원"
+   	 */
+   	//11. 금액 표시 형식을 한 곳에서 처리하는 함수다 (여러 곳에서 재사용한다)
+   	function won(n) {
+   		//12. toLocaleString("ko-KR") 이 한국 기준 천단위 쉼표를 넣어 준다
+   		return n.toLocaleString("ko-KR") + "원";
+   	}
+
+   	/**
+   	 * 사용자가 "적용" 으로 고른 옵션들의 1일 요금 합계를 구한다
+   	 */
+   	//13. 옵션 4개를 모두 확인해 선택된 것만 더하는 함수다
+   	function optionPerDay() {
+
+   		//14. 합계를 담을 변수를 0 으로 시작한다
+   		var sum = 0;
+
+   		//15. 옵션 select 를 하나씩 꺼내 검사한다 (sel 에 select 요소가 담긴다)
+   		optionEls.forEach(function (sel) {
+
+   			//16. 값이 "1"(적용)인 것만 요금을 더한다. "0"(미적용)은 건너뛴다
+   			if (sel.value === "1") {
+
+   				//17. HTML 의 data-price 속성에 적힌 단가를 읽어 숫자로 바꿔 더한다
+   				sum += parseInt(sel.getAttribute("data-price"), 10) || 0;
+   			}
+   		});
+
+   		//18. 최종 합계를 호출한 쪽으로 돌려준다
+   		return sum;
+   	}
+
+   	/* 참고. data-price 를 쓰는 이유 (금액이 어긋나지 않게 하는 핵심)
+   	   화면에 표시하는 금액과 계산에 쓰는 금액이 같은 값이어야 한다.
+   	   그래서 서버가 내려준 단가를 HTML 속성에 한 번만 심어 두고
+   	   자바스크립트는 그 값을 그대로 읽어 계산한다.
+
+   	       <select data-price="5000">
+   	           <option value="1">적용 +5,000원</option>   <- 표시용
+   	       </select>
+   	              ^
+   	              +-- 계산용. 출처가 같으므로 표시금액과 계산금액이 절대 어긋나지 않는다
+
+   	   화면과 스크립트에 5000 을 따로 적어 두면 한쪽만 고쳤을 때 조용히 틀어진다.
+   	   sel.value 는 항상 문자열이므로 === "1" 처럼 문자열로 비교한다.
+   	   value 가 "0" 이어도 문자열이라 참이 되므로 if (sel.value) 로 쓰면 안 된다.  */
+
+   	/**
+   	 * 현재 선택 상태로 금액을 다시 계산해 화면 3곳을 갱신한다
+   	 */
+   	//19. 값이 바뀔 때마다 호출되는 핵심 함수다
+   	function refresh() {
+
+   		//20. 고른 대여 일수를 숫자로 가져온다. 값이 없거나 숫자가 아니면 1일로 본다
+   		var days = parseInt(dayEl ? dayEl.value : 1, 10) || 1;
+
+   		//21. 차량 요금 = 1일요금 x 대수 x 일수
+   		var base   = carPrice * carQty * days;
+
+   		//22. 옵션 요금 = 옵션 1일합계 x 대수 x 일수
+   		var option = optionPerDay() * carQty * days;
+
+   		//23. 차량 요금을 계산식과 함께 표시한다 (왜 이 금액인지 알 수 있게 한다)
+   		document.getElementById("sumBase").textContent =
+   			won(carPrice) + " x " + carQty + "대 x " + days + "일 = " + won(base);
+
+   		//24. 옵션 요금을 표시한다. 고른 옵션이 하나도 없으면 안내 문구를 대신 넣는다
+   		document.getElementById("sumOption").textContent =
+   			(optionPerDay() === 0)
+   				? "선택한 옵션 없음"
+   				: won(optionPerDay()) + " x " + carQty + "대 x " + days + "일 = " + won(option);
+
+   		//25. 차량 요금 + 옵션 요금을 더해 최종 예상 금액을 표시한다
+   		document.getElementById("sumTotal").textContent = won(base + option);
+   	}
+
+   	/* 참고. textContent 와 innerHTML
+   	   textContent 는 받은 값을 글자 그대로 넣는다. 태그가 있어도 태그로 해석되지 않는다.
+   	   innerHTML 은 받은 값을 HTML 로 해석하므로 <script> 가 섞이면 실행될 수 있다.
+   	   화면에 글자만 넣을 때는 항상 textContent 를 쓴다. (XSS 를 막는 습관이다)
+
+   	   조건식 ? A : B  는 조건이 참이면 A, 거짓이면 B 를 고르는 문법이다.
+          위 24번은 옵션 합계가 0이면 안내문구, 아니면 계산식을 고른다.               */
+
+   	//26. 대여 기간을 바꾸면 refresh 를 실행하도록 연결한다
+   	if (dayEl) { dayEl.addEventListener("change", refresh); }
+
+   	//27. 옵션 4개도 각각 바뀔 때 refresh 를 실행하도록 연결한다
+   	optionEls.forEach(function (sel) { sel.addEventListener("change", refresh); });
+
+   	//28. 화면에 처음 들어왔을 때도 "-" 대신 실제 금액이 보이도록 한 번 실행해 둔다
+   	refresh();
+
+   })();
+ 
+   /* 참고. addEventListener("change", refresh) 에서 괄호를 붙이지 않는 이유
+          addEventListener("change", refresh)    <- 함수 자체를 넘긴다 (정상)
+          addEventListener("change", refresh())  <- 지금 실행한 결과를 넘긴다 (오류)
+      두 번째처럼 쓰면 등록 시점에 한 번 실행되고, 이후 값을 바꿔도 아무 일도 없다.
+
+      change 이벤트는 select 의 값이 바뀌고 나서 발생한다.
+      그래서 refresh 안에서 dayEl.value 를 읽으면 이미 바뀐 새 값이 들어 있다.        */
+
+   //요약: 앞 화면에서 넘어온 차량요금/수량을 숫자로 확보한 뒤(1~2),
+//         옵션 select 의 data-price 를 읽어 1일 합계를 구하고(13~18),
+//         (차량요금 + 옵션합계) x 수량 x 일수 로 총액을 계산해 화면 3곳에 표시한다(19~25).
+//         change 이벤트에 refresh 를 연결해 값이 바뀔 때마다 즉시 다시 계산한다(26~28).
+//         단, 이 계산은 미리보기이며 실제 결제금액은 서버가 DB 요금으로 다시 계산한다.
+   </script>
+

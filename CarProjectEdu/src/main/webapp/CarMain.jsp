@@ -1,10 +1,15 @@
 <%-- 이 페이지의 글자 인코딩을 UTF-8 로 정한다. 빠뜨리면 한글이 깨진다 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <%-- JSTL 태그들 사용을 위해 불러오는 구문  --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <%-- JSTL 태그를 fmt: 라는 이름으로 쓰겠다는 선언. 이 줄이 없으면 <fmt:...> 가 그냥 글자로 나온다 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
+
+
 <%-- 이 문서가 HTML5 라는 선언. 항상 첫 줄에 온다 --%>
 <!DOCTYPE html>
 <%-- 문서 전체 시작 --%>
@@ -108,12 +113,14 @@
 	  request내장객체 영역으로 부터 중앙화면 공간의 VIEW 주소를 얻어와 변수에 저장
  --%>
  <c:set var="center" value="${requestScope.center}" />
+ 			
  
  <%-- 처음으로 CarMain.jsp메인 화면을 요청 했을때 중앙화면은 Center.jsp로 보이게 설정 --%>
  <c:if test="${center == null}">
  	<%-- 화면에서만 쓸 임시 값 center 을 만든다 --%>
  	<c:set var="center" value="Center.jsp" />
  </c:if>
+ 
 <%-- 반응형 전체 감싸는 영역 (table 레이아웃 → div 레이아웃으로 변환) --%>
 <div class="main-wrapper">
     <%-- 상단 헤더/네비게이션 영역 --%>
@@ -124,7 +131,8 @@
     <%-- 중앙 콘텐츠 영역 (클릭한 메뉴에 따라 변경) --%>
     <div class="main-content">
         <%-- ${center} 화면을 이 자리에 불러와 붙인다 --%>
-        <jsp:include page="${center}"/>
+        <jsp:include page="${center}"/> 	
+        					
     </div>
     <%-- 하단 푸터 영역 --%>
     <div>

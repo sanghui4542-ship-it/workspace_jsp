@@ -166,6 +166,7 @@
 		</div>
 		<%-- car-grid 모양을 입힐 영역. 실제 모양은 CSS 에서 정한다 --%>
 		<div class="car-grid">
+		
 			<%-- varStatus 로 반복 횟수를 세어 6대까지만 출력한다 --%>
 			<c:forEach var="vo" items="${carList}" varStatus="st">
 				<%-- 조건 ${st.index < 6} 이 맞을 때만 아래를 화면에 그린다 --%>

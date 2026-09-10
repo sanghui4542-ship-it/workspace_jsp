@@ -45,6 +45,7 @@ public class ParamUtil {
 
 	/** 값을 trim해서 반환. 값이 없거나 빈 문자열이면 null 반환 */
 	public static String getString(HttpServletRequest request, String name) {
+		
 		// 요청에서 name 이라는 이름의 값을 꺼낸다. 없으면 null 이 나온다.
 		String value = request.getParameter(name);
 		// 아예 안 넘어온 경우
@@ -72,8 +73,10 @@ public class ParamUtil {
 
 	/** 반드시 있어야 하는 값. 없으면 400 예외 */
 	public static String getRequiredString(HttpServletRequest request, String name) {
+		
 		// 먼저 평소대로 꺼내 본다
 		String value = getString(request, name);
+		
 		// 없으면 그냥 넘어가면 안 되는 값이다
 		if (value == null) {
 			// 예외를 던진다. BaseController 가 이걸 받아 400(요청 잘못) 으로 응답한다.
@@ -89,8 +92,10 @@ public class ParamUtil {
 	 * DB 컬럼 길이를 넘는 값이 들어와 SQL 오류가 나는 것을 미리 막는다.
 	 */
 	public static String getRequiredString(HttpServletRequest request, String name, int maxLength) {
+		
 		// 우선 "반드시 있어야 하는 값" 규칙을 먼저 통과시킨다
 		String value = getRequiredString(request, name);
+		
 		// 글자 수가 허용치를 넘었는지 검사. length() 는 글자 수를 돌려준다.
 		if (value.length() > maxLength) {
 			// 넘었으면 DB 에 넣기 전에 여기서 막는다. (넣고 나서 터지면 원인을 찾기 어렵다)
@@ -106,6 +111,7 @@ public class ParamUtil {
 
 	/** 값이 없거나 숫자가 아니면 기본값을 반환 (예외 없음 - 페이지번호처럼 실패해도 되는 값에 사용) */
 	public static int getInt(HttpServletRequest request, String name, int defaultValue) {
+		
 		// 문자열로 먼저 꺼낸다 (파라미터는 언제나 문자열로 도착한다)
 		String value = getString(request, name);
 		// 아예 없으면 기본값으로 (예: 페이지 번호가 없으면 0페이지)
@@ -125,8 +131,11 @@ public class ParamUtil {
 
 	/** 반드시 있어야 하는 정수. 없거나 숫자가 아니면 400 예외 */
 	public static int getRequiredInt(HttpServletRequest request, String name) {
+		
+	
 		// 없으면 여기서 이미 예외가 난다
 		String value = getRequiredString(request, name);
+		
 		// 숫자로 바꾸기를 시도한다
 		try {
 			return Integer.parseInt(value);

@@ -28,68 +28,10 @@ import Vo.CarListVo;   // 값을 담아 나르는 상자(VO) 클래스
 import Vo.CarOrderVO;   // 값을 담아 나르는 상자(VO) 클래스
 import util.ParamUtil;   // 여러 곳에서 함께 쓰는 도우미 클래스
 
-/*
-	MVC 디자인 패턴 개발 방법 중에 C역할을 하는 CarController서블릿 클래스.
 
-	1. Top.jsp 페이지에서  <a href="/CarProject/Car/bb?center=CarReservation.jsp">예약하기</a>링크를 클릭했을때 요청을 받아 처리하는 서블릿 
-   
-    2. CarReservation.jsp 페이지에서 <input type="button" value="전체검색" 
-								        onclick="location.href='<%=contextPath%>/Car/CarList.do'">을 클릭해서
-								        전체 차량 검색 요청을 받아 처리하는 서블릿 
-								        
-	3. CarList.jsp 페이지에서 차량 유형별 검색 하기 위해  소형(Small), 중형(Mid), 대형(Big)중 선택한 유형의 차량 검색 요청을 받아 처리하는 서블릿
-	
-	소형을 선택하고 검색요청 버튼을 클릭하면?
-		/Car/carcategory.do?carcategory=Small
-		 
-	중형을 선택하고 검색요청 버튼을 클릭하면?
-		/Car/carcategory.do?carcategory=Mid
+//            /Car/CarInfo.do?carno=${vo.carno}
 
-	대형을 선택하고 검색요청 버튼을 클릭하면?
-		/Car/carcategory.do?carcategory=Big
-
-	4. CarList.jsp 중앙 화면에서 검색된 차량 하나의 정보를 보기 위해 아래의  a링크를 클릭해서  차량 한대 정보를 검색 요청을 하면 받는 서블릿 
-	
-	<a href="${contextPath}/Car/CarInfo.do?carno=${vo.carno}">
-		<img src="${contextPath}/img/${vo.carimg}" width="220" height="180"/><br>
-		차량명 : ${vo.carname}<br>
-		한대당 렌트 가격 : ${vo.carprice}
-	</a>
-	
-	5. CarInfo.jsp 중앙화면에서 검색된 차량 하나의 정보를 보고~  추가 옵션을 선택하는 화면 요청을 받은 서블릿
-	
-	 <%-- 조회된 차량 정보를 화면에서 보고 대여수량을 선택해 옵션을 추가로 선택하는 화면 요청 --%>
-		<form action="<%=contextPath%>/Car/CarOption.do" method="post">
-			
-			<%--옵션 선택 하는 페이지 요청시 조회된 예약할 차번호, 차이미지명, 대여금액 같이 전달 --%>
-			<input type="hidden" name="carno" value="${requestScope.vo.carno}" >
-			<input type="hidden" name="carimg" value="${requestScope.vo.carimg}" >
-			<input type="hidden" name="carprice" value="${requestScope.vo.carprice}" >
-			
-			<tr>
-				<td align="center" width="200">대여 수량</td>
-				<td align="center" width="200">
-					<select name="carqty">
-						<option value="1">1대</option>
-						<option value="2">2대</option>
-						<option value="3">3대</option>
-						<option value="4">4대</option>
-						<option value="5">5대</option>						
-					</select>
-				</td>
-			</tr>
-			
-	6. CarOption.jsp 페이지 화면에서  추가로 옵션을 선택하고  최종계산 요청을 하면 요청을 받아 처리 하는 서블릿 
-	
-	7. Top.jsp 페이지 상단 메뉴 중... 아래의 <a>의 예약확인 을 클릭했을떄  
-	     예약당시 입력했던 비회원 핸드폰번호, 비밀번호를 입력하여 예약확인을 요청하는 디자인 VIEW 요청을 받아 처리하는 서블릿
-
-			<a href="<%=contextPath%>/Car/cc?center=CarReserveConfirm.jsp">
-				<div style="font-size: 2.5rem; color:white; text-decoration: none;">예약확인</div>
-			</a>
-*/
-
-			 
+//            /Car/CarOption.do
 @WebServlet("/Car/*")
 public class CarController extends BaseController {
 
@@ -100,17 +42,6 @@ public class CarController extends BaseController {
 	//직렬화 버전 번호 (HttpServlet이 Serializable을 구현하므로 경고 방지용으로 선언)
 	private static final long serialVersionUID = 1L;
 
-	/*
-	 [3단계 변경] CarDAO 를 직접 들고 있던 것을 CarService 로 바꿨다.
-
-	   기존 구조만 예외적으로 Service 계층이 없어서
-	   컨트롤러가 DAO를 직접 호출하고, 금액 계산 같은 업무 규칙도 여기에 섞여 있었다.
-
-	       (이전)  CarController ----------------> CarDAO
-	       (지금)  CarController -> CarService -> CarDAO      <- 다른 도메인과 동일
-
-	   (transient : 서블릿 직렬화 대상에서 제외 - init()에서 다시 생성되므로 저장할 필요 없음)
-	*/
 	private transient CarService carService;
 
 	@Override   // 부모(HttpServlet)의 init 을 덮어쓴다는 표시
@@ -128,15 +59,19 @@ public class CarController extends BaseController {
 		response.setCharacterEncoding("UTF-8");   // 응답 글자를 UTF-8 로 내보낸다 (안 하면 한글이 깨진다)
 		PrintWriter out = response.getWriter();   // 응답에 글자를 쓸 수 있는 붓을 얻는다
 		 		
-		//1. 클라이언트가 요청한 전체 URL 중에서 2단계 주소 얻기 
-		String action = request.getPathInfo(); 
+		//1. 클라이언트가 요청한 전체 URL  중에서 2단계 주소 얻기 
+		String action = request.getPathInfo();
+		      
 		// "/Main"<- CarMain.jsp(VIEW) 메인화면 2단계 요청 주소 얻기
-		// "/bb" <- 예약하기 메뉴를 클릭 했을때  전체 검색 또는 카테고리별 검색 VIEW 화면 2단계 요청주소 얻기
 		// "/CarList.do" <- 전체 차량 검색  2단계 요청 주소 얻기 
 		// "/carcategory.do" <- 차량 유형별 선택 후 검색 2단계 요청 주소 얻기
 		// "/CarInfo.do"     <- 차량 한대 정보 검색 2단계 요청 주소 얻기
 		// "/CarOption.do"   <- 차량 렌트 예약을 위해  옵션을 추가로 선택할수 있는 화면 2단계 요청 주소 얻기
-		// "/CarOptionResult.do" <- 차량 렌트 예약을 위해 추가한 옵션금액 + 기본 금액 계산 2단계 요청 주소 얻기 
+		// "/CarOptionResult.do" <- 차량 렌트 예약을 위해 추가한 옵션금액 + 기본 금액 계산 2단계 요청 주소 얻기 	
+		
+		
+		// "/bb" <- 예약하기 메뉴를 클릭 했을때  전체 검색 또는 카테고리별 검색 VIEW 화면 2단계 요청주소 얻기	
+		
 		// "/CarOrder.do" <-  비회원 결제후 예약 요청 2단계 주소 얻기 
 		// "/cc"          <- 예약 확인 하기 위해 예약당시 입력 했던 비회원 핸드폰번호, 비밀번호를 입력하여 예약확인 요청하는 디자인 VIEW 2단계 요청주소얻기
 		// "/delete.do"   <- 예약 취소를 위해 비밀번호를 입력해서 예위취소 요청하는 VIEW 중앙 화면 Delete.jsp보여줘~ 2단계 요청 주소 얻기
@@ -212,11 +147,11 @@ public class CarController extends BaseController {
 			String category = request.getParameter("carcategory");
 			
 			//2.1.1. 클라이언트가 선택한 유형의 차량 조회를 부장(CarService)에게 시킨다
-			List<CarListVo> vector = carService.getCarsByCategory( category );
+			List<CarListVo> list = carService.getCarsByCategory( category );
 			
 			//2.2. View (CarList.jsp) 중앙화면에  검색된 전체 차량 정보를 보여주기 위해 
-			//     request 내장객체에  Vector배열을 바인딩 
-			request.setAttribute("v", vector);
+			//     request 내장객체에  ArrayList배열을 바인딩 
+			request.setAttribute("v", list);
 			
 			//2.2.1 View (CarList.jsp) 중앙화면 주소 또한
 			//     request 내장객체에 바인딩 
@@ -229,13 +164,6 @@ public class CarController extends BaseController {
 		}else if(action.equals("/CarInfo.do")) {//렌트 하기 위한 차량을 보여주기 위해 차량 한대 검색요청을 받았을떄..
 			
 			//2.1. 검색시 사용할 차번호 얻기
-			/*
-			<a href="${contextPath}/Car/CarInfo.do?carno=${vo.carno}">
-				<img src="${contextPath}/img/${vo.carimg}" width="220" height="180"/><br>
-				차량명 : ${vo.carname}<br>
-				한대당 렌트 가격 : ${vo.carprice}
-			</a>
-			*/
 			/*
 			 [변경] Integer.parseInt(request.getParameter(...)) -> ParamUtil.getRequiredInt(...)
 
@@ -261,36 +189,16 @@ public class CarController extends BaseController {
 		
 		}else if(action.equals("/CarOption.do")) {//추가로 옵션을 선택할수 있는 화면 요청을 받았을때
 
-			/*
-			 [6단계 추가] 옵션 요금 단가를 화면으로 내려보낸다.
+			request.setAttribute("priceInsurance", CarService.PRICE_INSURANCE);// 자차 보험 1일 요금 10000 request 에 바인딩 
+			request.setAttribute("priceWifi",      CarService.PRICE_WIFI); // 무선 WIFI 1일 요금 5000 request 에 바인딩 
+			request.setAttribute("priceNavi",      CarService.PRICE_NAVI); // 네비게이션 1일 요금 3000 request 에 바인딩 
+			request.setAttribute("priceBabyseat",  CarService.PRICE_BABYSEAT);// 베이비시트 1일 요금 10000 request 에 바인딩 
 
-			   왜 필요한가 - 화면과 서버의 금액이 서로 달랐다.
-
-			     기존 CarOption.jsp 에 이렇게 적혀 있었다.
-			         <option value="1">적용(1일 1만원)</option>   <- 무선 WiFi (실제 5,000원)
-			         <option value="1">적용(무료)</option>         <- 네비게이션 (실제 3,000원)
-
-			     즉 WiFi 는 요금을 2배로 안내하고,
-			     네비게이션은 "무료"라고 안내하면서 실제로는 3,000원을 청구했다.
-			     화면의 안내문과 실제 결제금액이 다르면 실서비스에서는 분쟁 사유가 된다.
-
-			   원인은 "같은 숫자를 화면과 서버에 각각 적어둔 것"이다.
-			   한쪽만 고치면 조용히 어긋난다.
-
-			   그래서 CarService 의 상수를 유일한 기준으로 삼고,
-			   화면은 그 값을 받아서 표시하도록 바꿨다.
-			   앞으로 요금이 바뀌면 CarService 만 고치면 화면도 함께 바뀐다.
-			*/
-			request.setAttribute("priceInsurance", CarService.PRICE_INSURANCE);
-			request.setAttribute("priceWifi",      CarService.PRICE_WIFI);   // WiFi 요금도 화면이 꺼내 쓸 수 있게 담는다
-			request.setAttribute("priceNavi",      CarService.PRICE_NAVI);   // 네비게이션 요금도 담는다
-			request.setAttribute("priceBabyseat",  CarService.PRICE_BABYSEAT);   // 베이비시트 요금도 담는다
-
-			//2.2.1. View(CarOption.jsp)중앙화면 주소를
-			//       request내장객체 메모리 영역에 바인딩
+			//View(CarOption.jsp) 추가로 옵션을 선택할수 있는 중앙화면 주소를
+			//request 내장객체 메모리 영역에 바인딩
 			request.setAttribute("center", "CarOption.jsp");
 
-			//2.3. 메인화면(CarMain.jsp)를 포워딩하기 위해 경로 저장
+			//메인화면(CarMain.jsp)를 포워딩하기 위해 경로 저장
 			nextPage = "/CarMain.jsp";
 
 			
@@ -340,7 +248,7 @@ public class CarController extends BaseController {
 			//차량 기본 금액 = 1일 요금 x 대여수량 x 대여기간
 			int totalreserve = carService.getBasePrice(priceCar.getCarprice(), calcVo);
 			
-			//2.2.2. 추가한 옵션 금액 계산
+			//추가한 옵션 금액 계산
 			/*
 			 [버그 수정] 옵션 금액 계산
 

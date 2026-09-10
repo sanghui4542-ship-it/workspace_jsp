@@ -156,7 +156,7 @@
 
       
       
-      <Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\src\main\webapp" path="/CarProjectEdu" reloadable="true" source="org.eclipse.jst.jee.server:CarProjectEdu"><Resources><PreResources base="C:\Users\KHBS_D_016\Desktop\workspace_jsp\CarProjectEdu\build\classes" classLoaderOnly="false" className="org.apache.catalina.webresources.DirResourceSet" internalPath="/" webAppMount="/WEB-INF/classes"/></Resources></Context></Host>
+      <Context docBase="C:\Users\KHBS_D_016\Desktop\workspace_jsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/></Host>
     </Engine>
   </Service>
 </Server>

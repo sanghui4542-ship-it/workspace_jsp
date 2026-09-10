@@ -120,7 +120,7 @@ public class CarService {
 			throw new NotFoundException("존재하지 않는 차량입니다. (차량번호 " + carno + ")");   // null 을 그대로 화면에 넘기면 NPE 500 이 난다. 404 로 바꿔 던진다
 		}
 
-		return vo;   // 찾은 차량 정보를 돌려준다
+		return vo;   //조회한  차량 1대 정보를 CarContoller로 돌려준다
 	}
 
 	//===========================================================
