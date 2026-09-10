@@ -40,6 +40,9 @@ import util.ParamUtil;   // 여러 곳에서 함께 쓰는 도우미 클래스
 //          /Car/CarList.do
 
 //            /Car/cc
+
+
+
 @WebServlet("/Car/*")
 public class CarController extends BaseController {
 
@@ -68,10 +71,10 @@ public class CarController extends BaseController {
 		PrintWriter out = response.getWriter();   // 응답에 글자를 쓸 수 있는 붓을 얻는다
 		 		
 		//1. 클라이언트가 요청한 전체 URL  중에서 2단계 주소  얻기 
-		String action = request.getPathInfo();    
-		
+		String action = request.getPathInfo();   
+
+	    // "/bb" <- 예약하기 메뉴를 클릭 했을때  전체 검색 또는 카테고리별 검색 VIEW 화면 2단계 요청주소 얻기		
 		// "/CarReserveConfirm.do" <- 비회원 예약 내역 조회 2단계 요청 주소 얻기 
-		
 		// "/cc"  <- 예약 확인 하기 위해 예약당시 입력 했던 비회원 핸드폰번호, 비밀번호를 입력하여 예약확인 요청하는 디자인 VIEW 2단계 요청주소얻기
 		// "/Main"<- CarMain.jsp(VIEW) 메인화면 2단계 요청 주소 얻기
 		// "/CarList.do" <- 전체 차량 검색  2단계 요청 주소 얻기 
@@ -82,7 +85,6 @@ public class CarController extends BaseController {
 		// "/CarOrder.do" <-  비회원 결제후 예약 요청 2단계 주소 얻기 
 		
 		
-		// "/bb" <- 예약하기 메뉴를 클릭 했을때  전체 검색 또는 카테고리별 검색 VIEW 화면 2단계 요청주소 얻기		
 		// "/delete.do"   <- 예약 취소를 위해 비밀번호를 입력해서 예위취소 요청하는 VIEW 중앙 화면 Delete.jsp보여줘~ 2단계 요청 주소 얻기
 		// "/deletePro.do" <- 예약 취소 요청하는 2단계 요청 주소 얻기 
 											
