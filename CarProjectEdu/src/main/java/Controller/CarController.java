@@ -35,14 +35,19 @@ import util.ParamUtil;   // 여러 곳에서 함께 쓰는 도우미 클래스
 
 //           /Car/CarOptionResult.do
 
-// 			 /Car/CarOrder.do
+// 			  /Car/CarOrder.do
 	
-//          /Car/CarList.do
+//            /Car/CarList.do
 
 //            /Car/cc
 
+//            /Car/bb
 
+//            /Car/carcategory.do?carcategory=Small
 
+//            /Car/update.do
+
+//           /Car/updatePro.do
 @WebServlet("/Car/*")
 public class CarController extends BaseController {
 
@@ -71,20 +76,23 @@ public class CarController extends BaseController {
 		PrintWriter out = response.getWriter();   // 응답에 글자를 쓸 수 있는 붓을 얻는다
 		 		
 		//1. 클라이언트가 요청한 전체 URL  중에서 2단계 주소  얻기 
-		String action = request.getPathInfo();   
-
-	    // "/bb" <- 예약하기 메뉴를 클릭 했을때  전체 검색 또는 카테고리별 검색 VIEW 화면 2단계 요청주소 얻기		
-		// "/CarReserveConfirm.do" <- 비회원 예약 내역 조회 2단계 요청 주소 얻기 
+		String action = request.getPathInfo();     
+			
+		// "/updatePro.do" <- 예약 수정  2단계 요청 주소 얻기 
+		
+		// "/update.do"  <- 예약 수정 화면(중앙화면 CarConfirmUpdate.jsp VIEW) 2단계 요청 주소 얻기 		
+		// "/carcategory.do" <- 차량 유형별 선택 후 검색 2단계 요청 주소 얻기
+		// "/bb" <- 예약하기 메뉴를 클릭 했을때  전체 검색 또는 카테고리별 검색 VIEW 화면 2단계 요청주소 얻기		
+		// "/CarReserveConfirm.do" <- 비회원 예약 내역 조회 2단계 요청 주소 얻기 		
 		// "/cc"  <- 예약 확인 하기 위해 예약당시 입력 했던 비회원 핸드폰번호, 비밀번호를 입력하여 예약확인 요청하는 디자인 VIEW 2단계 요청주소얻기
 		// "/Main"<- CarMain.jsp(VIEW) 메인화면 2단계 요청 주소 얻기
-		// "/CarList.do" <- 전체 차량 검색  2단계 요청 주소 얻기 
-		// "/carcategory.do" <- 차량 유형별 선택 후 검색 2단계 요청 주소 얻기
+		// "/CarList.do" <- 전체 차량 검색  2단계 요청 주소 얻기 		
 		// "/CarInfo.do"     <- 차량 한대 정보 검색 2단계 요청 주소 얻기
 		// "/CarOption.do"   <- 차량 렌트 예약을 위해  옵션을 추가로 선택할수 있는 화면 2단계 요청 주소 얻기
 		// "/CarOptionResult.do" <- 차량 렌트 예약을 위해 추가한 옵션금액 + 기본 금액 계산 2단계 요청 주소 얻기 
 		// "/CarOrder.do" <-  비회원 결제후 예약 요청 2단계 주소 얻기 
 		
-		
+	
 		// "/delete.do"   <- 예약 취소를 위해 비밀번호를 입력해서 예위취소 요청하는 VIEW 중앙 화면 Delete.jsp보여줘~ 2단계 요청 주소 얻기
 		// "/deletePro.do" <- 예약 취소 요청하는 2단계 요청 주소 얻기 
 											
@@ -111,14 +119,14 @@ public class CarController extends BaseController {
 			nextPage = "/CarMain.jsp";   // 틀이 되는 CarMain.jsp 로 넘긴다
 
 		}else if(action.equals("/bb")) {//<- 예약하기 메뉴 링크 클릭시 보여질 중앙화면
+			
 			//   Car/bb?center=CarReservation.jsp
 			
 			//2.1. 중앙화면 요청한 파라미터 얻기
 			String center = request.getParameter("center");
+			System.out.println("center = " + center);
 			
 			//2.2. request 내장객체 메모리에 "CarReservation.jsp"중앙화면경로 바인딩
-			//[보안] CenterView 허용 목록에 등록된 화면만 통과시킨다.
-			//       (기존에는 ?center=WEB-INF/web.xml 로 서버 파일 내용이 화면에 노출됐다)
 			request.setAttribute("center", center);
 			
 			//2.3. 메인 화면 CarMain.jsp를 포워딩 하기 위해 경로 저장
@@ -144,22 +152,25 @@ public class CarController extends BaseController {
 			
 		}else if(action.equals("/carcategory.do")) {//소형, 중형, 대형 중 선택한 유형의 차량 검색 요청이 들어 오면
 			
-			//2.1. 클라이언트가 요청한 소형, 중형, 대형중  선택한 하나의 <option>의 value속성값 얻기 
+			//2.1. 클라이언트가 요청한 소형, 중형, 대형중  클릭한 <a> 의 값 얻기  
 			/*
-			소형을 선택하고 검색요청 버튼을 클릭하면?
+			소형을 <a>클릭하고 검색요청 버튼을 클릭하면?
 					/Car/carcategory.do?carcategory=Small
 					 
-				중형을 선택하고 검색요청 버튼을 클릭하면?
+			중형을 <a>클릭하고 검색요청 버튼을 클릭하면?
 					/Car/carcategory.do?carcategory=Mid
 
-				대형을 선택하고 검색요청 버튼을 클릭하면?
+			대형을 <a>클릭하고 검색요청 버튼을 클릭하면?
 					/Car/carcategory.do?carcategory=Big
 			*/
 			String category = request.getParameter("carcategory");
+			//      Small  
 			
-			//2.1.1. 클라이언트가 선택한 유형의 차량 조회를 부장(CarService)에게 시킨다
+			//2.1.1. 클라이언트가 선택한 유형의 차량 조회를 부장(CarService)에게 시킨다			
 			List<CarListVo> list = carService.getCarsByCategory( category );
 			
+			//2.1.2. ArrayList<CarListVo객체들>(); 배열(Model을) 반환 받는다.
+					
 			//2.2. View (CarList.jsp) 중앙화면에  검색된 전체 차량 정보를 보여주기 위해 
 			//     request 내장객체에  ArrayList배열을 바인딩 
 			request.setAttribute("v", list);
@@ -170,8 +181,7 @@ public class CarController extends BaseController {
 			
 			//2.3. 메인 화면 CarMain.jsp를 포워딩 하기 위해 경로 저장
 			nextPage = "/CarMain.jsp";
-			
-			
+					
 		}else if(action.equals("/CarInfo.do")) {//렌트 하기 위한 차량을 보여주기 위해 차량 한대 검색요청을 받았을떄..
 			
 			//2.1. 검색시 사용할 차번호 얻기
@@ -577,13 +587,6 @@ public class CarController extends BaseController {
 			/*
 			 CarReserveResult.jsp 의 "예약 수정" 버튼으로 요청이 들어온다.
 
-			   (기존 코드 - GET 링크)
-			       <a href="${contextPath}/Car/update.do"
-			               + "?orderid=${carConfirmVo.orderid}"
-			               + "&carimg=${carConfirmVo.carimg}"
-			               + "&memberpass=${requestScope.memberpass}"     <- 비밀번호가 주소창에!
-			               + "&memberphone=${requestScope.memberphone}">예약수정</a>
-
 			   (지금 - POST 폼)
 			       <form action="${contextPath}/Car/update.do" method="post">
 			           <input type="hidden" name="orderid" ...>
@@ -599,9 +602,9 @@ public class CarController extends BaseController {
 			String carimg = request.getParameter("carimg"); //예약한 차량 이미지명
 
 			//2.2. 예약 아이디를 이용해 예약한 정보 한쌍을 DB에서 조회 하기 위해 
-			//     CarDAO객체의 getOneOrder메소드를 호출할때.. 매개변수로 orderid예약 아이디 전달해서 조회해 옵니다.
-			//없는 예약번호면 CarService가 404 예외를 던진다 (기존에는 null -> NPE 500)
-			CarConfirmVo carConfirmVo = carService.findOrder(orderid);
+			//     CarService객체의 findOrder메소드를 호출할때.. 매개변수로 orderid예약 아이디 전달해서 조회해 옵니다.
+			//     만약 없는 예약번호면 CarService가 404 예외를 던진다 (기존에는 null -> NPE 500)
+			CarConfirmVo carConfirmVo = carService.findOrder(orderid);	
 						 carConfirmVo.setCarimg(carimg); //추가로  예약한 차량 이미지명 저장 
 				
 			//2.3. 예약 아이디를 이요해 조회된 예약 정보를 보여줄 중앙화면 VIEW("CarConfirmUpdate.jsp")주소 request에 바인딩
@@ -614,22 +617,13 @@ public class CarController extends BaseController {
 			nextPage = "/CarMain.jsp";	
 			
 			
-		}else if(action.equals("/updatePro.do")) { //입력한 정보를 DB의 테이블에 수정(UPDATE)해 주세요 요청을 받았을때
-			
-			System.out.println( request.getParameter("carins")  + "-------------------");   // 보험 값이 무엇으로 들어왔는지 콘솔에 찍는다 (수업 중 확인용)
-			
-			//2.1. 수정을 위해 입력한 정보들은  request내장객체 메모리 영역에 저장되어 있으므로
+		}else if(action.equals("/updatePro.do")) { //수정을 위해 입력한 정보를 DB의 테이블에 수정(UPDATE)해 주세요 요청을 받았을때
+		
+			//2.1. 수정을 위해 입력한 정보들은  request 내장객체 메모리 영역에 저장되어 있으므로
 			//     DB의 non_carorder테이블의 컬럼 정보를 update수정하기 위해 
-			//     CarDAO객체의 carOrderUpdate메소드를 호출 해 수정 명령 합니다.
+			//     CarService의 메소드로 명령하고  CarDAO객체의 carOrderUpdate메소드를 호출 해 수정 명령 합니다.
 			/*
-			 [계층 분리] DAO에 request 를 그대로 넘기던 것을 고쳤다.
-
-			   기존 : cardao.carOrderUpdate(request);
-			          -> DAO 안에서 request.getParameter(...) 와 Integer.parseInt(...) 를 했다.
-			             DAO가 HTTP를 알게 되어 재사용이 불가능하고,
-			             잘못된 입력이 SQL 오류로 나타났다.
-
-			   지금 : 컨트롤러가 값을 꺼내 검증하고 VO로 만들어 Service에 넘긴다.
+			   지금 : 컨트롤러가 값을 꺼내 검증하고 VO로 만들어 CarService에 넘긴다.
 			          ParamUtil 이 형식과 범위(수량 1~5, 기간 1~30)를 서버에서 강제한다.
 			          화면의 select 태그만 믿으면 주소창으로 얼마든지 바꿔 보낼 수 있다.
 			*/
@@ -644,7 +638,7 @@ public class CarController extends BaseController {
 			updateVo.setCarbabyseat(ParamUtil.getFlag(request, "carbabyseat"));   // 베이비시트 선택 여부
 			updateVo.setMemberpass(ParamUtil.getRequiredString(request, "memberpass"));   // 본인 확인용 비밀번호. 없으면 여기서 400 예외가 난다
 
-			int result = carService.updateOrder(updateVo);   // 검증과 재계산까지 Service 가 하고 바뀐 행 수를 돌려준다
+			int result = carService.updateOrder(updateVo);   // 검증과 재계산까지 CarService 가 하고 바뀐 행 수를 돌려준다
 			
 			String memberphone = request.getParameter("memberphone");//예약시 입력했던 비회원 휴대폰번호
 			
@@ -653,27 +647,7 @@ public class CarController extends BaseController {
 			//     -> "예약정보 수정하기 위해 요청하는 디자인 화면 "-> /Car/update.do 포워딩 해서 보여지게 하기 
 			//	   -> return; <-을 작성해서  doHandle메소드 종료 
 			if(result == 1) {
-				/*
-				 ============================================================================
-				   [수정 2가지]
 
-				   (기존 코드)
-				       location.href='/Car/update.do?orderid=3&carimg=k5.jpg&memberphone=010-...'
-
-				   문제1. 연락처가 주소(URL)에 실려 나갔다.
-				          주소창에 담긴 값은 브라우저 기록과 서버 접속 로그에 남는다.
-				          개인정보를 이런 곳에 남기지 않는다.
-
-				   문제2. 수정에 성공했는데 "수정 화면으로 다시" 보냈다.
-				          사용자는 방금 저장한 화면을 또 보게 되어
-				          "저장이 된 것인지" 확신할 수 없었다.
-
-				   (지금)
-				     수정된 결과가 반영된 예약 목록으로 보내고, 완료 메시지를 함께 보여준다.
-				     주소로 다시 요청하지 않고 서버 안에서 조회 후 포워딩하므로
-				     비밀번호와 연락처가 주소창에 나타나지 않는다.
-				 ============================================================================
-				*/
 				String updatedPass = updateVo.getMemberpass();
 
 				List<CarConfirmVo> updatedOrders = carService.findOrders(memberphone, updatedPass);   // 수정된 결과가 반영된 예약 목록을 다시 조회한다
@@ -691,11 +665,11 @@ public class CarController extends BaseController {
 			//	   -> history객체의 back(); 메소드를 호출해서  이전 페이지로 되돌아가 보여지게 하기 
 			//     -> return; <-을 작성해서 doHandle메소드 종료 	
 			}else {
-				out.print("<script>");   // 브라우저가 실행할 스크립트를 만들어 보낸다
-				out.print(" alert('예약 정보 수정 실패');");   // 실패를 알린다
-				out.print(" history.back();");   // 이전 화면으로 되돌린다
-				out.print("</script>");   // 스크립트를 닫는다
-				return;   // 여기서 끝낸다
+				out.print("<script>");  
+				out.print(" alert('예약 정보 수정 실패');");   // 수정 실패를 알린다
+				out.print(" history.back();");   // 이전 화면 CarConfirmUpdate.jsp 으로 되돌린다
+				out.print("</script>");  
+				return;   // 여기서 끝낸다  doHandle 메소드 종료 
 			}
 			
 		}else if(action.equals("/delete.do")) {//예약 취소(삭제)를 위해 비밀번호를 입력하여 취소 요청하는 중앙 VIEW화면 요청을 받았을떄

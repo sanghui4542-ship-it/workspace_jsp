@@ -135,7 +135,7 @@ public class CarDAO {
 	//===========================================================
 	// 2. 차량 유형별(소형/중형/대형) 목록 조회
 	//    category : "Small" / "Mid" / "Big"
-	//===========================================================
+	//===========================================================		"Mid"
 	public List<CarListVo> selectCarsByCategory(Connection con, String category) throws SQLException {
 
 		// 결과를 담을 빈 목록
@@ -161,7 +161,7 @@ public class CarDAO {
 			}
 		}
 
-		// 해당 등급의 차량 목록을 돌려준다 (없으면 빈 목록)
+		// 해당 등급의 조회한 차량 목록(ArrayList<CarListVO객체>(); 배열) 을 CarService 부장에게 돌려준다 (없으면 빈 목록)
 		return list;
 	}
 
@@ -310,7 +310,7 @@ public class CarDAO {
 			try (ResultSet rs = pstmt.executeQuery()) {
 				// 결과가 있으면(=예약이 있으면)
 				if (rs.next()) {
-					// VO 로 바꿔 돌려준다
+					// CarService로  CarConfirmVo 객체를  돌려준다
 					return mapOrder(rs, true);
 				}
 			}

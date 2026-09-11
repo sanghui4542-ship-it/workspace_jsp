@@ -105,7 +105,7 @@
 }
 </style>
 </head>
-<%-- 실제로 보이는 내용 구역 --%>
+<%-- 실제로 보이는  CarMain.jsp  메인화면 내용 구역 --%>
 <body>
 <%--
 	모델 2 개발방식
@@ -114,7 +114,8 @@
  --%>						
  <c:set var="center" value="${requestScope.center}" />
  
- 
+
+
  <%-- 처음으로 CarMain.jsp메인 화면을 요청 했을때 중앙화면은 Center.jsp로 보이게 설정 --%>
  <c:if test="${center == null}">
  	<%-- 화면에서만 쓸 임시 값 center 을 만든다 --%>
@@ -130,8 +131,15 @@
     </div>
     <%-- 중앙 콘텐츠 영역 (클릭한 메뉴에 따라 변경) --%>
     <div class="main-content">
+    
         <%-- ${center} 화면을 이 자리에 불러와 붙인다 --%>
         <jsp:include page="${center}"/> 	
+        
+        	<%--2.3. 예약 아이디를 이용해 조회된 예약 정보를 보여줄 중앙화면 VIEW("CarConfirmUpdate.jsp")주소 request에 바인딩
+ 			
+			         request.setAttribute("center", "CarConfirmUpdate.jsp"); --%>
+			
+
         					
     </div>
     <%-- 하단 푸터 영역 --%>

@@ -458,18 +458,12 @@ header.site-header {
 <!-- ==========================================
      상단 헤더 영역: 로고 + 로그인/회원가입 버튼
      ========================================== -->
-<header class="site-header clearfix">
-    <%-- 메인 로고 영역: 이미지(RENT.jpg) → CSS 텍스트 로고로 대체 --%>
-    <div id="logo">
-        <%-- 다른 화면으로 넘어가는 링크 --%>
-        <a href="<%=contextPath %>/Car/Main">
-            <%-- CSS 아이콘 박스 (이미지 대체: 수정 방법→ .logo-icon 배경색 변경) --%>
-            <div class="logo-icon">SM</div>
-            <%-- 텍스트 로고 (수정 방법→ .logo-text 안의 글자 변경) --%>
-            <div class="logo-text-wrap">
-                <%-- 글자 묶음 — CSS 로 모양을 입히는 용도 --%>
+<header class="site-header clearfix"> 
+    <div id="logo">      
+        <a href="<%=contextPath %>/Car/Main">    
+            <div class="logo-icon">SM</div>          
+            <div class="logo-text-wrap">         
                 <span class="logo-text">SM렌탈</span>
-                <%-- 글자 묶음 — CSS 로 모양을 입히는 용도 --%>
                 <span class="logo-sub">Car Rental Service</span>
             </div>
         </a>
@@ -489,8 +483,9 @@ header.site-header {
            닉네임(loginName)이 있으면 그것을, 없으면 아이디를 보여준다.
         */
         String loginName = (String)session.getAttribute("loginName");
-        // displayName — 조건에 따라 둘 중 하나를 담는다
+
         String displayName = (loginName != null && !loginName.trim().isEmpty()) ? loginName : id;
+       
         //Session에 값이 저장되어 있지 않으면? (비로그인 상태)
         if(id == null){
     %>
@@ -508,19 +503,19 @@ header.site-header {
                     <%-- 화면에 그대로 보이는 글자: "회원가입" --%>
                     회원가입
                 </button>
-                <%-- 글자 묶음 — CSS 로 모양을 입히는 용도 --%>
+              
                 <span class="top-divider"></span>
 
                 <span class="top-divider"></span>
                 <!-- 인라인 검색 폼 -->
                 <form class="top-search-form" action="<%=contextPath%>/Car/NaverSearchAPI.do">
-                    <%-- 입력칸 --%>
+                   
                     <input class="top-search-input" type="search"
                            id="keyword" name="keyword"
                            placeholder="차량 검색" aria-label="Search">
+                           
                     <%-- 화면에는 안 보이지만 서버로 함께 보낼 startNum 값 --%>
                     <input type="hidden" id="startNum" name="startNum" value="1">
-                    <%-- 누르면 동작하는 버튼 --%>
                     <button class="top-search-btn" type="submit">&#128269;</button>
                 </form>
             </div>
@@ -536,18 +531,15 @@ header.site-header {
                             "믿을 수 있는 값"이 아니다. 모든 화면 상단에 출력되는
                             자리라서 여기가 뚫리면 사이트 전체가 뚫린다. -->
                 <span class="login-user-id">&#128100; <%=util.HtmlUtil.escape(displayName)%></span>
-                <%-- 글자 묶음 — CSS 로 모양을 입히는 용도 --%>
                 <span class="top-divider"></span>            
                 <!-- 정보수정 버튼 -->
                 <button type="button" class="top-btn top-btn-primary"
                         onclick="location.href='<%=contextPath%>/member/memberUpdate.me'">
-                    <%-- 화면에 그대로 보이는 글자: "정보수정" --%>
                     정보수정
                 </button>
                 <!-- 로그아웃 버튼 -->
                 <button type="button" class="top-btn top-btn-outline"
                         onclick="location.href='<%=contextPath%>/member/logout.me'">
-                    <%-- 화면에 그대로 보이는 글자: "로그아웃" --%>
                     로그아웃
                 </button>
 
@@ -558,9 +550,10 @@ header.site-header {
                     <input class="top-search-input" type="search"
                            id="keyword" name="keyword"
                            placeholder="차량 검색" aria-label="Search">
+                           
                     <%-- 화면에는 안 보이지만 서버로 함께 보낼 startNum 값 --%>
                     <input type="hidden" id="startNum" name="startNum" value="1">
-                    <%-- 누르면 동작하는 버튼 --%>
+           
                     <button class="top-search-btn" type="submit">&#128269;</button>
                 </form>
             </div>
@@ -582,22 +575,18 @@ header.site-header {
             aria-controls="mainNavMenu"
             aria-expanded="false"
             aria-label="메뉴 열기/닫기">
-        <%-- 글자 묶음 — CSS 로 모양을 입히는 용도 --%>
         <span class="navbar-toggler-icon"></span>
     </button>
     <!-- 메뉴 항목들 (모바일에서는 접힘) -->
     <div class="collapse navbar-collapse" id="mainNavMenu">
         <%-- 점 목록 --%>
         <ul class="navbar-nav w-100">
-            <!-- 예약하기 메뉴 -->
+        
+           <%-- 예약하기 메뉴 : 예약하기 클릭하면  CarController 서블릿으로  예약을 할수 있는 VIEW(CarReservation.jsp) 중앙화면 요청 --%>
             <li class="nav-item flex-fill text-center">
-            
-                <%-- 예약하기 클릭하면 CarController 서블릿으로 예약을 할 수 있는 VIEW(CarReservation.jsp) 중앙화면 요청 --%>
                 <a class="nav-link" href="<%=contextPath %>/Car/bb?center=CarReservation.jsp">
-                    <%-- 화면에 그대로 보이는 글자: "예약하기" --%>
                     예약하기
                 </a>
-                <%--예약하기 --%>
             </li>
             <!-- 예약확인 메뉴 -->
             <li class="nav-item flex-fill text-center">           

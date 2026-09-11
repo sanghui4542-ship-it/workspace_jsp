@@ -99,14 +99,17 @@ public class CarService {
 
 	/** 전체 차량 목록 */
 	public List<CarListVo> getAllCars() {
-		
 		return DBCPUtil.query(con -> cardao.selectAllCars(con));   // query = 조회 전용. 연결을 빌려 SQL 을 실행하고 자동으로 반납한다
 	}
 
-	/** 유형별(Small/Mid/Big) 차량 목록 */
+	/** 유형별(Small/Mid/Big) 차량 목록 */					
 	public List<CarListVo> getCarsByCategory(String category) {
+				
+		return DBCPUtil.query(con -> cardao.selectCarsByCategory(con, category));   
 		
-		return DBCPUtil.query(con -> cardao.selectCarsByCategory(con, category));   // 등급(Small/Mid/Big)을 그대로 DAO 에 넘긴다
+		//1.유형(Small/Mid/Big)을 그대로 DAO 에 넘겨서 유형별 차령정보 조회를 시킨다.
+		
+		//2.조회한 유형별 차량 정보(ArrayList<CarListVo객체>(); 배열)를  CarController 사장에게 반환(보고)
 	}
 
 	/**
@@ -282,7 +285,7 @@ public class CarService {
 		         화면에 실어보내면 HTML 소스에 남아 노출 경로가 된다. */
 		vo.setMemberpass(null);
 
-		return vo;   // 비밀번호를 지운 예약 정보를 화면에 돌려준다
+		return vo; // 비밀번호를 지운 예약 정보(CarConfirmVo객체)를 CarContrller로 반환해서 VIEW(ConConfirmUpdate.jsp)화면에 돌려준다
 	}
 
 	//===========================================================
@@ -302,7 +305,7 @@ public class CarService {
 			*/
 			if (!matchesOrderPassword(con, vo.getOrderid(), vo.getMemberpass())) {
 				System.out.println("[CarService] 예약 수정 거부 - 비밀번호 불일치. 예약번호=" + vo.getOrderid());
-				return Integer.valueOf(0);   // 0 을 돌려주면 컨트롤러가 "비밀번호가 틀렸다" 로 안내한다
+				return Integer.valueOf(0);   //  CarController로 0 을 돌려주면 컨트롤러가 "비밀번호가 틀렸다" 로 안내한다
 			}
 
 			//2) 예약된 차량의 요금을 조회해 금액을 다시 계산한다

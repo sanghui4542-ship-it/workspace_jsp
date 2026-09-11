@@ -10,7 +10,7 @@
    CarReservation.jsp  -  예약하기 진입 화면
  ================================================================================
 --%>
-<div class="container">
+<div class="container">	
 	<div class="section-head">
 		<span class="section-eyebrow">RESERVATION</span>
 		<h2 class="section-heading">예약하기</h2>
@@ -18,24 +18,24 @@
 	</div>
 	<div class="pick-grid mb-8">
 	
-		<%-- 소형차 유형만 CarController로 carlist 테이블에서 조회 요청 --%>
-		<a class="pick-card" href="<%=contextPath%>/Car/carcategory.do?carcategory=Small">
+		<%-- 소형차 유형만 CarController로  carlist 테이블에서 조회 요청 --%>
+		<a class="pick-card" href="<%=contextPath%>/Car/carcategory.do?carcategory=Small">	
 			<span class="pick-icon">&#128663;</span>
-			<div class="pick-name">소형 · 준중형</div>
-			<div class="pick-meta">4~5인 · 시내 주행 / 출퇴근</div>
+			<div class="pick-name">소형 · 준중형</div>			
+			<div class="pick-meta">4~5인 · 시내 주행 / 출퇴근</div>	
 			<div class="pick-price">1일 30,000원부터</div>
-		</a>
+		</a>		
 		
-		<%-- 중형차 유형만 CarController로 carlist 테이블에서 조회 요청 --%>
-		<a class="pick-card" href="<%=contextPath%>/Car/carcategory.do?carcategory=Mid">
-			<span class="pick-icon">&#128665;</span>
+		<%-- 중형차 유형만 CarController로  carlist 테이블에서 조회 요청 --%>
+		<a class="pick-card" href="<%=contextPath%>/Car/carcategory.do?carcategory=Mid">		
+			<span class="pick-icon">&#128665;</span>	
 			<div class="pick-name">중형 · SUV</div>
 			<div class="pick-meta">5~7인 · 가족 여행 / 출장</div>
 			<div class="pick-price">1일 65,000원부터</div>
 		</a>
 		
-		<%-- 대형차 유형만 CarController로 carlist 테이블에서 조회 요청 --%>
-		<a class="pick-card" href="<%=contextPath%>/Car/carcategory.do?carcategory=Big">
+		<%-- 대형차 유형만 CarController로  carlist 테이블에서 조회 요청 --%>
+		<a class="pick-card" href="<%=contextPath%>/Car/carcategory.do?carcategory=Big">	
 			<span class="pick-icon">&#128656;</span>
 			<div class="pick-name">대형 · 승합</div>
 			<div class="pick-meta">7~12인 · 단체 이동 / 의전</div>
@@ -43,11 +43,12 @@
 		</a>
 	</div>
 	<div class="text-center">
-		<%-- 전체차량 유형 모두 CarController로 carlist 테이블에서 조회 요청 --%>
+		<%-- 전체차량 유형 모두  CarController로  carlist 테이블에서 조회 요청 --%>
 		<a class="btn btn-primary btn-lg" href="<%=contextPath%>/Car/CarList.do">
 			전체 차량 보기
 		</a>
 	</div>
+	<%-- 이용 절차를 다시 보여줘 "예약이 복잡하지 않다"를 알린다 --%>
 	<div class="section-soft mt-12">
 		<div class="section-head">
 			<h3 class="section-heading" style="font-size:var(--fs-xl);">예약은 4단계면 끝납니다</h3>
