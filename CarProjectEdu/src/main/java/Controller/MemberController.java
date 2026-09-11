@@ -50,7 +50,10 @@ MVC 디자인 패턴 개발 방식  외우기
 //...사장 
 
 //MVC 디자인 패턴 개발 방법 중에서   C의 역할 을 하는 회원관련 처리  서블릿 
-@WebServlet("/member/*")  
+
+//1.           /member/join.me?center=members/join.jsp    회원가입 요청 VIEW 보여줘
+//2.           /member/joinPro.me   입력한 회원 정보를 DB의 member 테이블에 insert 해줘~ 요청!(회원 가입 요청!)
+@WebServlet("/member/*")   
 public class MemberController extends BaseController {
 
 	//직렬화 버전 번호 (HttpServlet이 Serializable을 구현하므로 경고 방지용으로 선언)
@@ -102,7 +105,7 @@ public class MemberController extends BaseController {
 			          요청 전체 URL -> /member/logout.me  중에서 2단계 요청한 주소 "/logout.me" 얻기 
 			          결론 : 2단계 요청한 주소 -> "/logout.me" 얻기             
 		*/
-		String action = request.getPathInfo();
+		String action = request.getPathInfo();   
 		System.out.println("클라이언트가 요청한 2단계 요청 주소  : " + action);   // 어떤 주소가 들어왔는지 이클립스 콘솔에 찍는다. 화면이 안 뜰 때 여기부터 확인한다
 
 		/*
@@ -114,39 +117,24 @@ public class MemberController extends BaseController {
 		*/
 		if(action == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-			return;   // 여기서 메소드를 끝낸다. 아래 코드를 실행하면 안 되기 때문이다
+			return;   // 여기서 doHandle 메소드를 끝낸다. 아래 코드를 실행하면 안 되기 때문이다
 		}
-
+			   
 		switch(action) {//클라이언트가 요청한 2단계 요청주소가?
 			
 			case "/join.me": //회원가입 작성 후 가입요청 하는 중앙 디자인 VIEW요청 2단계 요청 주소와 같다면?
 				
-				//부장(MemberService)에게 시키기 : 회원가입 작성 후 가입 요청하는 중앙 디자인 VIEW 주소 얻기
+				//1. 부장(MemberService)에게 시키기 : 회원가입 작성 후 가입 요청하는 중앙 디자인 VIEW 주소 얻기
 				center = memberService.serviceJoinName(request);
-				//"members/join.jsp" 가  center변수에 저장될 것임
-
-				/*
-				 [보안 추가] "Center.jsp" 를 통과시킨다.
-
-				   center 값은 URL 파라미터에서 온다.
-				       /member/join.me?center=members/join.jsp
-
-				   그런데 CarMain.jsp 는 이 값을 <jsp:include page="${center}"/> 로 그대로 포함한다.
-				   그래서 아래처럼 요청하면 서버 내부 파일이 화면에 그대로 출력됐다.
-
-				       /member/join.me?center=WEB-INF/web.xml     <- API 키 노출
-				       /member/join.me?center=WEB-INF/app.properties
-
-				   CenterView 는 미리 등록된 화면 목록에 있는 값만 통과시키고,
-				   그 외에는 기본 화면(Center.jsp)으로 되돌린다.
-				*/
+			  //center = "members/join.jsp";	
+			
+				//2. 회원가입 요청 하는 중앙 VIEW 주소 경로 -> "members/join.jsp" 를 request 에 바인딩 
 				request.setAttribute("center", center);
 				
-				//실제 포워딩할 메인 화면 주소를 저장
+				//3. 실제 포워딩할 메인 화면 주소를 저장
 				nextPage = "/CarMain.jsp";
-				
-				//switch종료 
-				break;	
+						
+				break;	//switch종료 
 				
 			case "/joinIdCheck.me": //가입시 입력한 아이디가 DB의 member테이블에 저장되어 있는지 아이디 유무 체크 2단계 요청주소와 같다면?
 				
@@ -172,25 +160,19 @@ public class MemberController extends BaseController {
 			case "/joinPro.me": //"회원가입 2단계 요청 주소와 같다면?"
 				
 				//부장(MmemberService)에게 시키기 : 가입을 위해 입력한 정보들이 저장된 request객체를 전달해서 새회원 추가 작업
-				/*
-				 [3단계 변경] 가입 성공 여부를 확인한다.
-
-				   기존에는 반환값이 없어(void) 가입이 실패해도 화면은 그대로 메인으로 넘어갔다.
-				   아이디 중복 확인을 통과한 직후 다른 사람이 같은 아이디로 먼저 가입하면
-				   INSERT가 실패하는데, 사용자는 가입된 줄 알고 로그인을 시도하게 된다.
-				*/
+				
 				boolean joined = memberService.serviceInsertMember(request);
 
 				if(!joined) {   // 가입에 실패했으면
 					out.println("<script>");   // 브라우저가 실행할 스크립트를 만들어 보낸다
 					out.println(" alert('회원가입에 실패했습니다. 아이디를 다시 확인해주세요.');");   // 실패를 알린다
-					out.println(" history.back();");   // 이전 화면으로 되돌린다. 입력하던 값이 살아 있어 다시 치지 않아도 된다
+					out.println(" history.back();");   // 이전 join.jsp 화면으로 되돌린다. 입력하던 값이 살아 있어 다시 치지 않아도 된다
 					out.println("</script>");   // 스크립트를 닫는다
-					return;   // 여기서 끝낸다 (아래 메인 화면 이동을 하면 안 된다)
+					return;   //doHandle 메소드 종료하면서  디스패처 방식의 포워딩  안함 
 				}
 
 				//새회원 추가에 성공하면 포워딩 해서 보려질 메인페이지 주소 저장
-				nextPage = "/CarMain.jsp";
+				nextPage = "/Car/Main";  //메인홈페이지 화면 CarMain.jsp를  CarContrller로 재요청 하기 위해 요청URL저장 
 
 				break;//switch문 종료
 				
@@ -429,14 +411,16 @@ public class MemberController extends BaseController {
 		*/
 		if(nextPage == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-			return;   // 여기서 끝낸다
+			return;   //doHandle 메소드 종료 해서 아래  디스패처 방식 포워딩 막는다.
 		}
 
-		//디스패처 방식으로 /CarMain.jsp 포워딩(재요청)
+		//디스패처 방식으로  /CarMain.jsp 포워딩(재요청)
 		request.getRequestDispatcher(nextPage).forward(request, response);
-		
-		
-	}
+									
+											
+	} //========================================================================> doHandle 메소드 }
+	
+	
 	
 	//===========================================================
 	// 요청 진입점 : BaseController 가 GET/POST 를 한곳으로 모아준다

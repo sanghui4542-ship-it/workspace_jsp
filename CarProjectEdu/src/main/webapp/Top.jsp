@@ -1,21 +1,7 @@
  <%-- 이 페이지의 글자 인코딩을 UTF-8 로 정한다. 빠뜨리면 한글이 깨진다 --%>
  <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%--
- [5단계 변경] 여기 있던 CSS <link> 를 제거했다.
-   (제거된 코드)
-     cdn.jsdelivr.net 의 bootstrap 4.6.2 css 를 link 태그로 불러오던 한 줄
-   제거한 이유 2가지
-     1) 외부 서버(CDN)에 의존했다
-        사내망이나 인터넷이 없는 강의실에서는 이 파일을 못 받아와
-        화면 전체 레이아웃이 깨졌다.
-        프로젝트 안에 이미 같은 파일(css/bootstrap.min.css)이 있었는데도 쓰지 않고 있었다.
-     2) 이 파일은 이제 "조각(fragment)"이다
-        Top.jsp 는 CarMain.jsp 안에 include 되므로, 여기에 <link> 를 쓰면
-        <body> 안에 스타일시트가 들어간다.
-        스타일이 언제 적용되는지 예측할 수 없고, 화면이 한 번 깜빡이는 원인이 된다.
-   CSS 는 이제 문서 주인인 CarMain.jsp 의 <head> 에서 한 번만 불러온다.
---%>
+
 <style>
 /* =============================================
    [전체 폰트 기본 크기] - 반응형 폰트 설정
@@ -500,7 +486,6 @@ header.site-header {
                 <!-- 회원가입 버튼 -->
                 <button type="button" class="top-btn top-btn-primary"
                         onclick="location.href='<%=contextPath%>/member/join.me?center=members/join.jsp'">
-                    <%-- 화면에 그대로 보이는 글자: "회원가입" --%>
                     회원가입
                 </button>
               

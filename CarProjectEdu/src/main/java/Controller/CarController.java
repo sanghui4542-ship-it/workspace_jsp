@@ -48,7 +48,11 @@ import util.ParamUtil;   // 여러 곳에서 함께 쓰는 도우미 클래스
 //            /Car/update.do
 
 //           /Car/updatePro.do
-@WebServlet("/Car/*")
+
+//			 /Car/delete.do
+
+//			 /Car/cc
+@WebServlet("/Car/*")   
 public class CarController extends BaseController {
 
 	/* developers.naver.com 에서 발급받은 본인 값으로 바꾸세요 */
@@ -76,15 +80,17 @@ public class CarController extends BaseController {
 		PrintWriter out = response.getWriter();   // 응답에 글자를 쓸 수 있는 붓을 얻는다
 		 		
 		//1. 클라이언트가 요청한 전체 URL  중에서 2단계 주소  얻기 
-		String action = request.getPathInfo();     
-			
-		// "/updatePro.do" <- 예약 수정  2단계 요청 주소 얻기 
+		String action = request.getPathInfo();      
+		// "/cc"  <- 예약 확인 하기 위해 예약당시 입력 했던 비회원 비밀번호를 입력하여 예약확인 요청하는 디자인 VIEW 2단계 요청주소얻기	
 		
+		// "/delete.do"   <- 예약 취소를 위해 비밀번호를 입력해서 예위취소 요청하는 VIEW 중앙 화면 Delete.jsp보여줘~ 2단계 요청 주소 얻기
+		// "/deletePro.do" <- 예약 취소 요청하는 2단계 요청 주소 얻기 	
+		// "/updatePro.do" <- 예약 수정  2단계 요청 주소 얻기 	
 		// "/update.do"  <- 예약 수정 화면(중앙화면 CarConfirmUpdate.jsp VIEW) 2단계 요청 주소 얻기 		
 		// "/carcategory.do" <- 차량 유형별 선택 후 검색 2단계 요청 주소 얻기
 		// "/bb" <- 예약하기 메뉴를 클릭 했을때  전체 검색 또는 카테고리별 검색 VIEW 화면 2단계 요청주소 얻기		
 		// "/CarReserveConfirm.do" <- 비회원 예약 내역 조회 2단계 요청 주소 얻기 		
-		// "/cc"  <- 예약 확인 하기 위해 예약당시 입력 했던 비회원 핸드폰번호, 비밀번호를 입력하여 예약확인 요청하는 디자인 VIEW 2단계 요청주소얻기
+		
 		// "/Main"<- CarMain.jsp(VIEW) 메인화면 2단계 요청 주소 얻기
 		// "/CarList.do" <- 전체 차량 검색  2단계 요청 주소 얻기 		
 		// "/CarInfo.do"     <- 차량 한대 정보 검색 2단계 요청 주소 얻기
@@ -93,8 +99,7 @@ public class CarController extends BaseController {
 		// "/CarOrder.do" <-  비회원 결제후 예약 요청 2단계 주소 얻기 
 		
 	
-		// "/delete.do"   <- 예약 취소를 위해 비밀번호를 입력해서 예위취소 요청하는 VIEW 중앙 화면 Delete.jsp보여줘~ 2단계 요청 주소 얻기
-		// "/deletePro.do" <- 예약 취소 요청하는 2단계 요청 주소 얻기 
+	
 											
 		System.out.println("요청한 2단계 주소:" + action);
 		
@@ -673,28 +678,12 @@ public class CarController extends BaseController {
 			}
 			
 		}else if(action.equals("/delete.do")) {//예약 취소(삭제)를 위해 비밀번호를 입력하여 취소 요청하는 중앙 VIEW화면 요청을 받았을떄
-		/*
-		 CarReserveResult.jsp 의 "예약 취소" 버튼으로 요청이 들어온다.
-
-		   (기존 코드 - GET 링크)
-		       <a href="${contextPath}/Car/delete.do?"
-		               + "orderid=${carConfirmVo.orderid}"
-		               + "&memberphone=${requestScope.memberphone}"
-		               + "&center=Delete.jsp">예약취소</a>
-
-		   (지금 - POST 폼)
-		       <form action="${contextPath}/Car/delete.do" method="post"> ... </form>
-
-		   취소는 "되돌릴 수 없는 동작"이다.
-		   GET 링크는 브라우저나 크롤러가 미리 열어보기(prefetch)만 해도 실행될 수 있으므로
-		   삭제·취소 같은 동작은 반드시 POST 로 받는다.
-		*/
+		/*CarReserveResult.jsp 의 "예약 취소" 버튼으로 요청이 들어온다. */
+			
 			//2.1. 요청한 데이터 얻기( 비밀번호 입력해서 예약취소 요청하는 중앙 VIEW "Delete.jsp" 경로 얻기)
 			String center = request.getParameter("center"); //"Delete.jsp"
 			
 			//2.2. request내장객체 메모리에 중앙 VIEW "Delete.jsp"경로 바인딩
-			//[보안] CenterView 허용 목록에 등록된 화면만 통과시킨다.
-			//       (기존에는 ?center=WEB-INF/web.xml 로 서버 파일 내용이 화면에 노출됐다)
 			request.setAttribute("center", center);
 		//	request.setAttribute("center", "Delete.jsp");
 			
@@ -713,44 +702,21 @@ public class CarController extends BaseController {
 			String memberphone = request.getParameter("memberphone");   // 예약할 때 넣은 연락처 (취소 후 목록을 다시 조회하는 데 쓴다)
 
 			//2.2. 응답할 값 마련
-			//예약 정보를 삭제(취소)하기 위해 CarDAO객체의 OrderDelete메소드를 호출할떄
-			//매개변수로 삭제(취소)할 예약아이디와 입력한 비밀번호를 전달하여 DB의 non_order테이블에서 삭제(delete) 시키자.
-			//삭제(delete)에 성공하면  OrderDelete메소드의 반환값은  삭제에 성공한 레코드 개수 1을 반환받고 , 삭제(delete)에 실패하면 0을 반환 받습니다.
+			//예약 정보를 삭제(취소)하기 위해 CarService 부장객체의 deleteOrder 메소드 호출시 취소할 예약 아이디와 취소시 입력한 비밀번호 전달
 			int result = carService.deleteOrder(orderid, memberpass);
 			
+			//1 => 예약 삭제(취소) 성공
+			//0 => 예약 삭제(취소) 실패 
+								
 			//2.3. 예약 정보 삭제(취소)에 성공하면?  
 			//     1. "예약 정보가 취소 되었습니다" <- 클라이언트가 요청한 브라우저 화면에 메세지를 보여주고
 			//     2. "비회원 휴대번호와 비밀번호로 예약한 정보를 모두 보여주기 위해   모든 예약 정보 조회할수 있도록 포워딩"
 			//     3.  디스패처 방식으로 포워딩 되는 코드의 실행을 맊기 위해  doHandle 메소드 종료  <- return;
 			if(result == 1) {
-				/*
-				 ============================================================================
-				   [보안 수정] 비밀번호를 URL 로 다시 보내지 않는다.
-
-				   (기존 코드)
-				       location.href='/Car/CarReserveConfirm.do?memberphone=010-...&memberpass=1234'
-
-				     예약 취소에 성공한 뒤, 목록을 다시 보여주려고 연락처와 비밀번호를
-				     주소(GET 쿼리스트링)에 담아 다시 요청했다.
-
-				   무엇이 문제인가
-				     주소창에 담긴 값은 아래에 모두 남는다.
-				       - 브라우저 방문 기록 (다음 사용자가 주소창에서 볼 수 있다)
-				       - 서버 접속 로그 (access log)
-				       - 다른 사이트로 이동할 때 Referer 헤더
-				       - 어깨너머로 보는 사람의 눈
-				     비밀번호를 이런 곳에 남겨서는 안 된다.
-
-				   (지금)
-				     주소로 다시 요청하지 않고, 서버 안에서 목록을 다시 조회해
-				     결과 화면으로 바로 포워딩한다.
-				     비밀번호는 서버 메모리에만 있고 주소창에는 나타나지 않는다.
-				     (POST 로 받은 값을 그대로 재사용하므로 사용자는 다시 입력하지 않아도 된다)
-				 ============================================================================
-				*/
+	
 				List<CarConfirmVo> remainOrders = carService.findOrders(memberphone, memberpass);
 
-				request.setAttribute("v", remainOrders);   // 남은 예약 목록을 요청에 담는다
+				request.setAttribute("v", remainOrders);   // 남은 예약 목록(조회한 ArrayList)을 요청 request에 담는다
 				request.setAttribute("memberphone", memberphone);   // 연락처도 함께 전달한다
 				request.setAttribute("center", "CarReserveResult.jsp");   // 가운데에 예약 결과 화면을 끼우라고 알린다
 
@@ -758,17 +724,17 @@ public class CarController extends BaseController {
 				request.setAttribute("flashMessage", "예약이 취소되었습니다.");
 
 				request.getRequestDispatcher("/CarMain.jsp").forward(request, response);   // 틀이 되는 CarMain.jsp 로 넘긴다. 주소창에 비밀번호가 남지 않는다
-				return;   // 여기서 끝낸다
+				return;   // doHandle 메소드 종료  <- return;
 
-			}else {//2.4. 예약 정보 삭제(취소)에 실패하면?
+			}else {//2.4. 예약 정보 삭제(취소)에 실패하면? (result 변수가 0 일 경우)
 				   //     1. "예약 정보 삭제 실패" <- 클라이언트가 요청한 브라우저 화면에 메세지를 보여주고
 				   //     2.  예약 취소 요청 했던 VIEW 이전 화면(Delete.jsp중앙화면)을 재요청해서 다시 보여줌 
 				  //	  3.  디스패처 방식으로 포워딩 되는 코드의 실행을 맊기 위해  doHandle 메소드 종료  <- return;
 				  out.print("<script>");
 				  out.print(" alert('예약 정보 삭제 실패');");   // 실패를 알린다
 				  out.print(" history.back();");   // 이전 화면으로 되돌린다
-				  out.print("</script>");   // 스크립트를 닫는다
-				  return;   // 여기서 끝낸다
+				  out.print("</script>"); 
+				  return;  // doHandle 메소드 종료  <- return;
 			}
 				
 			//네이버 블로그 검색 API 요청을 한 2단계 요청 주소와 같다면?	

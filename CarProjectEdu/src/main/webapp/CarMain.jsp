@@ -114,8 +114,9 @@
  --%>						
  <c:set var="center" value="${requestScope.center}" />
  
-
-
+ <c:out value="${center}"/> <%-- "members/join.jsp" 출력 될 것임 --%>
+ 
+ 		
  <%-- 처음으로 CarMain.jsp메인 화면을 요청 했을때 중앙화면은 Center.jsp로 보이게 설정 --%>
  <c:if test="${center == null}">
  	<%-- 화면에서만 쓸 임시 값 center 을 만든다 --%>
@@ -133,13 +134,7 @@
     <div class="main-content">
     
         <%-- ${center} 화면을 이 자리에 불러와 붙인다 --%>
-        <jsp:include page="${center}"/> 	
-        
-        	<%--2.3. 예약 아이디를 이용해 조회된 예약 정보를 보여줄 중앙화면 VIEW("CarConfirmUpdate.jsp")주소 request에 바인딩
- 			
-			         request.setAttribute("center", "CarConfirmUpdate.jsp"); --%>
-			
-
+        <jsp:include page="${center}"/>  	  <%--  "members/join.jsp"  인클루드  --%>    
         					
     </div>
     <%-- 하단 푸터 영역 --%>

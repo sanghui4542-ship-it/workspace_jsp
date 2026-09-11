@@ -48,6 +48,7 @@
 			</div>
 		</dl>
 
+		<%-- 예약 비밀번호 입력후 예약 취소 요청  --%>
 		<form action="<%=contextPath%>/Car/deletePro.do" method="post"
 			  onsubmit="return confirm('예약을 취소하시겠습니까?\n취소한 예약은 되돌릴 수 없습니다.');">
 
@@ -60,8 +61,7 @@
 
 			<div class="form-group">
 				<label class="form-label" for="memberpass">예약 비밀번호 <span class="required">*</span></label>
-				<input class="form-control" type="password" id="memberpass" name="memberpass"
-					   placeholder="예약 시 입력한 비밀번호" required autofocus>
+				<input class="form-control" type="password" id="memberpass" name="memberpass" placeholder="예약 시 입력한 비밀번호" required autofocus>
 				<p class="form-hint">&#8226; 본인 확인을 위해 필요합니다. 서버에서 다시 검증합니다.</p>
 			</div>
 

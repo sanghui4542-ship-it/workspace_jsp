@@ -367,10 +367,7 @@ public class CarDAO {
 	//===========================================================
 	public int deleteOrder(Connection con, int orderid) throws SQLException {
 
-		/*
-		 [변경] where 절에서 memberpass 조건을 제거했다.
-		        해시는 = 비교가 불가능하므로 Service 가 matches() 로 검증한 뒤 호출한다.
-		*/
+
 		// delete from 테이블 where 조건. where 가 없으면 표 전체가 지워진다.
 		String sql = "delete from non_carorder where non_orderid=?";
 
@@ -378,7 +375,7 @@ public class CarDAO {
 		try (PreparedStatement pstmt = con.prepareStatement(sql)) {
 			// 지울 예약의 번호를 끼운다
 			pstmt.setInt(1, orderid);
-			// 지워진 행 수를 돌려준다 (1이면 성공, 0이면 그런 예약이 없었다)
+			// 지워진 행 수를 CarService 부장에게 돌려준다 (1이면 예약 정보 삭제 성공, 0이면 그런 예약이 없었다)
 			return pstmt.executeUpdate();
 		}
 	}

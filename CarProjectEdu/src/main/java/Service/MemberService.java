@@ -52,39 +52,18 @@ public class MemberService {
 	public String serviceJoinName(HttpServletRequest request) {
 
 		//URL /member/join.me?center=members/join.jsp 에서
-		//"center" 이름으로 전달된 중앙 VIEW 주소를 꺼내 반환한다.
-		//(허용된 화면인지 검사는 MemberController가 CenterView로 처리한다)
-		String center = request.getParameter("center");
-
+		//"center" 이름으로 전달된 중앙 VIEW 주소를 꺼내 반환한다.		
+		String center = request.getParameter("center"); 	//members/join.jsp
+	
 		/*
-		 ============================================================================
-		   [화면 주소가 없을 때 기본값을 주도록 고친 부분]
-
-		   [Before] return request.getParameter("center");
-
-		     Top.jsp 의 회원가입 버튼은 항상 ?center=members/join.jsp 를 붙여 보낸다.
-		     그래서 버튼으로 들어오면 문제가 없었다.
-
-		     그런데 주소창에 /member/join.me 만 입력하거나
-		     그 주소를 북마크·카카오톡으로 공유하면 center 가 null 이 된다.
-		     CenterView 는 등록되지 않은 값(null 포함)을 기본 화면으로 되돌리므로
-		     회원가입을 누른 사람에게 엉뚱하게 메인 화면이 보였다.
-
-		     같은 파일의 로그인 화면(serviceLoginMember)은 서버가 주소를 직접 정해서
-		     이 문제가 없다. 두 화면이 다르게 동작할 이유가 없다.
-
-		   [After] 값이 없으면 회원가입 화면을 기본값으로 쓴다.
-
-		     "화면 주소를 클라이언트가 정해서 보낸다"는 구조 자체가 위험해서
-		     CenterView 화이트리스트를 둔 것인데, 기본값까지 서버가 갖고 있으면
-		     클라이언트가 아무 값을 안 보내도 올바른 화면이 나온다.
-		 ============================================================================
-		*/
+		   [회원 가입 중앙 화면 주소가 없을 때 기본값을 주도록 고친 부분]
+		    cneter변수 값이 없으면 회원가입 화면을 기본값으로 쓴다.
+	    */
 		if (center == null || center.trim().isEmpty()) {
 			return "members/join.jsp";
 		}
 
-		return center;   // 화면 이름이 넘어왔으면 그 값을 그대로 쓴다
+		return center; // "members/join.jsp" 회원가입 요청 중앙 화면 주소를 MemberController로 반환 
 	}
 
 	//==================================
@@ -107,21 +86,15 @@ public class MemberService {
 
 		//입력값을 VO로 만든다 (이 안에서 비밀번호를 해시로 바꾼다)
 		final MemberVO memberVo = buildMemberFromRequest(request);
+		
+//		new MemberVO(id, encodedPass, name, age, gender, address, email, tel, hp);
 
-		/*
-		 [트랜잭션으로 묶는 이유]
-		   INSERT 하나뿐이지만 execute()로 감싸면
-		   실패 시 rollback + 커넥션 반납 + 예외 전파가 일관되게 처리된다.
 
-		 [아이디 중복 경쟁 상태(race condition)]
-		   화면에서 중복확인을 통과했더라도, 그 직후 같은 아이디로 다른 사람이
-		   먼저 가입하면 여기서 INSERT가 실패한다.
-		   member.id 에 UNIQUE 제약이 걸려 있으므로 DB가 최종적으로 막아준다.
-		   (검사 시점과 사용 시점의 간격 문제 - TOCTOU 라고 부른다)
-		*/
 		int result = DBCPUtil.execute(con -> memberDao.insertMember(con, memberVo));
 
-		return result == 1;   // 저장된 행이 1건이면 가입 성공이다
+		return result == 1;   // 저장된 행이 1건이면 가입 성공이다  true를  MemberController로 반환 
+							  // 저장 실패 하면 false를 MemberContrller로 반환 
+		
 	}
 
 	/**

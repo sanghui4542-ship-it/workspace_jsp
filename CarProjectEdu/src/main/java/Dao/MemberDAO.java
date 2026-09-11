@@ -119,7 +119,7 @@ public class MemberDAO {
 	//    반환 : 추가된 행 수 (성공 1)
 	//===========================================================
 	public int insertMember(Connection con, MemberVO vo) throws SQLException {
-
+											//new MemberVO(id, encodedPass, name, age, gender, address, email, tel, hp);
 		/*
 		   tel / hp 컬럼 포함 (기존 INSERT문에는 없어서 입력한 연락처가 버려졌다)
 		   비밀번호는 MemberService에서 이미 PBKDF2로 해시한 값이 넘어온다.
@@ -140,7 +140,7 @@ public class MemberDAO {
 			pstmt.setString(8, vo.getTel());   // 8번 ? : 전화번호
 			pstmt.setString(9, vo.getHp());   // 9번 ? : 휴대폰번호
 
-			return pstmt.executeUpdate();   // 실행하고 저장된 행 수를 돌려준다 (성공하면 1)
+			return pstmt.executeUpdate();   // insert 실행하고 저장된 행 수 1를 MemberService 부장에게 돌려준다 (성공하면 1)
 		}
 	}
 

@@ -332,23 +332,19 @@ public class CarService {
 
 		return DBCPUtil.execute(con -> {   // 연결을 빌려 검증과 삭제를 한 흐름으로 처리한다
 
-			/*
-			 [필수] 삭제 전에 비밀번호를 검증한다.
-
-			   기존에는 DAO 의 where 절(memberpass=?)이 검증을 대신했다.
-			   해시는 = 비교가 불가능하므로 여기서 matches() 로 확인한다.
-
-			   예약 취소는 되돌릴 수 없는 작업이므로 검증이 특히 중요하다.
-			   통과하지 못하면 삭제를 실행하지 않고 0을 반환한다.
-			*/
 			if (!matchesOrderPassword(con, orderid, memberpass)) {
 				System.out.println("[CarService] 예약 취소 거부 - 비밀번호 불일치. 예약번호=" + orderid);
 				return Integer.valueOf(0);   // 삭제를 실행하지 않고 0 을 돌려준다
 			}
+			//예약 비밀번호와 입력한 비밀번호가 일치하면?
+			//CarDAO객체의 deleteOrder 메소드 호출시 매개변수로 Connection객체와  예약 취소할 예약 아이디 전달 해서 DELETE작업 명령!!
+			return Integer.valueOf(cardao.deleteOrder(con, orderid));  
 
-			return Integer.valueOf(cardao.deleteOrder(con, orderid));   // 검증을 통과했을 때만 실제로 지운다
-
-		}).intValue();   // Integer 상자에서 진짜 숫자를 꺼낸다
+		}).intValue();   // Integer 상자에서 진짜 숫자(1 또는 0) 를 꺼내서 CarController로 반환 
 	}
 
 }//CarService 클래스
+
+
+
+
