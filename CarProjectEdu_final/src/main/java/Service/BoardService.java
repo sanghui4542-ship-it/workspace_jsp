@@ -193,8 +193,10 @@ public class BoardService {
 			if (totalPage > 0 && safePage >= totalPage) {   // 페이지가 있는데 요청 번호가 마지막을 넘어섰다면
 				safePage = totalPage - 1;   // 마지막 페이지로 맞춘다
 			}
-
-			//3) 그 페이지에 해당하는 글만 조회
+			
+			System.out.println("safePage : " + safePage );
+			
+			//3) 그 페이지번호에 해당하는 글만 조회
 			int offset = safePage * NUM_PER_PAGE;
 			List<BoardVo> list = boarddao.boardList(con, key, word, offset, NUM_PER_PAGE);   // offset 만큼 건너뛰고 5건만 가져온다 (limit ?, ?)
 

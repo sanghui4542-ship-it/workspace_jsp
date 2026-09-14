@@ -77,6 +77,8 @@ public class BoardDAO {
 	public int countBoards(Connection con, String key, String word) throws SQLException {
 
 		boolean hasWord = (word != null && !word.trim().isEmpty());   // 검색어가 실제로 들어왔는지 확인 (공백만 있으면 없는 것으로 본다)
+		System.out.println("hasWord : " + hasWord);
+		
 		boolean searchTitleContent = "titleContent".equals(key);   // 검색 종류가 "제목+내용" 인가
 
 		String sql = "select count(*) as cnt from board" + buildWhere(hasWord, searchTitleContent);   // where 절은 아래 buildWhere 가 만들어 준다. 목록 조회와 똑같은 조건을 쓰기 위해서다
@@ -389,7 +391,7 @@ public class BoardDAO {
 			pstmt.setString(4, email);   // 4번 ? : 이메일
 			pstmt.setString(5, title);   // 5번 ? : 제목
 			pstmt.setString(6, content);   // 6번 ? : 내용
-			return pstmt.executeUpdate();   // 저장된 행 수를 돌려준다 (성공하면 1)
+			return pstmt.executeUpdate();   // insert 저장된 행 수를 돌려준다 (성공하면 1)
 		}
 	}
 

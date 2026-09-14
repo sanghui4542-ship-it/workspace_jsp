@@ -81,8 +81,6 @@
 			<p class="form-hint">&#8226; 나중에 이 글을 수정하거나 삭제할 때 필요합니다. 꼭 기억해 주세요.</p>
 		</div>
 
-
-
 	</form>
 
 	<%-- 버튼 : 좁은 화면에서는 자동으로 줄바꿈된다 --%>
@@ -97,95 +95,72 @@
 </div>
 <%-- board-container 끝 --%>
 
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 
-	//컨텍스트 주소 경로 저장
+	// JSP 가 서버에서 만든 프로젝트 경로를 자바스크립트 변수로 넘겨받는다  예) "/CarProject"
 	var ctx = "<%=contextPath%>";
-		
-	$(function(){
-		
-		//<button type="button" id="list" class="btn btn-ghost">목록</button> 선택해서 click 이벤트 등록후
-		//click 이벤트가 발생했을 때... nowPage, nowBlock 은 이 jsp화면 처음 포워딩해서 올때 list.jsp에서 넘쳐 받은 값을 설정해서
-		//글쓰기 화면 오기 전 글 조회 화면 재요청!
-		$("#list").on("click",function(event) {
-			event.preventDefault();   
-			
-			location.href = ctx + "/Board/list.bo?nowPage=<%=nowPage%>&nowBlock=<%=nowBlock%>";   
-		});
-		
-		//----- [등록] 버튼 클릭 했을때 ------
-		//<button type="button" id="registration1" class="btn btn-primary">등록</button> 선택해서 click 이벤트 등록후
-		//click 이벤트가 발생했을때...
-		//작성한 모든 글정보들을 얻어 각 변수에 저장하고
-		//$.ajax() 함수로 BoardController에 글쓰기 요청!
-		// 요청 URL : /CarProjectEdu_final/Board/writePro.bo
-		// 요청 데이터들 : 작성자명, 작성자id, 작성자이메일, 글제목, 글내용, 글비밀번호
-		$(#registration1).on("click", function (event) {
-			
-			event.preventDefault();   
 
-			var form = document.querySelector("form");
+	/* ----- [목록] 버튼 : 보고 있던 페이지로 돌아간다 ----- */
+	document.getElementById("list").addEventListener("click", function(event){
 
-			var writer = form.querySelector("input[name=writer]").value; //작성자 명
-			var id = form.querySelector("input[name=writer_id]").value;  //작성자 아이디
-			var email = form.querySelector("input[name=email]").value;   //작성자 이메일
-			var title = form.querySelector("input[name=title]").value;   //글제목  
-			var content = form.querySelector("textarea[name=content]").value; //글내용
-			var pass = form.querySelector("input[name=pass]").value;  //글비밀번호
-			
-			//글 제목 입력했는지 검사
-			if (title.trim() === "") {
-				$("#resultInsert").text("글 제목을 입력해주세요.").css("color", "red");
-				return;
+		event.preventDefault();   // 버튼의 기본 동작을 막는다
+
+		// nowPage, nowBlock 은 이 화면에 처음 들어올 때 list.jsp 에서 넘겨받은 값이다 (위 스크립틀릿 참고)
+		location.href = ctx + "/Board/list.bo?nowPage=<%=nowPage%>&nowBlock=<%=nowBlock%>";   // 보던 페이지 번호를 그대로 달고 목록으로 돌아간다
+	});
+
+	/* ----- [등록] 버튼 : 입력값을 검사한 뒤 서버에 새 글 등록을 요청한다 ----- */
+	document.getElementById("registration1").addEventListener("click", function(event){
+
+		event.preventDefault();   // 버튼의 기본 동작(폼 전송)을 막는다. 아래에서 우리가 직접 보낼 것이다
+
+		//폼 안의 입력값을 name 속성으로 찾아 가져온다
+		var form = document.querySelector("form");
+
+		var writer  = form.querySelector("input[name=writer]").value;     //작성자 명
+		var id      = form.querySelector("input[name=writer_id]").value;  //작성자 아이디
+		var email   = form.querySelector("input[name=email]").value;      //작성자 이메일
+		var title   = form.querySelector("input[name=title]").value;      //글 제목
+		var content = form.querySelector("textarea[name=content]").value; //글 내용
+		var pass    = form.querySelector("input[name=pass]").value;       //글 비밀번호
+
+		//화면에서도 최소 검증 (서버에서도 다시 검증한다 - BoardService.serviceInsertBoard 참고)
+		if(title.trim() === ""){
+			CarApp.setText("resultInsert", "글 제목을 입력해주세요.", "red");
+			return;   // 여기서 끝낸다 (서버로 보내지 않는다)
+		}
+		if(pass.trim() === ""){   // 글 비밀번호가 비어 있으면
+			CarApp.setText("resultInsert", "글 비밀번호를 입력해주세요.", "red");   // 빨간 글씨로 안내한다
+			return;   // 여기서 끝낸다
+		}
+
+		/* 서버로 전송
+		   파라미터 이름이 w / i / e / t / c / p 로 짧은 이유는 BoardController 가
+		   그 이름으로 request.getParameter() 를 읽도록 정해져 있기 때문이다. */
+		CarApp.postForm(ctx + "/Board/writePro.bo", {
+			w : writer,   // w = writer(작성자 명)
+			i : id,       // i = id(작성자 아이디)
+			e : email,    // e = email(이메일)
+			t : title,    // t = title(제목)
+			c : content,  // c = content(내용)
+			p : pass      // p = pass(비밀번호)
+		}).then(function(responseData){
+
+			//서버는 "1"(성공) 또는 "0"(실패) 을 보낸다
+			if(responseData === "1"){
+
+				CarApp.setText("resultInsert", "글작성 완료!", "green");
+
+				if(window.confirm("추가한 글을 조회해서 보기 위해 목록페이지로 이동하시겠습니까?")){   // 확인창에서 "확인" 을 누르면
+					location.href = ctx + "/Board/list.bo";   // 글 목록으로 이동한다
+				}
+
+			}else{
+				CarApp.setText("resultInsert", "글작성 실패", "red");   // 서버가 실패를 알린 경우 빨간 글씨로 안내한다
 			}
-			//비밀번호 입력했는지 검사
-			if (pass.trim() === "") {
-				$("#resultInsert").text("글 비밀번호를 입력해주세요.").css("color", "red");
-				return;
-			}
 
-					
-		$.ajax({
-			url: ctx + "/Board/writePro.bo",
-			type: "POST",
-			dataType: "text",
-			data: {
-				w : writer,   // w = writer(작성자 명)
-				i : id,       // i = id(작성자 아이디)
-				e : email,    // e = email(이메일)
-				t : title,    // t = title(제목)
-				c : content,  // c = content(내용)
-				p : pass      // p = pass(비밀번호)
-			},
-			success: function (responseData) { //responseData 매개변수로 BoardController가 응답한 결과를 받음
-				
-				
-				//톰캣서버가 실행하는 BoardController 서블릿은 "1"(글추가성공) 또는 "0"(글추가실패) 을 보낸다.
-				if(responseData.trim() === "1"){
-					
-					$("#resultInsert").text("글작성 완료!").css("color", "green");
-
-					if (window.confirm("추가한 글을 조회해서 보기 위해 목록페이지로 이동하시겠습니까?")) {
-						
-						location.href = ctx + "/Board/list.bo";   // 전체 글목록 조회 재요청!
-				
-				}
-				
-				} else {
-				
-						$("#resultInsert").text("글작성 실패").css("color", "red");   
-				
-				}
-				
-			},
-			//요청 통신 자체가 실패 했을때 자동으로 호출되는 콜백함수 정의
-				error: function (xhr, status, error) {
-					$("#resultInsert").text("글작성 실패 : " xhr.status + " : " + error).css("color", "red");
-				}
-
+		}).catch(function(err){   // 통신 자체가 실패한 경우
+			CarApp.setText("resultInsert", "글작성 실패 : " + err.message, "red");   // 실패 이유를 함께 보여 준다
 		});
-		
-		
 	});
 </script>
