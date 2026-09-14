@@ -105,7 +105,7 @@ public class MemberController extends BaseController {
 			          요청 전체 URL -> /member/logout.me  중에서 2단계 요청한 주소 "/logout.me" 얻기 
 			          결론 : 2단계 요청한 주소 -> "/logout.me" 얻기             
 		*/
-		String action = request.getPathInfo();   
+		String action = request.getPathInfo();    
 		System.out.println("클라이언트가 요청한 2단계 요청 주소  : " + action);   // 어떤 주소가 들어왔는지 이클립스 콘솔에 찍는다. 화면이 안 뜰 때 여기부터 확인한다
 
 		/*
@@ -119,7 +119,7 @@ public class MemberController extends BaseController {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;   // 여기서 doHandle 메소드를 끝낸다. 아래 코드를 실행하면 안 되기 때문이다
 		}
-			   
+		   
 		switch(action) {//클라이언트가 요청한 2단계 요청주소가?
 			
 			case "/join.me": //회원가입 작성 후 가입요청 하는 중앙 디자인 VIEW요청 2단계 요청 주소와 같다면?
@@ -193,22 +193,23 @@ public class MemberController extends BaseController {
 				
 				//부장(MemberService)에게 시키기 : 로그인 처리 작업 
 				int check = memberService.serviceUserCheck(request);
-				//check값이    1이면 입력한 아이디,비밀번호가 DB에 존재함
+				
+				//check값이 1이면 입력한 아이디,비밀번호가 DB에 존재함 (로그인 성공 시킴)
 				//         0이면 입력한 아이디만 DB에 존재함, 비밀번호 틀림 
 				//        -1이면 입력한 아이디 DB에 존재하지 않음 
 				
 				if(check == 0) {//아이디 맞음, 비밀번호틀림
 					out.println("<script>");
 					out.println(" window.alert('비밀번호 틀림'); ");   // 비밀번호가 틀렸다고 알린다
-					out.println(" history.go(-1);");   // 이전 화면으로 되돌린다 (-1 = 한 페이지 뒤로)
-					out.println("</script>");   // 스크립트를 닫는다
+					out.println(" history.go(-1);");   // 이전 member/login.jsp 화면으로 되돌린다 (-1 = 한 페이지 뒤로)
+					out.println("</script>");  
 					return;//doHandle메소드 종료 
 			
 				}else if(check == -1) {//아이디 틀림
-					out.println("<script>");   // 브라우저가 실행할 스크립트를 만들어 보낸다
+					out.println("<script>");  
 					out.println(" window.alert('아이디 틀림'); ");   // 아이디가 없다고 알린다
-					out.println(" history.go(-1);");   // 이전 화면으로 되돌린다
-					out.println("</script>");   // 스크립트를 닫는다
+					out.println(" history.go(-1);");    // 이전 member/login.jsp 화면으로 되돌린다 (-1 = 한 페이지 뒤로)
+					out.println("</script>");   
 					return; //doHandle메소드 종료 
 				}
 				

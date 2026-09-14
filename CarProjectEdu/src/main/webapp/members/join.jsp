@@ -178,14 +178,14 @@
 					    <input type="radio" 
 							   class="gender" 
 							   name="gender"
-							   value="남"
+							   value="man"
 							   > 
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	   
 					     여성
 					   <input type="radio" 
 							   class="gender" 
 							   name="gender"
-							   value="여"
+							   value="woman"
 							   > 
 					</div>					
 				</div>

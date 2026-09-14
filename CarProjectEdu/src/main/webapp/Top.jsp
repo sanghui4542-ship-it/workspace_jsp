@@ -479,8 +479,7 @@ header.site-header {
             <div id="login">
                 <!-- 로그인 버튼 -->
                 <button type="button" class="top-btn top-btn-primary"
-                        onclick="location.href='<%=contextPath%>/member/login.me'">
-                    <%-- 화면에 그대로 보이는 글자: "로그인" --%>
+                        onclick="location.href='<%=contextPath%>/member/login.me'">                  
                     로그인
                 </button>
                 <!-- 회원가입 버튼 -->

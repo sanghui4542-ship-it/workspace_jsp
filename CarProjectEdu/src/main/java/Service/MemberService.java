@@ -302,24 +302,11 @@ public class MemberService {
 	//===============================
 	public void serviceLogout(HttpServletRequest request) {
 
-		/*
-		 [변경 1] removeAttribute("id") 만 하던 것을 세션 폐기로 바꿨다.
-
-		   기존에는 아이디만 지우고 세션 자체는 남겨두었다.
-		   그러면 세션에 남은 다른 값(장바구니, 임시 인증 정보 등)이 계속 유지되고,
-		   같은 세션 ID가 그대로 재사용되어 세션 탈취 위험이 남는다.
-		   로그아웃은 "세션을 버리는 것"이 정석이다.
-
-		 [변경 2 - 버그 수정] 버린 뒤에 CSRF 토큰을 다시 발급한다.
-
-		   로그아웃도 곧바로 메인 화면을 그린다.
-		   토큰 없이 그려지면 그 화면에서 하는 첫 POST 가 403 으로 막혔다.
-		   (로그인 직후와 완전히 같은 문제였다)
-
-		   renewSession() 이 "폐기 -> 새 세션 -> 토큰 발급"을 한 번에 처리한다.
-		   로그아웃 상태이므로 "id" 는 담지 않는다. 토큰만 있는 빈 세션이 된다.
-		*/
-		request.getSession().invalidate(); request.getSession(true);
+		//로그 아웃 처리를 위한 로그인한 상태의 정보가 저장된 Httpsession 객체를 톰캣 메모리에서 제거 
+		request.getSession().invalidate(); 
+		
+		//새로운 HttpSession 객체 다시 생성 (로그인 했었던 세션 아이디 없음)
+		request.getSession(true);
 	}
 
 	//================================
@@ -433,7 +420,8 @@ public class MemberService {
 	public String serviceDeleteMember(String id) {
 
 		int result = DBCPUtil.execute(con -> memberDao.deleteMember(con, id));   // 회원 표에서 그 아이디를 지운다
-
+		
+		//삭제(delete)에 성공한 행이 1건이면 ? "삭제성공", 아니면 "삭제실패"를 사장(MemberController)로 반환
 		return (result == 1) ? "삭제성공" : "삭제실패";   // 1건이 지워졌으면 성공, 아니면 실패 문구를 돌려준다
 	}
 

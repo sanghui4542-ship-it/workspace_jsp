@@ -148,18 +148,7 @@ public class MemberDAO {
 	// 3. 로그인 검증용 : 저장된 비밀번호 조회
 	//    반환 : 저장된 비밀번호(해시 또는 예전 평문), 아이디가 없으면 null
 	//===========================================================
-	/*
-	   [2단계에서 SQL 인젝션을 고친 메소드]
 
-	   (기존) "select pass from member where id='" + login_id + "'"
-	          -> 아이디 칸에  ' or '1'='1  을 넣으면 조건이 항상 참이 된다.
-
-	   (지금) ? 바인딩. 입력값은 "값"으로만 전달되어 SQL 문법으로 해석되지 않는다.
-
-	   비밀번호 "비교"는 여기서 하지 않는다.
-	   해시는 같은 비밀번호라도 매번 값이 달라 equals 비교가 불가능하므로
-	   MemberService가 java.util.Objects.equals() 로 판단한다.
-	*/
 	public String findPasswordById(Connection con, String id) throws SQLException {
 
 		String sql = "select pass from member where id=?";   // 아이디로 저장된 비밀번호 한 칸만 꺼내 온다

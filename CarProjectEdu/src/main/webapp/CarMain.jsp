@@ -114,7 +114,7 @@
  --%>						
  <c:set var="center" value="${requestScope.center}" />
  
- <c:out value="${center}"/> <%-- "members/join.jsp" 출력 될 것임 --%>
+ <c:out value="${center}"/> 
  
  		
  <%-- 처음으로 CarMain.jsp메인 화면을 요청 했을때 중앙화면은 Center.jsp로 보이게 설정 --%>
@@ -134,7 +134,7 @@
     <div class="main-content">
     
         <%-- ${center} 화면을 이 자리에 불러와 붙인다 --%>
-        <jsp:include page="${center}"/>  	  <%--  "members/join.jsp"  인클루드  --%>    
+        <jsp:include page="${center}"/>  	  <%--  Center.jsp  인클루드  --%>    
         					
     </div>
     <%-- 하단 푸터 영역 --%>
