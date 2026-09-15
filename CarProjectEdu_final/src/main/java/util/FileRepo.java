@@ -160,7 +160,7 @@ public class FileRepo {
 	//  예) "사진.PNG" -> "png" / "readme" -> "" / "a." -> ""
 	//----------------------------------------------------------------
 	public static String getExtension(String fileName) {
-
+		
 		// 파일 이름이 없으면 빈 글자 반환
 		if (fileName == null) {
 			return "";
