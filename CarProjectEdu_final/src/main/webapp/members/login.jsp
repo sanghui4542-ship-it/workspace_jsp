@@ -69,9 +69,11 @@
     width: 100%;                             /* 너비 : 카드 너비를 꽉 채운다 */
     padding: 10px 14px;                      /* 안쪽 여백 : 위아래 10px, 좌우 14px */
     margin-bottom: 15px;                     /* 아래 바깥 여백 15px : 입력칸끼리 떨어뜨린다 */
-    border: 1px solid #ccc;                  /* 테두리 : 1px 실선, 회색 */
+    border: 1px solid #ccc; 				 /* 테두리 : 1px 실선, 회색 */               
     border-radius: 6px;                      /* 모서리 둥글기 6px */
     font-size: 14px;                         /* 글자 크기 14px */
+    color : #333;       					 /* 글자색 : 진한 회색 */		
+    background-color: #fff;             	 /* 배경색 : 흰색 */
     box-sizing: border-box;                  /* 너비 100% 안에 여백과 테두리까지 포함한다 */
     transition: border-color 0.2s;           /* 테두리 색이 바뀔 때 0.2초 동안 부드럽게 바뀐다 */
 }

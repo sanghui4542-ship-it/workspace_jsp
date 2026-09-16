@@ -774,9 +774,13 @@ public class FileBoardService {
 				System.out.println("[FileBoardService] 답글을 달 원글이 없습니다. b_idx=" + parentIdx);   // 왜 중단했는지 콘솔에 남긴다
 				return 0;   // 아무것도 저장하지 않고 0 을 돌려준다
 			}
+			
+			//답변글을 작성하는 부모글의 b_group 열의 값보다 큰 기존 주글의 b_group열의 값을 1증가(update) 시키는 명령
+			boarddao.shiftGroupsGreaterThan(con, groupLevel[0]);   
 
-			boarddao.shiftGroupsGreaterThan(con, groupLevel[0]);   // 원글보다 뒤에 있는 글들의 그룹번호를 한 칸 민다 (답글이 들어갈 자리를 만든다)
-
+			//답변글 추가. 작성한 답글 정보 DB의 테이블에 INSERT 추가 해~~ 명령
+			//답변글 추가 조건2. 답변글의 들여쓰기 정도값(b_level 열의 값)은 부모글의 b_level열 값 + 1 한 값 insert  
+			//답변글 추가 조건3. 답변글의 그룹 정렬값(b_group 열의 값)은 부모글의 b_group열 값 + 1 한 값 insert
 			return boarddao.insertReply(con, reply_id, encodedPass, reply_name, reply_email,   // 만들어진 자리에 답글을 저장한다. 그룹은 원글과 같고 깊이는 한 단계 아래다
 										reply_title, reply_content,
 										groupLevel[0] + 1, groupLevel[1] + 1);

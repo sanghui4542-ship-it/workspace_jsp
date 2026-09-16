@@ -158,7 +158,8 @@ public class FileBoardDAO {
 	//===========================================================
 	/** [부르는 곳] FileBoardService 의 serviceBoardRead() (글 조회와 함께 트랜잭션으로 묶여 실행된다) */
 	public int increaseReadCount(Connection con, int b_idx) throws SQLException {
-
+		
+		//답글을 작성하는 부모글의 그룹번호보다 큰 그룹번호를 가진 이미 들록된 주 글들만 그룹번호열의 값을 1증가 시키자.
 		String sql = "update fileboard set b_cnt = b_cnt + 1 where b_idx = ?";   // 조회수를 지금 값에서 1 늘린다
 
 		try (PreparedStatement pstmt = con.prepareStatement(sql)) {   // SQL 실행 도구를 만든다

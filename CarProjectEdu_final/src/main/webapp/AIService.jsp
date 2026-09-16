@@ -108,7 +108,12 @@
            "3개 중 1번째 탭, 선택됨" 처럼 읽어준다.
          ========================================== --%>
     <div class="ai-tabs" role="tablist" aria-label="AI 서비스 종류">
+        <%-- role="tablist" : "이 안에 탭 버튼들이 모여 있다"고 스크린리더에 알려주는 표시(속성)다. 화면에는 안 보인다 --%>
 
+        <%-- 탭1 버튼. id="tab-1" 을 JS의 switchTab(1) 함수가 document.getElementById('tab-1') 로 찾아 쓴다.
+             onclick="switchTab(1)" : 이 버튼을 누르면 script 태그 안의 switchTab 함수가 인자 1과 함께 실행된다.
+             aria-controls="panel-1" : "이 버튼을 누르면 panel-1 이라는 내용이 열린다"고 스크린리더에 알려준다.
+             class 에 is-active 가 있으면 처음 화면이 열릴 때부터 이 탭이 선택된 것처럼 보인다(진하게 표시) --%>
         <button type="button" class="ai-tab is-active" role="tab"
                 id="tab-1" aria-controls="panel-1" aria-selected="true"
                 onclick="switchTab(1)">
@@ -116,6 +121,8 @@
             <span class="ai-tab-text">맞춤 차량 추천</span>
         </button>
 
+        <%-- 탭2 버튼. 구조는 탭1과 완전히 같고 번호만 2로 바뀐다.
+             처음엔 is-active 클래스가 없으므로 화면에서 선택 안 된 모양으로 보인다 --%>
         <button type="button" class="ai-tab" role="tab"
                 id="tab-2" aria-controls="panel-2" aria-selected="false"
                 onclick="switchTab(2)">
@@ -123,6 +130,7 @@
             <span class="ai-tab-text">비용 계산기</span>
         </button>
 
+        <%-- 탭3 버튼. 눌리면 switchTab(3) 이 실행되어 panel-3 이 열린다 --%>
         <button type="button" class="ai-tab" role="tab"
                 id="tab-3" aria-controls="panel-3" aria-selected="false"
                 onclick="switchTab(3)">
@@ -130,6 +138,7 @@
             <span class="ai-tab-text">여행 플래너</span>
         </button>
 
+        <%-- 탭4 버튼. 눌리면 switchTab(4) 가 실행되어 panel-4(말로 예약 화면)가 열린다 --%>
         <button type="button" class="ai-tab" role="tab"
                 id="tab-4" aria-controls="panel-4" aria-selected="false"
                 onclick="switchTab(4)">
@@ -141,6 +150,8 @@
 
     <%-- ==========================================
          탭1 : AI 맞춤 차량 추천
+         section id="panel-1" 은 JS의 switchTab(1) 이
+         document.getElementById('panel-1') 로 찾아 보이거나 숨긴다.
          ========================================== --%>
     <section id="panel-1" class="ai-panel is-active" role="tabpanel" aria-labelledby="tab-1">
 
@@ -152,6 +163,12 @@
             <%-- 표 대신 폼 그리드. 좁은 화면 1열, 넓은 화면 2열로 자동 전환된다. --%>
             <div class="ai-form-grid">
 
+                <%-- 탑승 인원 드롭다운.
+                     label 의 for="rec-passengers" 와 select 의 id="rec-passengers" 가 짝을 이룬다.
+                     이렇게 연결하면 label 글자를 눌러도 select 가 열리고, 스크린리더도 "탑승 인원, 4명 선택됨"처럼 읽어준다.
+                     JS의 sendAIRecommend() 함수가 이 id로 지금 선택된 값을 읽어간다.
+                     option 의 value 가 실제로 넘어가는 값이고, 화면 글자(1명, 2명...)와 같아서 헷갈리지 않는다.
+                     selected 가 붙은 option 이 화면이 처음 열릴 때 기본으로 보이는 값이다(여기서는 "4명") --%>
                 <div class="form-group">
                     <label class="form-label" for="rec-passengers">탑승 인원</label>
                     <select class="form-control" id="rec-passengers">
@@ -167,6 +184,8 @@
                     </select>
                 </div>
 
+                <%-- 1일 예산 드롭다운. id="rec-budget" 을 sendAIRecommend() 가 읽어간다.
+                     구간(문자열) 자체가 value 라서 AI에게 그대로 문장으로 전달된다 --%>
                 <div class="form-group">
                     <label class="form-label" for="rec-budget">1일 예산 (렌탈료)</label>
                     <select class="form-control" id="rec-budget">
@@ -177,6 +196,7 @@
                     </select>
                 </div>
 
+                <%-- 이용 목적 드롭다운. id="rec-purpose" 를 sendAIRecommend() 가 읽어간다 --%>
                 <div class="form-group">
                     <label class="form-label" for="rec-purpose">이용 목적</label>
                     <select class="form-control" id="rec-purpose">
@@ -189,6 +209,8 @@
 
             </div>
 
+            <%-- "AI 추천받기" 버튼. id="btn-1" 은 callAIService()가 로딩 중 잠갔다 풀 때 쓴다.
+                 onclick="sendAIRecommend()" : 이 버튼을 누르면 위 세 select 값을 모아 AI를 부르는 함수가 실행된다 --%>
             <button type="button" class="btn btn-primary btn-lg btn-block mt-6"
                     id="btn-1" onclick="sendAIRecommend()">
                 &#129302; AI 추천받기
@@ -196,7 +218,9 @@
 
         </div>
 
-        <%-- 로딩 표시 : aria-live 로 "지금 무슨 일이 일어나는지"를 스크린리더에도 알린다 --%>
+        <%-- 로딩 표시 : aria-live 로 "지금 무슨 일이 일어나는지"를 스크린리더에도 알린다.
+             id="loading-1" 을 callAIService() 가 찾아 display 를 block/none 으로 바꿔 보이거나 감춘다.
+             화면이 열릴 때는 CSS가 기본으로 숨겨 두고, AI 호출이 시작될 때만 JS가 보이게 만든다 --%>
         <div id="loading-1" class="ai-loading" aria-live="polite">
             <div class="ai-loading-dots" aria-hidden="true">
                 <span class="ai-loading-dot"></span>
@@ -206,6 +230,8 @@
             <p class="ai-loading-text">AI가 최적의 차량을 분석하고 있습니다...</p>
         </div>
 
+        <%-- 결과가 그려질 빈 상자. 처음엔 완전히 비어 있다가
+             showResult(1, ...) 함수가 이 안(id="result-1")에 AI 답변 카드를 채워 넣는다 --%>
         <div id="result-1" class="ai-result" aria-live="polite"></div>
 
     </section>
@@ -222,6 +248,13 @@
 
             <div class="ai-form-grid">
 
+                <%-- 차량 선택 드롭다운.
+                     c:choose/c:when/c:otherwise 는 JSTL(자바 서버 태그)이다. "만약~라면"에 해당한다.
+                     carList 가 비어 있으면(c:when) select 대신 안내 문구만 보여준다.
+                     차량이 있으면(c:otherwise) select#cost-car 를 만들고,
+                     c:forEach 로 carList 의 차량 수만큼 option 을 하나씩 반복해서 찍어낸다.
+                     option 의 value 는 "차량명|가격" 형태로 만들어 JS가 | 로 나눠 쓴다.
+                     sendAICost() 함수가 이 id(cost-car)로 지금 선택된 값을 읽어간다 --%>
                 <div class="form-group">
                     <label class="form-label" for="cost-car">차량 선택</label>
                     <c:choose>
@@ -245,6 +278,7 @@
                     </c:choose>
                 </div>
 
+                <%-- 대여 기간 드롭다운. id="cost-days" 를 sendAICost() 가 읽어간다 --%>
                 <div class="form-group">
                     <label class="form-label" for="cost-days">대여 기간</label>
                     <select class="form-control" id="cost-days">
@@ -267,12 +301,19 @@
                [변경] 금액을 화면에 적어두지 않고 서버가 내려준 값을 쓴다.
                       출처는 CarService.PRICE_* 한 곳뿐이다.
                       data-price 는 JS가 AI 에게 보낼 문장을 만들 때 사용한다.
+
+               fieldset/legend : 관련된 체크박스 여러 개를 하나의 묶음으로 스크린리더에 알려주는 HTML 태그다.
+               각 label 안의 input(체크박스)에는 id 와 data-price 속성이 있다.
+                 - id : sendAICost() 가 document.getElementById(id) 로 이 체크박스를 찾는다
+                 - data-price : 서버가 내려준 요금(예: 자차보험 하루 요금)을 태그 속성에 그대로 심어 둔 것.
+                                JS는 화면에 보이는 값을 직접 계산하지 않고 이 속성값을 그대로 읽는다
             --%>
             <fieldset class="ai-option-set">
                 <legend class="form-label">추가 옵션</legend>
 
                 <div class="ai-check-grid">
 
+                    <%-- 자차보험 체크박스. id="cost-ins" 로 sendAICost() 가 찾는다 --%>
                     <label class="ai-check">
                         <input type="checkbox" id="cost-ins" data-price="${requestScope.priceInsurance}">
                         <span class="ai-check-name">자차보험</span>
@@ -281,6 +322,7 @@
                         </span>
                     </label>
 
+                    <%-- 무선 WiFi 체크박스. id="cost-wifi" --%>
                     <label class="ai-check">
                         <input type="checkbox" id="cost-wifi" data-price="${requestScope.priceWifi}">
                         <span class="ai-check-name">무선 WiFi</span>
@@ -289,6 +331,7 @@
                         </span>
                     </label>
 
+                    <%-- 네비게이션 체크박스. id="cost-navi" --%>
                     <label class="ai-check">
                         <input type="checkbox" id="cost-navi" data-price="${requestScope.priceNavi}">
                         <span class="ai-check-name">네비게이션</span>
@@ -297,6 +340,7 @@
                         </span>
                     </label>
 
+                    <%-- 베이비시트 체크박스. id="cost-baby" --%>
                     <label class="ai-check">
                         <input type="checkbox" id="cost-baby" data-price="${requestScope.priceBabyseat}">
                         <span class="ai-check-name">베이비시트</span>
@@ -308,6 +352,7 @@
                 </div>
             </fieldset>
 
+            <%-- "비용 계산하기" 버튼. onclick="sendAICost()" 로 위 select/checkbox 값을 모두 모아 AI를 부른다 --%>
             <button type="button" class="btn btn-primary btn-lg btn-block mt-6"
                     id="btn-2" onclick="sendAICost()">
                 &#128178; 비용 계산하기
@@ -315,6 +360,7 @@
 
         </div>
 
+        <%-- 로딩 표시. id="loading-2" 를 callAIService() 가 찾아 보이거나 숨긴다 --%>
         <div id="loading-2" class="ai-loading" aria-live="polite">
             <div class="ai-loading-dots" aria-hidden="true">
                 <span class="ai-loading-dot"></span>
@@ -324,6 +370,7 @@
             <p class="ai-loading-text">AI가 비용을 계산하고 있습니다...</p>
         </div>
 
+        <%-- 결과 상자. showResult(2, ...) 가 id="result-2" 안에 답변 카드를 채운다 --%>
         <div id="result-2" class="ai-result" aria-live="polite"></div>
 
     </section>
@@ -340,6 +387,11 @@
 
             <div class="ai-form-grid">
 
+                <%-- 여행지 입력칸. <select> 가 아니라 <input type="text"> 라서 사용자가 자유롭게 글자를 쓴다.
+                     id="travel-dest" 를 sendAITravel() 함수가 읽어간다.
+                     바로 아래 <p id="travel-dest-hint"> 는 처음엔 비어 있다가,
+                     여행지를 안 쓰고 버튼을 누르면 sendAITravel() 이 여기에 "여행지를 입력해주세요." 라고 채워 넣는다.
+                     required 표시(*)는 그냥 화면에 보여주는 글자일 뿐, 실제 필수 검사는 JS(sendAITravel)가 한다 --%>
                 <div class="form-group">
                     <label class="form-label" for="travel-dest">
                         여행지 <span class="required">*</span>
@@ -349,6 +401,7 @@
                     <p class="form-hint" id="travel-dest-hint"></p>
                 </div>
 
+                <%-- 여행 일수 드롭다운. id="travel-days" 를 sendAITravel() 이 읽어간다 --%>
                 <div class="form-group">
                     <label class="form-label" for="travel-days">여행 일수</label>
                     <select class="form-control" id="travel-days">
@@ -361,6 +414,7 @@
                     </select>
                 </div>
 
+                <%-- 여행 인원 드롭다운. id="travel-people" 를 sendAITravel() 이 읽어간다 --%>
                 <div class="form-group">
                     <label class="form-label" for="travel-people">여행 인원</label>
                     <select class="form-control" id="travel-people">
@@ -373,6 +427,7 @@
                     </select>
                 </div>
 
+                <%-- 여행 스타일 드롭다운. id="travel-style" 를 sendAITravel() 이 읽어간다 --%>
                 <div class="form-group">
                     <label class="form-label" for="travel-style">여행 스타일</label>
                     <select class="form-control" id="travel-style">
@@ -385,6 +440,7 @@
 
             </div>
 
+            <%-- "여행 계획 만들기" 버튼. onclick="sendAITravel()" 로 위 입력값들을 모아 AI를 부른다 --%>
             <button type="button" class="btn btn-primary btn-lg btn-block mt-6"
                     id="btn-3" onclick="sendAITravel()">
                 &#9992; 여행 계획 만들기
@@ -392,6 +448,7 @@
 
         </div>
 
+        <%-- 로딩 표시. id="loading-3" 를 callAIService() 가 찾아 보이거나 숨긴다 --%>
         <div id="loading-3" class="ai-loading" aria-live="polite">
             <div class="ai-loading-dots" aria-hidden="true">
                 <span class="ai-loading-dot"></span>
@@ -401,6 +458,7 @@
             <p class="ai-loading-text">AI가 여행 일정을 계획하고 있습니다...</p>
         </div>
 
+        <%-- 결과 상자. showResult(3, ...) 가 id="result-3" 안에 답변 카드를 채운다 --%>
         <div id="result-3" class="ai-result" aria-live="polite"></div>
 
     </section>
@@ -426,6 +484,10 @@
                 금액을 찾아 예약 화면까지 이어드립니다.
             </p>
 
+            <%-- 예약 문장을 적는 곳. <select>가 아니라 <textarea>(여러 줄 입력칸)를 쓴 이유는
+                 문장이 길어질 수 있어서다. id="reserve-text" 를 sendAIReserve() 가 읽어간다.
+                 rows="3" 은 처음에 3줄 높이로 보이라는 뜻, maxlength="200" 은 최대 200자까지만 쓸 수 있다는 제한이다.
+                 <p id="reserve-hint"> 는 입력을 안 하고 버튼을 눌렀을 때 sendAIReserve() 가 안내 문구를 채우는 자리다 --%>
             <div class="form-group">
                 <label class="form-label" for="reserve-text">원하시는 일정</label>
                 <textarea class="form-control" id="reserve-text" rows="3" maxlength="200"
@@ -433,13 +495,16 @@
                 <p class="form-hint" id="reserve-hint"></p>
             </div>
 
-            <%-- 예시 문장 : 누르면 입력칸에 채워진다 (처음 쓰는 사람의 막막함을 없앤다) --%>
+            <%-- 예시 문장 버튼 3개 : 누르면 입력칸에 채워진다 (처음 쓰는 사람의 막막함을 없앤다).
+                 이 버튼들에는 onclick 이 따로 없다. 대신 script 태그 안의 IIFE(즉시실행함수)가
+                 class="reserve-example" 를 가진 버튼을 전부 찾아 클릭 이벤트를 걸어 둔다 --%>
             <div class="flex flex-wrap gap-2">
                 <button type="button" class="btn btn-ghost btn-sm reserve-example">내일부터 3일간 2명, 하루 5만원 이하</button>
                 <button type="button" class="btn btn-ghost btn-sm reserve-example">다음 주 토요일 당일, 가족 4명 SUV</button>
                 <button type="button" class="btn btn-ghost btn-sm reserve-example">8월 15일부터 일주일, 9명 워크숍</button>
             </div>
 
+            <%-- "조건에 맞는 차량 찾기" 버튼. onclick="sendAIReserve()" 로 textarea의 문장을 서버로 보낸다 --%>
             <button type="button" class="btn btn-primary btn-lg btn-block mt-6"
                     id="btn-4" onclick="sendAIReserve()">
                 &#128663; 조건에 맞는 차량 찾기
@@ -447,6 +512,7 @@
 
         </div>
 
+        <%-- 로딩 표시. id="loading-4" 를 sendAIReserve() 가 찾아 보이거나 숨긴다 --%>
         <div id="loading-4" class="ai-loading" aria-live="polite">
             <div class="ai-loading-dots" aria-hidden="true">
                 <span class="ai-loading-dot"></span>
@@ -456,6 +522,7 @@
             <p class="ai-loading-text">일정을 읽고 보유 차량에서 찾는 중입니다...</p>
         </div>
 
+        <%-- 결과 상자. renderReserveResult() 가 id="result-4" 안에 차량 카드들을 채운다 --%>
         <div id="result-4" class="ai-result" aria-live="polite"></div>
 
     </section>
@@ -467,7 +534,7 @@
    AI 추천 서비스 - 순수 자바스크립트 (jQuery 사용하지 않음)
    ============================================================ */
 
-var aiContextPath = "<%=contextPath%>";
+var aiContextPath = "<%=contextPath%>";   // 이 웹앱의 기본 주소(예: /CarRent)를 자바 쪽에서 받아 JS 변수에 저장한다. 서버 주소로 fetch 요청을 보낼 때마다 이 값을 앞에 붙여 쓴다
 
 /* ------------------------------------------------------------
    탭 전환
@@ -475,28 +542,28 @@ var aiContextPath = "<%=contextPath%>";
             app.css 의 다른 컴포넌트와 규칙을 맞추기 위한 것이다.
      [변경] aria-selected 도 함께 갱신한다 (스크린리더용).
    ------------------------------------------------------------ */
-function switchTab(num) {
+function switchTab(num) {   // num 은 탭 번호(1~4). HTML의 <button onclick="switchTab(1)"> 처럼 버튼을 누르면 그 번호가 넘어온다
 
-    var tabs   = document.querySelectorAll('.ai-tab');   // 탭 버튼 4개를 모두 찾는다
-    var panels = document.querySelectorAll('.ai-panel');   // 탭에 대응하는 내용 판 4개를 모두 찾는다
+    var tabs   = document.querySelectorAll('.ai-tab');   // class="ai-tab" 이 붙은 <button> 4개(tab-1~tab-4)를 전부 찾아 배열처럼 담는다
+    var panels = document.querySelectorAll('.ai-panel');   // class="ai-panel" 이 붙은 <section> 4개(panel-1~panel-4, 각 탭의 내용 화면)를 전부 찾아 담는다
 
-    for (var i = 0; i < tabs.length; i++) {   // 먼저 모든 탭에서 "선택됨" 표시를 뗀다
-        tabs[i].classList.remove('is-active');   // 활성 클래스를 뗀다 (CSS 가 이 클래스로 색을 바꾼다)
-        tabs[i].setAttribute('aria-selected', 'false');   // 스크린리더에도 "선택 안 됨" 이라고 알린다
+    for (var i = 0; i < tabs.length; i++) {   // 방금 찾은 탭 버튼 4개를 처음부터 끝까지 하나씩 돈다
+        tabs[i].classList.remove('is-active');   // i번째 탭 버튼에서 is-active 클래스를 뗀다 (CSS가 이 클래스 유무로 선택된 탭의 색을 바꾼다)
+        tabs[i].setAttribute('aria-selected', 'false');   // 같은 버튼의 aria-selected 속성을 false 로 바꿔 스크린리더에 "선택 안 됨"이라고 알린다
     }
-    for (var j = 0; j < panels.length; j++) {   // 모든 내용 판도 숨긴다
-        panels[j].classList.remove('is-active');   // 활성 클래스를 떼면 CSS 가 감춘다
-    }
-
-    var tab = document.getElementById('tab-' + num);   // 누른 번호의 탭을 찾는다
-    if (tab) {   // 그 탭이 있으면
-        tab.classList.add('is-active');   // 활성 클래스를 붙여 선택된 모양으로 만든다
-        tab.setAttribute('aria-selected', 'true');   // 스크린리더에도 "선택됨" 이라고 알린다
+    for (var j = 0; j < panels.length; j++) {   // 이번엔 내용 판(section) 4개를 처음부터 끝까지 돈다
+        panels[j].classList.remove('is-active');   // j번째 판에서 is-active 클래스를 뗀다. CSS가 이 클래스가 없으면 화면에서 감춘다
     }
 
-    var panel = document.getElementById('panel-' + num);   // 누른 번호의 내용 판을 찾는다
-    if (panel) {   // 그 판이 있으면
-        panel.classList.add('is-active');   // 활성 클래스를 붙여 화면에 보이게 한다
+    var tab = document.getElementById('tab-' + num);   // id="tab-1"~"tab-4" 중, 눌린 번호와 같은 id를 가진 <button> 하나를 정확히 찾는다
+    if (tab) {   // 그 id를 가진 버튼이 실제로 존재하면 (오타 방지용 안전장치)
+        tab.classList.add('is-active');   // 그 버튼에만 is-active 클래스를 다시 붙여 "선택된 탭" 모양으로 만든다
+        tab.setAttribute('aria-selected', 'true');   // 같은 버튼의 aria-selected 를 true 로 바꿔 스크린리더에 "선택됨"이라고 알린다
+    }
+
+    var panel = document.getElementById('panel-' + num);   // id="panel-1"~"panel-4" 중, 눌린 번호와 같은 id를 가진 <section> 하나를 정확히 찾는다
+    if (panel) {   // 그 id를 가진 판이 실제로 존재하면
+        panel.classList.add('is-active');   // 그 판에만 is-active 클래스를 붙여 화면에 보이게 한다 (나머지 판은 위에서 이미 숨겨졌다)
     }
 }
 
@@ -526,33 +593,33 @@ function escapeHtml(text) {
 /* ------------------------------------------------------------
    공통 : AI 서비스 호출
    ------------------------------------------------------------ */
-function callAIService(message, type, resultNum) {
+function callAIService(message, type, resultNum) {   // resultNum 은 1,2,3 중 하나 (탭1/2/3에 대응). 이 번호로 어느 버튼·로딩·결과칸을 다룰지 정한다
 
-    var btn     = document.getElementById('btn-' + resultNum);   // 실행 버튼을 찾는다
-    var loading = document.getElementById('loading-' + resultNum);   // "불러오는 중" 표시를 찾는다
-    var result  = document.getElementById('result-' + resultNum);   // 결과를 그릴 자리를 찾는다
+    var btn     = document.getElementById('btn-' + resultNum);   // id="btn-1"(또는 btn-2, btn-3)인 <button>, 즉 "AI 추천받기" 같은 실행 버튼을 찾는다
+    var loading = document.getElementById('loading-' + resultNum);   // id="loading-1" 인 <div class="ai-loading">, 즉 "불러오는 중" 점 3개 표시 상자를 찾는다
+    var result  = document.getElementById('result-' + resultNum);   // id="result-1" 인 <div class="ai-result">, 즉 AI 답변이 그려질 빈 상자를 찾는다
 
     /* 버튼을 잠근다. 잠그지 않으면 연달아 눌러 AI 호출이 중복된다(비용이 든다). */
-    btn.disabled = true;
-    loading.style.display = 'block';   // "불러오는 중" 표시를 보이게 한다
-    result.style.display = 'none';   // 이전 결과는 숨긴다
+    btn.disabled = true;   // 위에서 찾은 버튼(btn)의 disabled 속성을 true 로 바꿔 눌러도 반응하지 않게(회색으로) 만든다
+    loading.style.display = 'block';   // loading 상자(div)의 CSS display 속성을 block 으로 바꿔 화면에 보이게 한다
+    result.style.display = 'none';   // result 상자(div)의 display 를 none 으로 바꿔 이전에 그려져 있던 결과를 숨긴다
 
-    var formData = new URLSearchParams();   // 보낼 값들을 담을 상자를 만든다
-    formData.append('message', message);   // AI 에게 물어볼 문장을 담는다
-    formData.append('type', type);   // 어떤 서비스인지(recommend/cost/travel)를 담는다. 서버가 이 값으로 역할을 정한다
+    var formData = new URLSearchParams();   // 서버로 보낼 이름=값 쌍을 담을 빈 상자를 만든다 (HTML 요소가 아니라 자바스크립트 내장 도구다)
+    formData.append('message', message);   // 이 상자에 message 라는 이름으로 AI에게 물어볼 문장을 담는다
+    formData.append('type', type);   // 같은 상자에 type 이라는 이름으로 서비스 종류(recommend/cost/travel)를 담는다. 서버가 이 값으로 역할을 정한다
 
 
-    fetch(aiContextPath + '/Chatbot/ai.do', {   // AI 서비스 주소로 요청을 보낸다
+    fetch(aiContextPath + '/Chatbot/ai.do', {   // 앞서 만든 aiContextPath 변수 + 주소로 서버에 요청을 보낸다 (HTML 요소가 아니라 네트워크 통신이다)
         method: 'POST',   // POST 방식으로 보낸다
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',   // 본문이 "이름=값&이름=값" 형식이라고 알린다
             /* 서버가 "비동기 요청"으로 인식해 HTML 대신 짧은 메시지로 답하게 한다 */
             'X-Requested-With': 'XMLHttpRequest'
         },
-        body: formData.toString(),
+        body: formData.toString(),   // 위에서 담은 formData 를 "message=...&type=..." 같은 문자열로 바꿔 본문에 싣는다
         credentials: 'same-origin'
     })
-    .then(function(response) {
+    .then(function(response) {   // 서버가 응답을 보내오면 이 함수가 실행된다 (response 는 아직 HTML 요소가 아니라 서버의 응답 객체다)
         if (response.status === 403) {   // 403 = 로그인 필요, 권한 없음 : 서버(BaseController)가 보낸 안내 문구를 실패 이유로 쓴다
             return response.text().then(function(message) { throw new Error(message.trim()); });
         }
@@ -561,16 +628,16 @@ function callAIService(message, type, resultNum) {
         }
         return response.json();   // 정상이면 응답을 JSON 으로 읽는다
     })
-    .then(function(data) {   // 읽은 결과를 화면에 그린다
-        loading.style.display = 'none';   // "불러오는 중" 표시를 지운다
-        btn.disabled = false;   // 버튼을 다시 누를 수 있게 푼다
+    .then(function(data) {   // 읽은 결과(data)를 화면(위에서 찾아둔 loading, btn, result 요소)에 반영한다
+        loading.style.display = 'none';   // loading 상자를 다시 안 보이게(display:none) 바꾼다
+        btn.disabled = false;   // btn 버튼의 잠금을 풀어(disabled:false) 다시 누를 수 있게 한다
         showResult(resultNum, data.reply || '응답을 받지 못했습니다.', type);   // AI 답변을 결과 카드로 그린다. 답이 없으면 대신 보여줄 문구를 쓴다
     })
-    .catch(function(error) {   // 통신이 실패한 경우
-        loading.style.display = 'none';   // "불러오는 중" 표시를 지운다
-        btn.disabled = false;   // 버튼을 다시 누를 수 있게 푼다 (안 풀면 다시는 못 누른다)
-        showResult(resultNum, error.message || '네트워크 오류가 발생했습니다. 다시 시도해주세요.', type);   // 실패 이유를 결과 자리에 그대로 보여 준다
-        console.error('AI Service error:', error);   // 개발자가 원인을 볼 수 있게 브라우저 콘솔에 남긴다
+    .catch(function(error) {   // 통신이 실패한 경우, 위와 같은 요소들을 원래 상태로 되돌린다
+        loading.style.display = 'none';   // loading 상자를 다시 안 보이게 한다
+        btn.disabled = false;   // btn 버튼의 잠금을 풀어 다시 누를 수 있게 한다 (안 풀면 다시는 못 누른다)
+        showResult(resultNum, error.message || '네트워크 오류가 발생했습니다. 다시 시도해주세요.', type);   // 실패 이유를 result 상자에 그대로 보여 준다
+        console.error('AI Service error:', error);   // 개발자가 원인을 볼 수 있게 브라우저 콘솔에 남긴다 (화면 요소와는 무관, 개발자 도구용)
     });
 }
 
@@ -579,33 +646,33 @@ function callAIService(message, type, resultNum) {
    ------------------------------------------------------------ */
 function showResult(resultNum, text, type) {
 
-    var result = document.getElementById('result-' + resultNum);   // 결과를 그릴 자리를 찾는다
+    var result = document.getElementById('result-' + resultNum);   // id="result-1/2/3" 중 해당 번호의 <div class="ai-result">, 즉 결과를 그릴 빈 상자를 찾는다
 
-    var iconMap  = { recommend: '🚗', cost: '💰', travel: '✈' };   // 서비스 종류별 아이콘을 미리 정해 둔다
+    var iconMap  = { recommend: '🚗', cost: '💰', travel: '✈' };   // 서비스 종류별 아이콘을 미리 정해 둔다 (HTML 요소 아님, 그냥 자바스크립트 객체)
     var labelMap = { recommend: 'AI 추천 결과', cost: 'AI 비용 분석', travel: 'AI 여행 계획' };   // 서비스 종류별 제목을 미리 정해 둔다
 
-    result.innerHTML =   // 결과 카드 HTML 을 조립해 넣는다
-        '<div class="ai-result-card">' +
-            '<div class="ai-result-header">' +
-                '<span class="ai-result-icon" aria-hidden="true">' + (iconMap[type] || '🤖') + '</span>' +
-                '<span class="ai-result-label">' + (labelMap[type] || 'AI 응답') + '</span>' +
-            '</div>' +
-            '<div class="ai-result-body">' + formatAIResponse(text) + '</div>' +
-            '<button type="button" class="btn btn-outline btn-sm mt-4" ' +
-                    'onclick="resetResult(' + resultNum + ')">🔄 다시 물어보기</button>' +
-        '</div>';
+    result.innerHTML =   // 위에서 찾은 result 상자(div) 안쪽 내용을, 아래에서 조립한 HTML 문자열로 통째로 새로 채워 넣는다
+        '<div class="ai-result-card">' +                          // 결과 카드 전체를 감싸는 상자를 연다 (이 div들은 지금 새로 "만들어지는" 요소다, 화면엔 아직 없음)
+            '<div class="ai-result-header">' +                    // 카드 맨 위, 아이콘+제목이 들어갈 줄을 연다
+                '<span class="ai-result-icon" aria-hidden="true">' + (iconMap[type] || '🤖') + '</span>' +   // 서비스 종류에 맞는 아이콘을 넣는다. 없으면 기본 로봇 아이콘을 쓴다
+                '<span class="ai-result-label">' + (labelMap[type] || 'AI 응답') + '</span>' +               // 서비스 종류에 맞는 제목을 넣는다. 없으면 기본 제목을 쓴다
+            '</div>' +                                              // 헤더 줄을 닫는다
+            '<div class="ai-result-body">' + formatAIResponse(text) + '</div>' +   // AI가 답한 내용을 안전하게 서식 처리해서 넣는다 (escapeHtml 을 거친 값)
+            '<button type="button" class="btn btn-outline btn-sm mt-4" ' +         // "다시 물어보기" 버튼을 새로 만든다
+                    'onclick="resetResult(' + resultNum + ')">🔄 다시 물어보기</button>' +   // 이 버튼을 누르면 resetResult 함수가 같은 번호의 result 상자를 지운다
+        '</div>';                                                    // 카드 전체 상자를 닫는다
 
-    result.style.display = 'block';   // 결과 자리를 보이게 한다
-    result.scrollIntoView({ behavior: 'smooth', block: 'start' });   // 결과가 있는 곳까지 부드럽게 스크롤해 준다
+    result.style.display = 'block';   // result 상자(div)의 display 를 block 으로 바꿔 방금 채운 내용이 화면에 보이게 한다
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });   // 브라우저가 result 상자가 있는 위치까지 부드럽게 스크롤을 옮겨 준다
 }
 
 /* ------------------------------------------------------------
    결과 초기화
    ------------------------------------------------------------ */
 function resetResult(resultNum) {
-    var result = document.getElementById('result-' + resultNum);   // 결과를 그릴 자리를 찾는다
-    result.style.display = 'none';   // 화면에서 숨긴다
-    result.innerHTML = '';   // 안에 있던 내용도 비운다 (다음에 열 때 이전 결과가 보이지 않게)
+    var result = document.getElementById('result-' + resultNum);   // id="result-1/2/3/4" 중 해당 번호의 결과 상자(div)를 찾는다
+    result.style.display = 'none';   // 그 상자의 display 를 none 으로 바꿔 화면에서 숨긴다
+    result.innerHTML = '';   // 그 상자 안의 내용도 완전히 비운다 (다음에 열 때 이전 결과가 잠깐이라도 보이지 않게)
 }
 
 /* ------------------------------------------------------------
@@ -628,16 +695,16 @@ function formatAIResponse(text) {
    ============================================================ */
 function sendAIRecommend() {
 
-    var passengers = document.getElementById('rec-passengers').value;   // 입력한 탑승 인원
-    var budget     = document.getElementById('rec-budget').value;   // 고른 예산
-    var purpose    = document.getElementById('rec-purpose').value;   // 고른 용도
+    var passengers = document.getElementById('rec-passengers').value;   // id="rec-passengers" 인 <select>(탑승 인원 드롭다운)를 찾아, 지금 선택된 값(예: "4")을 읽는다
+    var budget     = document.getElementById('rec-budget').value;   // id="rec-budget" 인 <select>(1일 예산 드롭다운)에서 선택된 값을 읽는다
+    var purpose    = document.getElementById('rec-purpose').value;   // id="rec-purpose" 인 <select>(이용 목적 드롭다운)에서 선택된 값을 읽는다
 
-    var message = '탑승인원: ' + passengers + '명, '   // 입력값들을 하나의 자연어 문장으로 조립한다. AI 는 문장으로 받아야 잘 이해한다
+    var message = '탑승인원: ' + passengers + '명, '   // 위 세 값을 하나의 자연어 문장으로 조립한다. AI 는 문장으로 받아야 잘 이해한다
                 + '1일 예산: ' + budget + ', '
                 + '용도: ' + purpose + '. '
                 + '이 조건에 맞는 최적의 렌트카를 추천해주세요.';
 
-    callAIService(message, 'recommend', 1);   // 조립한 문장으로 AI 를 부른다. 1번 자리에 결과를 그린다
+    callAIService(message, 'recommend', 1);   // 조립한 문장으로 AI 를 부른다. resultNum=1 이므로 btn-1/loading-1/result-1 요소들이 다뤄진다
 }
 
 /* ============================================================
@@ -645,46 +712,46 @@ function sendAIRecommend() {
    ============================================================ */
 function sendAICost() {
 
-    var carSelect = document.getElementById('cost-car');   // 차량 선택 상자를 찾는다
+    var carSelect = document.getElementById('cost-car');   // id="cost-car" 인 <select>(차량 선택 드롭다운)를 찾는다. 차량이 없으면 이 select 자체가 화면에 없을 수 있다
 
     /* 차량 목록이 비어 select 자체가 없을 수 있다 (DB에 차량이 없을 때) */
-    if (!carSelect || !carSelect.value) {
-        alert('선택할 수 있는 차량이 없습니다.');
-        return;   // 고를 차가 없으면 여기서 끝낸다
+    if (!carSelect || !carSelect.value) {   // carSelect 요소 자체가 없거나(null), 있어도 선택된 값이 비어 있으면
+        alert('선택할 수 있는 차량이 없습니다.');   // 브라우저 기본 경고창을 띄운다 (특정 HTML 요소가 아니라 브라우저가 직접 보여주는 창)
+        return;   // 고를 차가 없으면 여기서 함수를 끝낸다
     }
 
-    var carParts = carSelect.value.split('|');   // "차량명|가격"
-    var carName  = carParts[0];   // "차량명|가격" 에서 앞쪽이 차량명이다
-    var carPrice = Number(carParts[1] || 0);   // 뒤쪽이 가격이다. 숫자로 바꾸고 실패하면 0 을 쓴다
-    var days     = document.getElementById('cost-days').value;   // 입력한 대여 일수
+    var carParts = carSelect.value.split('|');   // cost-car select 에서 선택된 값("차량명|가격")을 | 기준으로 잘라 배열로 만든다
+    var carName  = carParts[0];   // 잘린 배열의 0번째, 즉 차량명
+    var carPrice = Number(carParts[1] || 0);   // 잘린 배열의 1번째, 즉 가격. 숫자로 바꾸고 실패하면 0 을 쓴다
+    var days     = document.getElementById('cost-days').value;   // id="cost-days" 인 <select>(대여 기간 드롭다운)에서 선택된 일수를 읽는다
 
     /*
      선택한 옵션을 모은다.
      [변경] 금액을 JS 안에 적어두지 않고 data-price 속성에서 읽는다.
             그 값은 서버(CarService.PRICE_*)가 내려준 것이다.
     */
-    var optionIds = [
-        { id: 'cost-ins',  name: '자차보험' },
-        { id: 'cost-wifi', name: '무선 WiFi' },
-        { id: 'cost-navi', name: '네비게이션' },
-        { id: 'cost-baby', name: '베이비시트' }
-    ];
+    var optionIds = [   // 화면에 있는 옵션 체크박스 4개(<input type="checkbox">)의 id와 이름을 배열(목록)로 미리 정리해 둔다
+        { id: 'cost-ins',  name: '자차보험' },     // id="cost-ins" 인 체크박스 = 자차보험
+        { id: 'cost-wifi', name: '무선 WiFi' },    // id="cost-wifi" 인 체크박스 = 무선 WiFi
+        { id: 'cost-navi', name: '네비게이션' },   // id="cost-navi" 인 체크박스 = 네비게이션
+        { id: 'cost-baby', name: '베이비시트' }    // id="cost-baby" 인 체크박스 = 베이비시트
+    ];   // 배열을 닫는다. 이렇게 목록으로 만들어 두면 아래 for문에서 하나씩 반복 처리할 수 있다
 
     var options = [];   // 고른 옵션 이름을 모을 빈 목록
     for (var i = 0; i < optionIds.length; i++) {   // 옵션 4개를 하나씩 확인한다
-        var box = document.getElementById(optionIds[i].id);   // 그 체크박스를 찾는다
-        if (box && box.checked) {   // 체크박스가 있고 체크되어 있으면
-            var price = Number(box.getAttribute('data-price') || 0);   // 화면에 심어 둔 요금을 읽는다. 이 값은 서버가 내려준 것이다
+        var box = document.getElementById(optionIds[i].id);   // 이번 순서의 id(cost-ins 등)를 가진 실제 <input type="checkbox"> 요소를 찾는다
+        if (box && box.checked) {   // 그 체크박스가 실제로 존재하고, 사용자가 체크(선택)해 두었다면
+            var price = Number(box.getAttribute('data-price') || 0);   // 그 체크박스 태그에 심어 둔 data-price 속성값(요금)을 읽는다. 이 값은 서버가 내려준 것이다
             options.push(optionIds[i].name + '(' + price.toLocaleString() + '원/일)');   // "자차보험(15,000원/일)" 형태로 목록에 담는다.  toLocaleString 은 천 단위 쉼표를 넣어 준다
         }
     }
 
-    var message = '차량: ' + carName + ' (일일 렌탈료 ' + carPrice.toLocaleString() + '원), '   // 입력값들을 하나의 자연어 문장으로 조립한다
+    var message = '차량: ' + carName + ' (일일 렌탈료 ' + carPrice.toLocaleString() + '원), '   // 지금까지 읽은 값들을 하나의 자연어 문장으로 조립한다
                 + '대여기간: ' + days + '일, '
                 + '추가옵션: ' + (options.length > 0 ? options.join(', ') : '없음') + '. '
                 + '총 비용을 계산하고 절약 팁을 알려주세요.';
 
-    callAIService(message, 'cost', 2);   // 조립한 문장으로 AI 를 부른다. 2번 자리에 결과를 그린다
+    callAIService(message, 'cost', 2);   // 조립한 문장으로 AI 를 부른다. resultNum=2 이므로 btn-2/loading-2/result-2 요소들이 다뤄진다
 }
 
 /* ============================================================
@@ -692,33 +759,33 @@ function sendAICost() {
    ============================================================ */
 function sendAITravel() {
 
-    var destInput = document.getElementById('travel-dest');   // 여행지 입력칸을 찾는다
-    var hint      = document.getElementById('travel-dest-hint');   // 안내 문구를 띄울 자리를 찾는다
-    var dest      = destInput.value.trim();   // 입력한 여행지를 읽고 앞뒤 공백을 없앤다
+    var destInput = document.getElementById('travel-dest');   // id="travel-dest" 인 <input type="text">(여행지 입력칸) 요소 자체를 찾아 둔다 (아직 값이 아니라 요소)
+    var hint      = document.getElementById('travel-dest-hint');   // id="travel-dest-hint" 인 <p>(입력칸 바로 아래 안내 문구 자리)를 찾는다
+    var dest      = destInput.value.trim();   // destInput 요소의 현재 입력값(value)을 읽고, trim() 으로 앞뒤 공백을 없앤다
 
     /* [변경] alert 대신 입력칸 아래에 안내를 띄운다.
              alert 은 화면을 가려서 어느 칸이 문제인지 알기 어렵다. */
-    if (!dest) {
-        hint.textContent = '여행지를 입력해주세요.';
-        hint.className = 'form-error';   // 오류용 클래스를 붙여 빨간 글씨로 만든다
-        destInput.focus();   // 입력칸에 커서를 놓아 준다 (어디를 고칠지 바로 알 수 있게)
-        return;   // 여기서 끝낸다
+    if (!dest) {   // 입력값이 빈 문자열이면(아무것도 안 썼으면)
+        hint.textContent = '여행지를 입력해주세요.';   // hint(<p>) 안의 글자를 이 안내 문구로 바꾼다
+        hint.className = 'form-error';   // hint(<p>)의 class 를 form-error 로 바꿔 CSS가 빨간 글씨로 보여주게 한다
+        destInput.focus();   // destInput(입력칸)에 커서를 놓아 준다 (어디를 고칠지 바로 알 수 있게)
+        return;   // 여기서 함수를 끝낸다
     }
 
-    hint.textContent = '';   // 입력이 정상이면 안내 문구를 지운다
-    hint.className = 'form-hint';   // 클래스도 평소 상태로 되돌린다
+    hint.textContent = '';   // 입력이 정상이면 hint(<p>) 안의 안내 문구를 빈 문자열로 지운다
+    hint.className = 'form-hint';   // hint(<p>)의 class 도 평소 상태(form-hint)로 되돌린다
 
-    var days   = document.getElementById('travel-days').value;   // 입력한 여행 일수
-    var people = document.getElementById('travel-people').value;   // 입력한 인원
-    var style  = document.getElementById('travel-style').value;   // 고른 여행 스타일
+    var days   = document.getElementById('travel-days').value;   // id="travel-days" 인 <select>(여행 일수 드롭다운)에서 선택된 값을 읽는다
+    var people = document.getElementById('travel-people').value;   // id="travel-people" 인 <select>(여행 인원 드롭다운)에서 선택된 값을 읽는다
+    var style  = document.getElementById('travel-style').value;   // id="travel-style" 인 <select>(여행 스타일 드롭다운)에서 선택된 값을 읽는다
 
-    var message = '여행지: ' + dest + ', '   // 입력값들을 하나의 자연어 문장으로 조립한다
+    var message = '여행지: ' + dest + ', '   // 지금까지 읽은 값들을 하나의 자연어 문장으로 조립한다
                 + '기간: ' + days + '일, '
                 + '인원: ' + people + '명, '
                 + '여행스타일: ' + style + '. '
                 + '일정별 여행 계획과 추천 렌트카를 알려주세요.';
 
-    callAIService(message, 'travel', 3);   // 조립한 문장으로 AI 를 부른다. 3번 자리에 결과를 그린다
+    callAIService(message, 'travel', 3);   // 조립한 문장으로 AI 를 부른다. resultNum=3 이므로 btn-3/loading-3/result-3 요소들이 다뤄진다
 }
 
 /* ============================================================
@@ -731,41 +798,41 @@ function sendAITravel() {
    ============================================================ */
 
 /* 예시 문장 버튼 : 누르면 입력칸에 채워진다 */
-(function () {
-    var examples = document.querySelectorAll('.reserve-example');   // 예시 문장 버튼들을 모두 찾는다
-    for (var i = 0; i < examples.length; i++) {   // 버튼을 하나씩 처리한다
-        examples[i].addEventListener('click', function () {   // 그 버튼을 클릭했을 때 실행할 동작을 등록한다
-            document.getElementById('reserve-text').value = this.textContent.trim();   // 누른 예시 문장을 입력칸에 그대로 넣는다.  this 는 방금 누른 버튼을 가리킨다
-            document.getElementById('reserve-text').focus();   // 입력칸에 커서를 놓아 준다 (바로 고쳐 쓸 수 있게)
+(function () {   // 페이지가 로드되자마자 바로 실행되는 함수(IIFE). 아래 괄호 () 가 즉시 실행시킨다
+    var examples = document.querySelectorAll('.reserve-example');   // class="reserve-example" 가 붙은 <button> 3개(예시 문장 버튼들)를 모두 찾는다
+    for (var i = 0; i < examples.length; i++) {   // 찾은 예시 버튼들을 하나씩 처리한다
+        examples[i].addEventListener('click', function () {   // i번째 예시 버튼에 "클릭되면 실행할 동작"을 등록해 둔다 (지금 실행되는 게 아니라 나중에 클릭될 때 실행됨)
+            document.getElementById('reserve-text').value = this.textContent.trim();   // id="reserve-text" 인 <textarea>(예약 문장 입력칸)의 값을, 방금 누른 버튼(this)의 글자로 채운다
+            document.getElementById('reserve-text').focus();   // 같은 textarea(reserve-text)에 커서를 놓아 준다 (바로 고쳐 쓸 수 있게)
         });
     }
-})();   // 이 괄호가 위에서 시작한 함수를 "바로 실행" 시킨다
+})();   // 이 괄호가 위에서 정의한 함수를 "바로 실행" 시킨다
 
-function sendAIReserve() {   // "말로 예약하기" 버튼이 부르는 함수
+function sendAIReserve() {   // "말로 예약하기" 버튼(id="btn-4")이 부르는 함수
 
-    var input = document.getElementById('reserve-text');   // 예약 문장 입력칸을 찾는다
-    var hint  = document.getElementById('reserve-hint');   // 안내 문구를 띄울 자리를 찾는다
-    var text  = input.value.trim();   // 입력한 문장을 읽고 앞뒤 공백을 없앤다
+    var input = document.getElementById('reserve-text');   // id="reserve-text" 인 <textarea>(예약 문장 입력칸) 요소를 찾는다
+    var hint  = document.getElementById('reserve-hint');   // id="reserve-hint" 인 <p>(입력칸 아래 안내 문구 자리)를 찾는다
+    var text  = input.value.trim();   // input(textarea) 요소의 현재 값을 읽고 앞뒤 공백을 없앤다
 
     if (!text) {   // 아무것도 입력하지 않았으면
-        hint.textContent = '원하시는 일정을 입력해주세요.';   // 입력해 달라고 안내한다
-        hint.className = 'form-error';   // 오류용 클래스를 붙여 빨간 글씨로 만든다
-        input.focus();   // 입력칸에 커서를 놓아 준다
-        return;   // 여기서 끝낸다
+        hint.textContent = '원하시는 일정을 입력해주세요.';   // hint(<p>) 안의 글자를 이 안내 문구로 바꾼다
+        hint.className = 'form-error';   // hint(<p>)의 class 를 form-error 로 바꿔 빨간 글씨로 만든다
+        input.focus();   // input(textarea)에 커서를 놓아 준다
+        return;   // 여기서 함수를 끝낸다
     }
-    hint.textContent = '';   // 입력이 정상이면 안내 문구를 지운다
-    hint.className = 'form-hint';   // 클래스도 평소 상태로 되돌린다
+    hint.textContent = '';   // 입력이 정상이면 hint(<p>) 안의 안내 문구를 지운다
+    hint.className = 'form-hint';   // hint(<p>)의 class 도 평소 상태로 되돌린다
 
-    var btn     = document.getElementById('btn-4');   // 실행 버튼을 찾는다
-    var loading = document.getElementById('loading-4');   // "불러오는 중" 표시를 찾는다
-    var result  = document.getElementById('result-4');   // 결과를 그릴 자리를 찾는다
+    var btn     = document.getElementById('btn-4');   // id="btn-4" 인 <button>(조건에 맞는 차량 찾기 버튼)를 찾는다
+    var loading = document.getElementById('loading-4');   // id="loading-4" 인 <div class="ai-loading">(불러오는 중 표시)를 찾는다
+    var result  = document.getElementById('result-4');   // id="result-4" 인 <div class="ai-result">(결과가 그려질 빈 상자)를 찾는다
 
-    btn.disabled = true;   // 버튼을 잠근다 (연달아 눌러 중복 호출되는 것을 막는다)
-    loading.style.display = 'block';   // "불러오는 중" 표시를 보이게 한다
-    result.style.display = 'none';   // 이전 결과는 숨긴다
+    btn.disabled = true;   // btn(버튼)을 잠근다 (연달아 눌러 중복 호출되는 것을 막는다)
+    loading.style.display = 'block';   // loading(div)의 display 를 block 으로 바꿔 "불러오는 중" 표시를 보이게 한다
+    result.style.display = 'none';   // result(div)의 display 를 none 으로 바꿔 이전 결과는 숨긴다
 
-    var formData = new URLSearchParams();   // 보낼 값들을 담을 상자를 만든다
-    formData.append('message', text);   // 사용자가 말한 예약 문장을 담는다
+    var formData = new URLSearchParams();   // 서버로 보낼 값들을 담을 상자를 만든다 (HTML 요소 아님)
+    formData.append('message', text);   // 이 상자에 message 라는 이름으로, input(textarea)에서 읽은 예약 문장을 담는다
 
 
     fetch(aiContextPath + '/Chatbot/reserveAI.do', {   // "말로 예약하기" 주소로 요청을 보낸다
@@ -786,15 +853,15 @@ function sendAIReserve() {   // "말로 예약하기" 버튼이 부르는 함수
         }
         return response.json();   // 정상이면 응답을 JSON 으로 읽는다
     })
-    .then(function (data) {   // 읽은 결과를 화면에 그린다
-        loading.style.display = 'none';   // "불러오는 중" 표시를 지운다
-        btn.disabled = false;   // 버튼을 다시 누를 수 있게 푼다
-        renderReserveResult(data);   // 추천 차량 카드를 그린다
+    .then(function (data) {   // 서버가 돌려준 데이터(data)를 화면 요소에 반영한다
+        loading.style.display = 'none';   // loading(div)을 다시 안 보이게 한다
+        btn.disabled = false;   // btn(버튼)의 잠금을 풀어 다시 누를 수 있게 한다
+        renderReserveResult(data);   // result(div, id="result-4") 안에 추천 차량 카드를 그리는 함수를 부른다
     })
     .catch(function (error) {   // 통신이 실패한 경우
-        loading.style.display = 'none';   // "불러오는 중" 표시를 지운다
-        btn.disabled = false;   // 버튼을 다시 누를 수 있게 푼다
-        renderReserveResult({ reply: error.message || '네트워크 오류가 발생했습니다.' });   // 실패 이유를 같은 카드 모양으로 보여 준다 (화면이 갑자기 달라지지 않게)
+        loading.style.display = 'none';   // loading(div)을 다시 안 보이게 한다
+        btn.disabled = false;   // btn(버튼)의 잠금을 풀어 다시 누를 수 있게 한다
+        renderReserveResult({ reply: error.message || '네트워크 오류가 발생했습니다.' });   // 실패 이유를 같은 result 카드 모양으로 보여 준다 (화면이 갑자기 달라지지 않게)
         console.error('Reserve AI error:', error);   // 개발자가 원인을 볼 수 있게 브라우저 콘솔에 남긴다
     });
 }
@@ -802,18 +869,18 @@ function sendAIReserve() {   // "말로 예약하기" 버튼이 부르는 함수
 /* 서버 응답을 카드로 그린다 */
 function renderReserveResult(data) {
 
-    var result = document.getElementById('result-4');   // 결과를 그릴 자리를 찾는다
+    var result = document.getElementById('result-4');   // id="result-4" 인 <div class="ai-result">(탭4 결과가 그려질 빈 상자)를 찾는다
 
     /* [보안] 서버가 준 값도 이스케이프한다.
        차량명은 DB 값이고 reply 는 서버가 만든 문장이지만,
        "innerHTML 에 넣는 모든 문자열은 이스케이프한다"를 예외 없이 지킨다. */
-    var html =
-        '<div class="ai-result-card">' +
-            '<div class="ai-result-header">' +
-                '<span class="ai-result-icon" aria-hidden="true">🚗</span>' +
-                '<span class="ai-result-label">조건에 맞는 보유 차량</span>' +
-            '</div>' +
-            '<div class="ai-result-body">' + escapeHtml(data.reply || '').replace(/\n/g, '<br>') + '</div>';
+    var html =   // 화면에 그릴 HTML 문자열을 여기서부터 계속 이어 붙여 나간다 (var 이므로 아래에서 html += 로 계속 추가된다)
+        '<div class="ai-result-card">' +                          // 카드 전체를 감싸는 상자를 연다 (아직 안 닫음, 맨 뒤 862번째 줄쯤에서 닫는다)
+            '<div class="ai-result-header">' +                    // 카드 맨 위, 아이콘+제목 줄을 연다
+                '<span class="ai-result-icon" aria-hidden="true">🚗</span>' +   // 자동차 이모지를 아이콘으로 넣는다
+                '<span class="ai-result-label">조건에 맞는 보유 차량</span>' +   // 이 카드의 제목을 넣는다 (고정 문구)
+            '</div>' +                                              // 헤더 줄을 닫는다
+            '<div class="ai-result-body">' + escapeHtml(data.reply || '').replace(/\n/g, '<br>') + '</div>';   // AI가 뽑아낸 조건 요약 문장을 이스케이프한 뒤 줄바꿈만 <br>로 되살려 넣는다. div는 아직 안 닫힌 카드 안에 들어간다
 
     var cars = data.cars || [];   // 추천 차량 목록을 꺼낸다. 없으면 빈 배열로 대신한다
 
@@ -834,35 +901,35 @@ function renderReserveResult(data) {
             /* 예약 이어가기 : 기존 예약 흐름(CarInfo -> CarOption)으로
                시작일/일수/대수를 미리 채워 보낸다.
                begindate 는 서버가 만든 YYYY-MM-DD 값이지만 한 번 더 형식 검사한다. */
-            var begin = /^\d{4}-\d{2}-\d{2}$/.test(data.begindate) ? data.begindate : '';
-            var link = aiContextPath + '/Car/CarInfo.do?carno=' + carno   // "예약 이어가기" 링크를 만든다. 기존 예약 화면에 값이 미리 채워진 채로 열린다
-                     + '&carqty=' + qty
-                     + '&carbegindate=' + begin
-                     + '&carreserveday=' + days;
+            var begin = /^\d{4}-\d{2}-\d{2}$/.test(data.begindate) ? data.begindate : '';   // 정규식으로 "숫자4개-숫자2개-숫자2개" 형태인지 검사한다. 형태가 맞으면 그 값을 쓰고, 아니면 빈 문자열을 쓴다 (조건 ? 참일때값 : 거짓일때값)
+            var link = aiContextPath + '/Car/CarInfo.do?carno=' + carno   // "예약 이어가기" 링크를 만든다. 기존 예약 화면에 값이 미리 채워진 채로 열린다. ?carno= 뒤에 차량번호를 붙인다
+                     + '&carqty=' + qty              // & 로 다음 값을 이어 붙인다 : 필요 대수
+                     + '&carbegindate=' + begin      // 시작일을 이어 붙인다
+                     + '&carreserveday=' + days;      // 대여 일수를 이어 붙여 링크 문자열을 완성한다
 
-            html +=   // 차량 카드 하나의 HTML 을 이어 붙인다
-                '<div class="reserve-car">' +
-                    '<img class="reserve-car-img" loading="lazy" alt="' + escapeHtml(car.carname) + ' 사진"' +
-                        ' src="' + aiContextPath + '/img/' + encodeURIComponent(car.carimg || '') + '">' +
-                    '<div class="reserve-car-info">' +
-                        '<div class="reserve-car-name">' + escapeHtml(car.carname) + '</div>' +
-                        '<div class="reserve-car-meta">' + seats + '인승 · ' +
-                            price.toLocaleString() + '원/일' +
-                            (qty > 1 ? ' · <b>' + qty + '대 필요</b>' : '') + '</div>' +
-                        '<div class="reserve-car-total">' + days + '일 총 ' + total.toLocaleString() + '원</div>' +
-                    '</div>' +
-                    '<a class="btn btn-primary btn-sm" href="' + link + '">예약 이어가기 &rsaquo;</a>' +
-                '</div>';
+            html +=   // 지금까지 만든 html 뒤에 차량 카드 하나의 HTML 을 덧붙인다 (+= 는 "기존 값 뒤에 이어 붙인다"는 뜻)
+                '<div class="reserve-car">' +                          // 차량 카드 한 장을 감싸는 상자를 연다
+                    '<img class="reserve-car-img" loading="lazy" alt="' + escapeHtml(car.carname) + ' 사진"' +   // 차량 사진. alt 는 사진이 안 보일 때 대신 읽어줄 설명글이다
+                        ' src="' + aiContextPath + '/img/' + encodeURIComponent(car.carimg || '') + '">' +   // 사진 경로. encodeURIComponent 로 파일명에 특수문자가 있어도 주소가 깨지지 않게 한다
+                    '<div class="reserve-car-info">' +                 // 차량 정보(이름/좌석/가격)를 담을 상자를 연다
+                        '<div class="reserve-car-name">' + escapeHtml(car.carname) + '</div>' +   // 차량 이름을 넣는다
+                        '<div class="reserve-car-meta">' + seats + '인승 · ' +   // 탑승 인원을 넣는다
+                            price.toLocaleString() + '원/일' +          // 1일 요금을 천 단위 쉼표를 넣어 표시한다
+                            (qty > 1 ? ' · <b>' + qty + '대 필요</b>' : '') + '</div>' +   // 대수가 2대 이상이면 "N대 필요"를 굵게 덧붙이고, 1대면 아무것도 안 붙인다
+                        '<div class="reserve-car-total">' + days + '일 총 ' + total.toLocaleString() + '원</div>' +   // 대여 일수와 총 금액을 넣는다
+                    '</div>' +                                          // 차량 정보 상자를 닫는다
+                    '<a class="btn btn-primary btn-sm" href="' + link + '">예약 이어가기 &rsaquo;</a>' +   // 위에서 만든 link 주소로 이동하는 버튼 모양 링크를 넣는다
+                '</div>';                                                // 차량 카드 한 장의 상자를 닫는다
         }
         html += '</div>';   // 차량 카드들을 감싼 상자를 닫는다
     }
 
-    html += '<button type="button" class="btn btn-outline btn-sm mt-4" ' +   // "다시 입력하기" 버튼을 붙인다
-                'onclick="resetResult(4)">🔄 다른 일정으로 찾기</button>' +
-        '</div>';
+    html += '<button type="button" class="btn btn-outline btn-sm mt-4" ' +   // 새로 만들 "다른 일정으로 찾기" 버튼을 html 문자열 뒤에 붙인다
+                'onclick="resetResult(4)">🔄 다른 일정으로 찾기</button>' +   // 이 버튼을 누르면 resetResult(4) 가 호출되어 result-4 상자를 지운다
+        '</div>';   // 맨 처음(810번째 줄쯤)에 열어 둔 ai-result-card 상자를 이제야 닫는다
 
-    result.innerHTML = html;   // 조립한 HTML 을 결과 자리에 넣는다
-    result.style.display = 'block';   // 결과 자리를 보이게 한다
-    result.scrollIntoView({ behavior: 'smooth', block: 'start' });   // 결과가 있는 곳까지 부드럽게 스크롤해 준다
+    result.innerHTML = html;   // 앞서 찾아 둔 result(div, id="result-4") 안에, 지금까지 조립한 html 문자열을 통째로 채워 넣는다
+    result.style.display = 'block';   // result(div)의 display 를 block 으로 바꿔 화면에 보이게 한다
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });   // 브라우저가 result(div)가 있는 위치까지 부드럽게 스크롤을 옮겨 준다
 }
 </script>
